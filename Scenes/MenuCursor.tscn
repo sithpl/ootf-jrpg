@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://c7llgdviardiq"]
+
+[ext_resource type="Texture2D" uid="uid://cmsa7ipbpl7gj" path="res://Assets/hand_point_e.png" id="1_4641a"]
+[ext_resource type="Script" uid="uid://me2pmmair5hb" path="res://Scripts/MenuCursor.gd" id="2_oxkco"]
+
+[node name="MenuCursor" type="TextureRect"]
+offset_right = 32.0
+offset_bottom = 32.0
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_4641a")
+stretch_mode = 2
+script = ExtResource("2_oxkco")

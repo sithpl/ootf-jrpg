@@ -1,0 +1,314 @@
+[gd_scene load_steps=13 format=3 uid="uid://buhojghfeg4r2"]
+
+[ext_resource type="Script" uid="uid://duujsym6v6wka" path="res://Scripts/Battle.gd" id="1_p46lj"]
+[ext_resource type="PackedScene" uid="uid://dggmt4f88v4jj" path="res://Scenes/WindowDefault.tscn" id="1_wvl2i"]
+[ext_resource type="PackedScene" uid="uid://nc557d57bl5u" path="res://Scenes/EnemyButton.tscn" id="2_2h7oj"]
+[ext_resource type="Texture2D" uid="uid://bqm5ix0xuv5pv" path="res://Assets/Forest_01_300%.png" id="2_6yjxy"]
+[ext_resource type="PackedScene" uid="uid://bkuddhx0iepft" path="res://Scenes/PlayerButton.tscn" id="3_1samx"]
+[ext_resource type="Script" uid="uid://bf24p0v61c4ro" path="res://Scripts/WindowDefault.gd" id="3_8teo4"]
+[ext_resource type="PackedScene" uid="uid://ce3mvvn7dqjjf" path="res://Scenes/PlayerInfoBar.tscn" id="3_c5ef4"]
+[ext_resource type="Script" uid="uid://c3g6ec23bdh1g" path="res://Scripts/Menu.gd" id="5_c5ef4"]
+[ext_resource type="PackedScene" uid="uid://c7llgdviardiq" path="res://Scenes/MenuCursor.tscn" id="8_u22qb"]
+[ext_resource type="PackedScene" uid="uid://tlqftavjyptl" path="res://Scenes/DownCursor.tscn" id="10_qxnh6"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_p46lj"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_8teo4"]
+
+[node name="Battle" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_p46lj")
+metadata/_edit_use_anchors_ = true
+
+[node name="BackgroundTemp" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.277983, 0.447947, 1, 0.960784)
+
+[node name="BattleScene" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_6yjxy")
+expand_mode = 3
+
+[node name="Enemies" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 52.0
+offset_top = 57.0
+offset_right = 128.0
+offset_bottom = 107.0
+script = ExtResource("5_c5ef4")
+
+[node name="EnemyButton" parent="Enemies" instance=ExtResource("2_2h7oj")]
+layout_mode = 0
+offset_left = 51.0
+offset_top = 2.0
+offset_right = 67.0
+offset_bottom = 18.0
+
+[node name="EnemyButton2" parent="Enemies" instance=ExtResource("2_2h7oj")]
+layout_mode = 0
+offset_left = 11.0
+offset_top = 2.0
+offset_right = 27.0
+offset_bottom = 18.0
+
+[node name="EnemyButton3" parent="Enemies" instance=ExtResource("2_2h7oj")]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 27.0
+offset_right = 17.0
+offset_bottom = 43.0
+
+[node name="EnemyButton4" parent="Enemies" instance=ExtResource("2_2h7oj")]
+layout_mode = 0
+offset_left = 41.0
+offset_top = 27.0
+offset_right = 57.0
+offset_bottom = 43.0
+
+[node name="Players" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 199.0
+offset_top = 20.0
+offset_right = 279.0
+offset_bottom = 115.0
+script = ExtResource("5_c5ef4")
+
+[node name="PlayerButton" parent="Players" instance=ExtResource("3_1samx")]
+layout_mode = 0
+offset_left = 29.0
+offset_top = 26.0
+offset_right = 45.0
+offset_bottom = 42.0
+
+[node name="PlayerButton2" parent="Players" instance=ExtResource("3_1samx")]
+layout_mode = 0
+offset_left = 39.0
+offset_top = 46.0
+offset_right = 55.0
+offset_bottom = 62.0
+
+[node name="PlayerButton3" parent="Players" instance=ExtResource("3_1samx")]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 65.0
+offset_right = 64.0
+offset_bottom = 81.0
+
+[node name="PlayerButton4" parent="Players" instance=ExtResource("3_1samx")]
+layout_mode = 0
+offset_left = 58.0
+offset_top = 84.0
+offset_right = 74.0
+offset_bottom = 100.0
+
+[node name="GUIMargin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Bottom" type="HBoxContainer" parent="GUIMargin"]
+custom_minimum_size = Vector2(200, 52)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_override_constants/separation = -2
+alignment = 1
+
+[node name="Enemies" parent="GUIMargin/Bottom" instance=ExtResource("1_wvl2i")]
+layout_mode = 2
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="TextureRect" type="TextureRect" parent="GUIMargin/Bottom/Enemies"]
+self_modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("CanvasTexture_p46lj")
+
+[node name="MarginContainer" type="MarginContainer" parent="GUIMargin/Bottom/Enemies"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUIMargin/Bottom/Enemies/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="GUIMargin/Bottom/Enemies/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Enemy"
+
+[node name="Label2" type="Label" parent="GUIMargin/Bottom/Enemies/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Enemy"
+
+[node name="Label3" type="Label" parent="GUIMargin/Bottom/Enemies/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Enemy"
+
+[node name="Label4" type="Label" parent="GUIMargin/Bottom/Enemies/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Enemy"
+
+[node name="Players" parent="GUIMargin/Bottom" instance=ExtResource("1_wvl2i")]
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+size_flags_stretch_ratio = 2.0
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="TextureRect" type="TextureRect" parent="GUIMargin/Bottom/Players"]
+self_modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("CanvasTexture_p46lj")
+
+[node name="MarginContainer" type="MarginContainer" parent="GUIMargin/Bottom/Players"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 1.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PlayerInfos" type="VBoxContainer" parent="GUIMargin/Bottom/Players/MarginContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="PlayerInfoBar" parent="GUIMargin/Bottom/Players/MarginContainer/PlayerInfos" instance=ExtResource("3_c5ef4")]
+layout_mode = 2
+
+[node name="PlayerInfoBar2" parent="GUIMargin/Bottom/Players/MarginContainer/PlayerInfos" instance=ExtResource("3_c5ef4")]
+layout_mode = 2
+
+[node name="PlayerInfoBar3" parent="GUIMargin/Bottom/Players/MarginContainer/PlayerInfos" instance=ExtResource("3_c5ef4")]
+layout_mode = 2
+
+[node name="PlayerInfoBar4" parent="GUIMargin/Bottom/Players/MarginContainer/PlayerInfos" instance=ExtResource("3_c5ef4")]
+layout_mode = 2
+
+[node name="Options" parent="." instance=ExtResource("1_wvl2i")]
+custom_minimum_size = Vector2(48, 52)
+layout_mode = 2
+offset_left = 76.0
+offset_top = 124.0
+offset_right = 124.0
+offset_bottom = 176.0
+size_flags_horizontal = 0
+size_flags_vertical = 8
+size_flags_stretch_ratio = 2.0
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+script = ExtResource("3_8teo4")
+
+[node name="Options" type="VBoxContainer" parent="Options"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+script = ExtResource("5_c5ef4")
+
+[node name="Button" type="Button" parent="Options/Options"]
+layout_mode = 2
+size_flags_horizontal = 4
+focus_neighbor_bottom = NodePath("../Button4")
+text = "Fight"
+
+[node name="Button4" type="Button" parent="Options/Options"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Magic"
+
+[node name="Button3" type="Button" parent="Options/Options"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Item"
+
+[node name="Button2" type="Button" parent="Options/Options"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Defend"
+
+[node name="TextureRect" type="TextureRect" parent="Options"]
+self_modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("CanvasTexture_8teo4")
+
+[node name="MenuCursor" parent="." instance=ExtResource("8_u22qb")]
+layout_mode = 0
+offset_left = 67.0
+offset_top = 124.0
+offset_right = 99.0
+offset_bottom = 156.0
+
+[node name="DownCursor" parent="." instance=ExtResource("10_qxnh6")]
+position = Vector2(236, 38)
+
+[node name="ActionLogLabel" type="Label" parent="."]
+layout_mode = 0
+offset_right = 320.0
+offset_bottom = 32.0
+theme_override_font_sizes/font_size = 5
+autowrap_mode = 1
+
+[connection signal="button_pressed" from="Enemies" to="." method="_on_enemies_button_pressed"]
+[connection signal="button_pressed" from="Players" to="." method="_on_players_button_pressed"]
+[connection signal="button_pressed" from="Options/Options" to="." method="_on_options_button_pressed"]

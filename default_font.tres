@@ -1,0 +1,10 @@
+[gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://chhqsnfn3fs1k"]
+
+[ext_resource type="FontFile" uid="uid://bvrsdm2ug5b5j" path="res://Assets/Fonts/Px437_IBM_3270pc.ttf" id="1_gp0bv"]
+
+[resource]
+base_font = ExtResource("1_gp0bv")
+opentype_features = {
+1667329140: 0
+}
+spacing_top = 1

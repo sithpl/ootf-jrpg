@@ -1,0 +1,201 @@
+[gd_scene load_steps=8 format=3 uid="uid://buhojghfeg4r2"]
+
+[ext_resource type="Script" uid="uid://duujsym6v6wka" path="res://Scripts/Battle.gd" id="1_p46lj"]
+[ext_resource type="PackedScene" uid="uid://dggmt4f88v4jj" path="res://Scenes/WindowDefault.tscn" id="1_wvl2i"]
+[ext_resource type="PackedScene" uid="uid://nc557d57bl5u" path="res://Scenes/BattleEnemy.tscn" id="2_2h7oj"]
+[ext_resource type="PackedScene" uid="uid://bkuddhx0iepft" path="res://Scenes/BattlePlayer.tscn" id="3_1samx"]
+[ext_resource type="Script" uid="uid://c3g6ec23bdh1g" path="res://Scenes/Menu.gd" id="3_p46lj"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_p46lj"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_8teo4"]
+
+[node name="Battle" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_p46lj")
+metadata/_edit_use_anchors_ = true
+
+[node name="BackgroundTemp" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.277983, 0.447947, 1, 0.960784)
+
+[node name="Bottom" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(400, 96)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -91.0
+offset_top = -48.0
+offset_right = 309.0
+offset_bottom = 48.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(0.5, 0.5)
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Enemies" parent="Bottom" instance=ExtResource("1_wvl2i")]
+layout_mode = 2
+patch_margin_left = 32
+patch_margin_top = 32
+patch_margin_right = 32
+patch_margin_bottom = 32
+
+[node name="TextureRect" type="TextureRect" parent="Bottom/Enemies"]
+self_modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("CanvasTexture_p46lj")
+
+[node name="Players" parent="Bottom" instance=ExtResource("1_wvl2i")]
+layout_mode = 2
+size_flags_stretch_ratio = 2.0
+patch_margin_left = 32
+patch_margin_top = 32
+patch_margin_right = 32
+patch_margin_bottom = 32
+
+[node name="TextureRect" type="TextureRect" parent="Bottom/Players"]
+self_modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("CanvasTexture_p46lj")
+
+[node name="Options" parent="." instance=ExtResource("1_wvl2i")]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+offset_left = 88.0
+offset_top = 132.0
+offset_right = 184.0
+offset_bottom = 228.0
+scale = Vector2(0.5, 0.5)
+size_flags_stretch_ratio = 2.0
+patch_margin_left = 32
+patch_margin_top = 32
+patch_margin_right = 32
+patch_margin_bottom = 32
+
+[node name="Options" type="VBoxContainer" parent="Options"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 12.0
+offset_right = -4.0
+offset_bottom = -13.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_p46lj")
+
+[node name="Button" type="Button" parent="Options/Options"]
+layout_mode = 2
+text = "FIGHT"
+
+[node name="Button2" type="Button" parent="Options/Options"]
+layout_mode = 2
+text = "DEFEND"
+
+[node name="Button3" type="Button" parent="Options/Options"]
+layout_mode = 2
+text = "ITEM"
+
+[node name="Button4" type="Button" parent="Options/Options"]
+layout_mode = 2
+text = "MAGIC"
+
+[node name="TextureRect" type="TextureRect" parent="Options"]
+self_modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("CanvasTexture_8teo4")
+
+[node name="Enemies" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BattleEnemy" parent="Enemies" instance=ExtResource("2_2h7oj")]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 32.0
+offset_right = 104.0
+offset_bottom = 48.0
+
+[node name="BattleEnemy2" parent="Enemies" instance=ExtResource("2_2h7oj")]
+layout_mode = 0
+offset_left = 77.0
+offset_top = 65.0
+offset_right = 93.0
+offset_bottom = 81.0
+
+[node name="BattleEnemy3" parent="Enemies" instance=ExtResource("2_2h7oj")]
+layout_mode = 0
+offset_left = 63.0
+offset_top = 103.0
+offset_right = 79.0
+offset_bottom = 119.0
+
+[node name="Players" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BattlePlayer" parent="Players" instance=ExtResource("3_1samx")]
+layout_mode = 0
+offset_left = 228.0
+offset_top = 28.0
+offset_right = 244.0
+offset_bottom = 44.0
+
+[node name="BattlePlayer2" parent="Players" instance=ExtResource("3_1samx")]
+layout_mode = 0
+offset_left = 238.0
+offset_top = 53.0
+offset_right = 254.0
+offset_bottom = 69.0
+
+[node name="BattlePlayer3" parent="Players" instance=ExtResource("3_1samx")]
+layout_mode = 0
+offset_left = 246.0
+offset_top = 78.0
+offset_right = 262.0
+offset_bottom = 94.0
+
+[node name="BattlePlayer4" parent="Players" instance=ExtResource("3_1samx")]
+layout_mode = 0
+offset_left = 253.0
+offset_top = 104.0
+offset_right = 269.0
+offset_bottom = 120.0
+
+[connection signal="button_focused" from="Options/Options" to="." method="_on_options_button_focused"]
+[connection signal="button_pressed" from="Options/Options" to="." method="_on_options_button_pressed"]
