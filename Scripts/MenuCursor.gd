@@ -3,6 +3,8 @@ class_name MenuCursor extends TextureRect
 const OFFSET: Vector2 = Vector2(-18, -2)
 
 var target: Node = null
+@onready var move_sound: AudioStreamPlayer = $MoveSound
+@onready var confirm_sound: AudioStreamPlayer = $ConfirmSound
 
 func _ready():
 	get_viewport().gui_focus_changed.connect(_on_viewport_gui_focus_changed)
@@ -15,6 +17,9 @@ func _process(_delta: float):
 
 func _on_viewport_gui_focus_changed(node: Control):
 	if node is BaseButton:
+		if target != node:
+			if move_sound.stream:
+				move_sound.play()
 		if target:
 			target.tree_exiting.disconnect(_on_target_tree_exiting)
 
@@ -30,3 +35,7 @@ func _on_target_tree_exiting(node: Control):
 	if node == target:
 		target = null
 		set_process(false)
+
+func play_confirm_sound():
+	if confirm_sound.stream:
+		confirm_sound.play()
