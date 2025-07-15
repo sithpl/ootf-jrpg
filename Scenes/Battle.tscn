@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://buhojghfeg4r2"]
+[gd_scene load_steps=14 format=3 uid="uid://buhojghfeg4r2"]
 
 [ext_resource type="Script" uid="uid://duujsym6v6wka" path="res://Scripts/Battle.gd" id="1_p46lj"]
 [ext_resource type="PackedScene" uid="uid://dggmt4f88v4jj" path="res://Scenes/WindowDefault.tscn" id="1_wvl2i"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://bqm5ix0xuv5pv" path="res://Assets/Forest_01_300%.png" id="2_6yjxy"]
 [ext_resource type="PackedScene" uid="uid://bkuddhx0iepft" path="res://Scenes/PlayerButton.tscn" id="3_1samx"]
 [ext_resource type="Script" uid="uid://bf24p0v61c4ro" path="res://Scripts/WindowDefault.gd" id="3_8teo4"]
+[ext_resource type="AudioStream" uid="uid://ctfu05aiai88b" path="res://Assets/Audio/Battle/battle_theme.wav" id="3_262jj"]
 [ext_resource type="PackedScene" uid="uid://ce3mvvn7dqjjf" path="res://Scenes/PlayerInfoBar.tscn" id="3_c5ef4"]
 [ext_resource type="Script" uid="uid://c3g6ec23bdh1g" path="res://Scripts/Menu.gd" id="5_c5ef4"]
 [ext_resource type="PackedScene" uid="uid://c7llgdviardiq" path="res://Scenes/MenuCursor.tscn" id="8_u22qb"]
@@ -43,6 +44,10 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_6yjxy")
 expand_mode = 3
+
+[node name="BattleMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_262jj")
+volume_db = -30.0
 
 [node name="Enemies" type="Control" parent="."]
 anchors_preset = 0

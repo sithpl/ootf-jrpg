@@ -9,6 +9,9 @@ enum States {
 
 enum Actions {
 	FIGHT,
+	MAGIC,
+	ITEM,
+	DEFEND
 }
 
 enum {
@@ -26,7 +29,9 @@ var event_running: bool = false
 var action: Actions = Actions.FIGHT
 var player: BattleActor = null
 var action_log: Array[String] = []
+var pending_battle_end: bool = false
 
+@onready var _battle_music: AudioStreamPlayer = $BattleMusic
 @onready var _log_label: Label = $ActionLogLabel
 @onready var _gui: Control = $GUIMargin
 @onready var _options: WindowDefault = $Options
@@ -52,6 +57,12 @@ func _ready():
 		data = enemy_button.data
 		enemy_button.atb_ready.connect(_on_enemy_atb_ready.bind(data))
 		data.defeated.connect(_on_battle_actor_defeated.bind(data))
+	
+	var theme_path = Data.get_battle_theme()
+	var theme_stream = load(theme_path)
+	if theme_stream:
+		_battle_music.stream = theme_stream
+		_battle_music.play()
 
 func _unhandled_input(event: InputEvent):
 	if event.is_action_pressed("ui_cancel"):
@@ -91,26 +102,38 @@ func find_valid_target(target: BattleActor):
 	
 	return target
 
-func end():
-	event_queue.clear()
-	player_atb_queue.clear()
-	_menu_cursor.hide()
-	_down_cursor.hide()
-	_options.hide()
-	await get_tree().create_timer(1.0)
-	_gui.hide()
-	
-	for player_info in _players_infos:
-		player_info.highlight(true)
-		player_info.reset()
-		player_info.stop()
-		
-	# TODO Actual battle end states
-	match state:
-		States.VICTORY:
-			print("WTF YOU WON???")
-		States.GAMEOVER:
-			print("YOU LOSE STUPID BITCH")
+#func end():
+	#event_queue.clear()
+	#player_atb_queue.clear()
+	#_menu_cursor.hide()
+	#_down_cursor.hide()
+	#_options.hide()
+	#await get_tree().create_timer(1.0)
+	#_gui.hide()
+	#
+	#_battle_music.stop() # Or fade out with Tween
+	#
+	#for player_info in _players_infos:
+		#player_info.highlight(true)
+		#player_info.reset()
+		#player_info.stop()
+		#
+	## TODO Actual battle end states
+	## Determine end state and play the appropriate music
+	#match state:
+		#States.VICTORY:
+			#var victory_music = load(Data.victory_theme)
+			#if victory_music:
+				#_battle_music.stream = victory_music
+				#_battle_music.play()
+			#print("YOU WON!")
+		#
+		#States.GAMEOVER:
+			#var gameover_music = load(Data.gameover_theme)
+			#if gameover_music:
+				#_battle_music.stream = gameover_music
+				#_battle_music.play()
+			#print("YOU LOSE!")
 
 func log_action(text: String) -> void:
 	action_log.append(text)
@@ -173,7 +196,8 @@ func run_event():
 	
 	# No valid targets. One side has won!
 	if target == null:
-		end()
+		#end()
+		queue_end(States.VICTORY)  # or GAMEOVER based on situation
 		
 		return
 	
@@ -184,6 +208,12 @@ func run_event():
 		Actions.FIGHT:
 			target.healhurt(-actor.strength)
 			log_action("%s attacks %s for %d damage!" % [actor.name, target.name, actor.strength])
+		Actions.MAGIC:
+			pass
+		Actions.ITEM:
+			pass
+		Actions.DEFEND:
+			pass
 		_:
 			pass
 	
@@ -206,10 +236,52 @@ func add_event(event: Array):
 	if !event_running:
 		run_event()
 
+func queue_end(result_state: States):
+	if pending_battle_end:
+		return
+	pending_battle_end = true
+	state = result_state
+
+	# Wait until all events are processed
+	await get_tree().create_timer(0.75).timeout
+	while event_running:
+		await get_tree().process_frame
+
+	await get_tree().create_timer(1.0).timeout  # Let animations/FX wrap up
+	do_battle_end()
+
 #func _on_options_button_focused(button: BaseButton) -> void:
 	#pass
 
+func do_battle_end():
+	event_queue.clear()
+	player_atb_queue.clear()
+	_menu_cursor.hide()
+	_down_cursor.hide()
+	_options.hide()
+	_gui.hide()
+
+	_battle_music.stop()
+
+	match state:
+		States.VICTORY:
+			var victory_music = load(Data.victory_theme)
+			if victory_music:
+				_battle_music.stream = victory_music
+				_battle_music.play()
+			print("YOU WON!")
+		
+		States.GAMEOVER:
+			var gameover_music = load(Data.gameover_theme)
+			if gameover_music:
+				_battle_music.stream = gameover_music
+				_battle_music.play()
+			print("YOU LOSE!")
+
+	# Optionally: call `Game.return_to_map()` or display win/loss UI
+
 func _on_options_button_pressed(button: BaseButton) -> void:
+	$MenuCursor.play_confirm_sound()
 	#DEBUG print(button.text)
 	match button.text:
 		"Fight":
@@ -228,12 +300,14 @@ func _on_enemy_atb_ready(enemy: BattleActor):
 	add_event([enemy, target, Actions.FIGHT]) # TODO choosing action
 
 func _on_enemies_button_pressed(button: EnemyButton) -> void:
+	$MenuCursor.play_confirm_sound()
 	var target: BattleActor = button.data
 	add_event([player, target, action])
 	#DEBUG print(target, action)
 	advance_atb_queue()
 
 func _on_players_button_pressed(button: PlayerButton) -> void:
+	$MenuCursor.play_confirm_sound()
 	var target: BattleActor = button.data
 	event_queue.append([player, action])
 	#DEBUG print(player, target, action)
@@ -241,7 +315,7 @@ func _on_players_button_pressed(button: PlayerButton) -> void:
 
 func _on_battle_actor_defeated(data: BattleActor):
 	if !find_valid_target(data):
-		end()
+		do_battle_end()
 	
 	var player_index: int = Data.party.find(data)
 	if player_index != -1:
