@@ -1,4 +1,5 @@
-https://github.com/user-attachments/assets/43977afa-eafb-45d8-ba25-da87f0dc35bd
+https://github.com/user-attachments/assets/09fecb74-de6d-4309-a702-3261044e5604
+
 
 
 Building a new JRPG based on a combination of these 2 tutorials by Tampopo Interactive Media
