@@ -33,7 +33,7 @@ func set_name_custom(value: String):
 		var name_formatted: String = name.to_lower().replace(" ", "_")
 		texture = load("res://Assets/Enemies/" + name_formatted + ".png")
 		#"res://Assets/Enemies/slime_green.png"
-		print(name)
+		#DEBUG print(name)
 
 func healhurt(value: int):
 	#DEBUG print("Damage: ", value)

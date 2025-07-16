@@ -11,6 +11,7 @@ texture_normal = ExtResource("1_8txii")
 script = ExtResource("2_8txii")
 
 [node name="ATBBar" parent="." instance=ExtResource("2_uahas")]
+visible = false
 layout_mode = 0
 offset_top = 16.0
 offset_right = 23.0
