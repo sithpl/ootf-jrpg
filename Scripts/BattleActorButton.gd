@@ -20,16 +20,15 @@ func set_data(_data: BattleActor):
 	data.defeated.connect(_on_data_is_defeated)
 	data.acting.connect(_on_data_acting)
 
-func recoil():
+func recoil() -> Tween:
 	if tween:
 		tween.kill()
 	tween = create_tween()
-	# Start
 	tween.tween_property(self, "position:x", start_pos.x + (RECOIL * recoil_direction), 0.25).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 	tween.parallel().tween_property(self, "self_modulate", Color.RED, 0.25).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
-	# End
 	tween.tween_property(self, "position:x", start_pos.x, 0.1).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 	tween.parallel().tween_property(self, "self_modulate", Color.WHITE, 0.25).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
+	return tween
 
 func action_slide():
 	if tween:
@@ -37,6 +36,7 @@ func action_slide():
 	tween = create_tween()
 	tween.tween_property(self, "position:x", start_pos.x + (RECOIL * recoil_direction * -1), 0.5).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_IN)
 	tween.tween_property(self, "position:x", start_pos.x, 0.1).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+	return tween
 
 func _on_data_hp_changed(hp: int, change: int):
 	var hit_text: Label = HIT_TEXT.instantiate()
