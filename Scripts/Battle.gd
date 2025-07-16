@@ -2,6 +2,7 @@ extends Control
 class_name Battle
 
 enum States {
+	INTRO,
 	IDLE,
 	PLAYER_SELECT,
 	PLAYER_TARGET,
@@ -17,10 +18,13 @@ enum Actions {
 	DEFEND
 }
 
+@export var transition_time := 0.7
+
 const MAX_LOG_LINES := 3
 
 # Battle flow
 var state: States = States.IDLE
+var _orig_positions := {}
 var turn_order: Array[BattleActor] = []
 var current_turn_idx: int = 0
 var current_actor: BattleActor = null
@@ -28,6 +32,8 @@ var action: Actions = Actions.FIGHT
 var action_log: Array[String] = []
 
 # UI nodes
+@onready var _top_cover = $CanvasLayer/TopCover
+@onready var _bottom_cover = $CanvasLayer/BottomCover
 @onready var _battle_music: AudioStreamPlayer = $BattleMusic
 @onready var _log_label: Label = $ActionLogLabel
 @onready var _gui: Control = $GUIMargin
@@ -42,11 +48,54 @@ func _ready():
 	_options.hide()
 	_down_cursor.hide()
 	_gui.hide()
-	_start_battle()
+	call_deferred("_play_intro")  # Defer so _ready finishes first
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel") and state == States.PLAYER_TARGET:
 		_cancel_target_selection()
+
+func _stash_and_offset_buttons() -> void:
+	var screen_w = get_viewport_rect().size.x
+
+	# Players slide in from left
+	for btn in _players_menu.get_buttons():
+		_orig_positions[btn] = btn.position
+		btn.position.x += screen_w
+
+	# Enemies slide in from right
+	for btn in _enemies_menu.get_buttons():
+		_orig_positions[btn] = btn.position
+		btn.position.x -= screen_w
+
+func _play_intro() -> void:
+	print("Battle.gd/_play_intro() called")
+	state = States.INTRO
+	# 1) Point directly at the intro theme
+	var theme_path = Data.intro_theme
+
+	# 2) Load and play
+	var theme_stream = load(theme_path)
+	if theme_stream:
+		_battle_music.stream = theme_stream
+		_battle_music.play()
+	
+	
+	_stash_and_offset_buttons()
+	
+	## Intro Animation
+	await get_tree().create_timer(0.5).timeout
+
+	# 1) Slide players
+	await _slide_group(_players_menu.get_buttons(), 0.3)
+
+	# Optional pause
+	await get_tree().create_timer(1.0).timeout
+
+	# 2) Slide enemies
+	await _slide_group(_enemies_menu.get_buttons(), 0.6)
+
+	# 3) Start the battle
+	_start_battle()
 
 func _start_battle() -> void:
 	# Play battle theme
@@ -188,7 +237,6 @@ func _resolve_action(actor: BattleActor, target: BattleActor, act: Actions) -> v
 			# Implement item logic
 			_log_action("%s uses an item!" % actor.name)
 		Actions.DEFEND:
-			actor.defend()
 			_log_action("%s defends!" % actor.name)
 		_:
 			pass
@@ -296,3 +344,16 @@ func _get_button_for_actor(actor: BattleActor) -> BattleActorButton:
 		if btn.data == actor:
 			return btn
 	return null
+
+# Moves a group of buttons from their current (off-screen) positionsback to _orig_positions over 'duration' seconds.
+func _slide_group(buttons: Array, duration: float):
+	var elapsed := 0.0
+	while elapsed < duration:
+		var t = elapsed / duration
+		for btn in buttons:
+			btn.position = btn.position.lerp(_orig_positions[btn], t)
+		elapsed += get_process_delta_time()
+		await get_tree().process_frame
+	# Snap to final
+	for btn in buttons:
+		btn.position = _orig_positions[btn]
