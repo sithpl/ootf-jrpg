@@ -16,6 +16,8 @@ static var players: Dictionary = {
 
 var party: Array = players.values()
 
+var mobs: Array = enemies.values()
+
 enum BattleType {
 	INTRO,
 	NORMAL,
@@ -54,3 +56,13 @@ func get_battle_theme() -> String:
 			return special_theme
 		_:
 			return zone_theme
+
+static func get_random_enemies(count: int) -> Array:
+	var keys = enemies.keys()        # e.g. ["Goofball", "Slime Green"]
+	var picked = []
+	for i in range(count):
+		# pick a random key each loop
+		var key = keys[randi() % keys.size()]
+		# duplicate_custom() gives you an independent BattleActor
+		picked.append(enemies[key].duplicate_custom())
+	return picked

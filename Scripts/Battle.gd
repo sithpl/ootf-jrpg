@@ -1,5 +1,4 @@
-extends Control
-class_name Battle
+class_name Battle extends Control
 
 enum States {
 	INTRO,
@@ -30,16 +29,18 @@ var current_turn_idx: int = 0
 var current_actor: BattleActor = null
 var action: Actions = Actions.FIGHT
 var action_log: Array[String] = []
+var EnemyButtonScene: PackedScene = preload("res://scenes/EnemyButton.tscn")
 
 # UI nodes
-@onready var _top_cover = $CanvasLayer/TopCover
-@onready var _bottom_cover = $CanvasLayer/BottomCover
 @onready var _battle_music: AudioStreamPlayer = $BattleMusic
 @onready var _log_label: Label = $ActionLogLabel
 @onready var _gui: Control = $GUIMargin
 @onready var _options: WindowDefault = $Options
 @onready var _options_menu: Menu = $Options/Options
 @onready var _enemies_menu: Menu = $Enemies
+@onready var _enemy_slots := $Enemies.get_children()
+@onready var _enemy_scroll : ScrollContainer = $GUIMargin/Bottom/Enemies/ScrollContainer
+@onready var _enemy_vbox   := _enemy_scroll.get_child(0).get_child(0)  # or direct path
 @onready var _players_menu: Menu = $Players
 @onready var _menu_cursor: MenuCursor = $MenuCursor
 @onready var _down_cursor: Sprite2D = $DownCursor
@@ -53,6 +54,12 @@ func _ready():
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel") and state == States.PLAYER_TARGET:
 		_cancel_target_selection()
+
+func _log_action(text: String) -> void:
+	action_log.append(text)
+	if action_log.size() > MAX_LOG_LINES:
+		action_log.pop_front()
+	_log_label.text = "\n".join(action_log)
 
 func _stash_and_offset_buttons() -> void:
 	var screen_w = get_viewport_rect().size.x
@@ -68,51 +75,50 @@ func _stash_and_offset_buttons() -> void:
 		btn.position.x -= screen_w
 
 func _play_intro() -> void:
-	print("Battle.gd/_play_intro() called")
 	state = States.INTRO
-	# 1) Point directly at the intro theme
-	var theme_path = Data.intro_theme
 
-	# 2) Load and play
-	var theme_stream = load(theme_path)
+	# 0) Spawn between 2 and 6 enemies (duplicates allowed)
+	var spawn_count = randi_range(2, 6)
+	_spawn_random_enemies(spawn_count)
+
+	# 1) Play ONLY the intro theme
+	var theme_stream = load(Data.intro_theme)
 	if theme_stream:
 		_battle_music.stream = theme_stream
 		_battle_music.play()
-	
-	
+
+	# 2) Cache orig positions & move offscreen
 	_stash_and_offset_buttons()
-	
-	## Intro Animation
+
+	# 3) A small delay, then slide players/enemies
 	await get_tree().create_timer(0.5).timeout
-
-	# 1) Slide players
 	await _slide_group(_players_menu.get_buttons(), 0.3)
-
-	# Optional pause
 	await get_tree().create_timer(1.0).timeout
-
-	# 2) Slide enemies
 	await _slide_group(_enemies_menu.get_buttons(), 0.6)
 
-	# 3) Start the battle
+	# 4) Show the UI and start the turn loop (no more theme resets here)
+	_gui.show()
 	_start_battle()
 
 func _start_battle() -> void:
-	# Play battle theme
+	# 1) Play battle theme
 	var theme_path = Data.get_battle_theme()
 	var theme_stream = load(theme_path)
 	if theme_stream:
 		_battle_music.stream = theme_stream
 		_battle_music.play()
 
-	# Build turn order: all players first, then enemies
 	turn_order.clear()
+	# 1) All players are guaranteed valid
 	for p in Data.party:
 		turn_order.append(p)
-	for enemy_btn in _enemies_menu.get_buttons():
-		turn_order.append(enemy_btn.data)
 
+	# 2) Only append enemy.data if it's non-null
+	for btn in _enemies_menu.get_buttons():
+		if btn.data != null:
+			turn_order.append(btn.data)
 	current_turn_idx = 0
+
 	_gui.show()
 	_next_turn()
 
@@ -126,10 +132,13 @@ func _next_turn() -> void:
 	if _check_end():
 		return
 
-	# Skip over any defeated actors
 	var max_checks = turn_order.size()
 	var checks = 0
-	while checks < max_checks and not turn_order[current_turn_idx].has_hp():
+	while checks < max_checks:
+		var actor = turn_order[current_turn_idx]
+		# only break if actor exists AND has HP
+		if actor != null and actor.has_hp():
+			break
 		current_turn_idx = (current_turn_idx + 1) % turn_order.size()
 		checks += 1
 
@@ -198,7 +207,6 @@ func _begin_enemy_turn() -> void:
 
 	var target = Data.party.pick_random()
 	await _resolve_action(current_actor, target, Actions.FIGHT)
-	# <-- NOTHING else here!
 
 func _resolve_action(actor: BattleActor, target: BattleActor, act: Actions) -> void:
 	print("Battle.gd/_resolve_action() called")
@@ -245,12 +253,6 @@ func _resolve_action(actor: BattleActor, target: BattleActor, act: Actions) -> v
 	_advance_index()
 	_next_turn()
 
-func _log_action(text: String) -> void:
-	action_log.append(text)
-	if action_log.size() > MAX_LOG_LINES:
-		action_log.pop_front()
-	_log_label.text = "\n".join(action_log)
-
 func _advance_index() -> void:
 	print("Battle.gd/_advance_index() called")
 	if turn_order.size() == 0:
@@ -267,7 +269,9 @@ func _check_end() -> bool:
 
 	var any_enemy_alive = false
 	for btn in _enemies_menu.get_buttons():
-		if btn.data.has_hp():
+		# Only call has_hp() if data is set
+		var actor = btn.data
+		if actor != null and actor.has_hp():
 			any_enemy_alive = true
 			break
 
@@ -315,11 +319,10 @@ func _position_cursor_on_player(actor: BattleActor) -> void:
 	_down_cursor.show()
 
 func _position_cursor_on_enemy(enemy: BattleActor) -> void:
-	for btn in _enemies_menu.get_buttons():
-		if btn.data == enemy:
+	for btn in _get_enemy_slots():
+		if btn.visible and btn.data == enemy:
 			_menu_cursor.global_position = btn.global_position
-			#_down_cursor.global_position = btn.global_position + Vector2(5, -10)
-			#_down_cursor.show()
+			_enemy_scroll.ensure_control_visible(btn)
 			return
 
 func _position_cursor_off() -> void:
@@ -345,8 +348,20 @@ func _get_button_for_actor(actor: BattleActor) -> BattleActorButton:
 			return btn
 	return null
 
-# Moves a group of buttons from their current (off-screen) positionsback to _orig_positions over 'duration' seconds.
+func _spawn_random_enemies(requested_count: int) -> void:
+	var actors = Data.get_random_enemies(requested_count)
+
+	for i in range(_enemy_slots.size()):
+		var slot = _enemy_slots[i]
+		if i < actors.size():
+			slot.show()
+			slot.set_data(actors[i])
+		else:
+			slot.hide()
+			#slot.set_data(null)  # optional, clears old data
+
 func _slide_group(buttons: Array, duration: float):
+	# Moves a group of buttons from their current (off-screen) positionsback to _orig_positions over 'duration' seconds.
 	var elapsed := 0.0
 	while elapsed < duration:
 		var t = elapsed / duration
@@ -357,3 +372,11 @@ func _slide_group(buttons: Array, duration: float):
 	# Snap to final
 	for btn in buttons:
 		btn.position = _orig_positions[btn]
+
+func get_buttons() -> Array:
+	return get_children().filter(func(c):
+		return c is EnemyButton and c.visible and c.data != null)
+
+func _get_enemy_slots() -> Array:
+	return _enemy_vbox.get_children().filter(func(c):
+		return c is EnemyButton)
