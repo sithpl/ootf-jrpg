@@ -6,7 +6,8 @@ class_name EnemyButton extends BattleActorButton
 
 func _ready():
 	# TODO load data based on overworld tile/cohort
-	set_data(Data.enemies.Goofball.duplicate_custom())
+	#set_data(Data.enemies.Goofball.duplicate_custom())
+	pass
 
 #func reset():
 	#_atb_bar.reset()
