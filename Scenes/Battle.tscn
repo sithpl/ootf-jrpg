@@ -149,6 +149,7 @@ patch_margin_right = 4
 patch_margin_bottom = 4
 
 [node name="ScrollContainer" type="ScrollContainer" parent="GUIMargin/Bottom/Enemies"]
+custom_minimum_size = Vector2(63, 48)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -164,9 +165,14 @@ vertical_scroll_mode = 3
 
 [node name="MarginContainer" type="MarginContainer" parent="GUIMargin/Bottom/Enemies/ScrollContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_top = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="GUIMargin/Bottom/Enemies/ScrollContainer/MarginContainer"]
+custom_minimum_size = Vector2(55, 0)
 layout_mode = 2
+theme_override_constants/separation = 4
 
 [node name="EnemyInfo" type="Label" parent="GUIMargin/Bottom/Enemies/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2

@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://nc557d57bl5u"]
 
-[ext_resource type="Texture2D" uid="uid://bjlj1o2nqf5mx" path="res://Assets/Enemies/slime_green.png" id="1_8txii"]
+[ext_resource type="Texture2D" uid="uid://bjlj1o2nqf5mx" path="res://Assets/Enemies/skeleton.png" id="1_8txii"]
 [ext_resource type="Script" uid="uid://dqmdnvcv3j6cc" path="res://Scripts/EnemyButton.gd" id="2_8txii"]
 [ext_resource type="PackedScene" uid="uid://bsrq5nbx25gdv" path="res://Scenes/ATBBar.tscn" id="2_uahas"]
 

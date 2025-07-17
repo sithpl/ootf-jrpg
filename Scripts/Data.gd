@@ -2,8 +2,8 @@ extends Node
 
 static var enemies: Dictionary = {
 	#_xp, _gold, _hp, _mp, _speed, _strength
-	"Goofball": BattleActor.new(1,1,1,10,0,1),
-	"Slime Green": BattleActor.new(1,1,1,5,0,1),
+	"Skeleton": BattleActor.new(1,1,1,10,1,1),
+	"Slime Green": BattleActor.new(1,1,1,5,1,1),
 }
 
 static var players: Dictionary = {
