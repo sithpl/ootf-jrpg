@@ -1,4 +1,6 @@
-class_name BattleActorButton extends TextureButton
+# BattleActorButton.gd
+extends TextureButton
+class_name BattleActorButton
 
 const RECOIL : int = 8
 const HIT_TEXT : PackedScene = preload("res://Scenes/HitText.tscn")
