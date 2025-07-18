@@ -3,20 +3,18 @@
 [ext_resource type="Texture2D" uid="uid://bjlj1o2nqf5mx" path="res://Assets/Enemies/skeleton.png" id="1_8txii"]
 [ext_resource type="Script" uid="uid://dqmdnvcv3j6cc" path="res://Scripts/EnemyButton.gd" id="2_8txii"]
 [ext_resource type="PackedScene" uid="uid://bsrq5nbx25gdv" path="res://Scenes/ATBBar.tscn" id="2_uahas"]
-[ext_resource type="SpriteFrames" uid="uid://bsp4n14njauus" path="res://Assets/Animations/EnemyAnimations.tres" id="3_lb7kf"]
 
 [node name="EnemyButton" type="TextureButton"]
 offset_right = 24.0
 offset_bottom = 20.0
+texture_normal = ExtResource("1_8txii")
 script = ExtResource("2_8txii")
-actor_class = null
 
 [node name="ATBBar" parent="." instance=ExtResource("2_uahas")]
+visible = false
 layout_mode = 0
 offset_top = 16.0
 offset_right = 23.0
 offset_bottom = 20.0
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-sprite_frames = ExtResource("3_lb7kf")
-animation = &"RESET"
+[connection signal="filled" from="ATBBar" to="." method="_on_atb_bar_filled"]
