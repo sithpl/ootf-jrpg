@@ -1,11 +1,17 @@
 [gd_scene load_steps=3 format=3 uid="uid://bkuddhx0iepft"]
 
-[ext_resource type="Texture2D" uid="uid://b58wa1lsanvsd" path="res://Assets/Players/Soldier.png" id="1_hrsdt"]
 [ext_resource type="Script" uid="uid://cg12ujy303m2p" path="res://Scripts/PlayerButton.gd" id="2_hrsdt"]
+[ext_resource type="SpriteFrames" uid="uid://dlwgqi40acwwm" path="res://Assets/Animations/PlayerAnimations.tres" id="3_ko5nr"]
 
 [node name="PlayerButton" type="TextureButton"]
 offset_right = 15.0
 offset_bottom = 18.0
-texture_normal = ExtResource("1_hrsdt")
 flip_h = true
 script = ExtResource("2_hrsdt")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(-44, -39)
+sprite_frames = ExtResource("3_ko5nr")
+animation = &"knight_hurt"
+centered = false
+flip_h = true

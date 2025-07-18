@@ -1,47 +1,26 @@
-# BattleActorButton.gd
-extends TextureButton
-class_name BattleActorButton
-
-# Scene nodes & constants
-const HIT_TEXT : PackedScene = preload("res://Scenes/HitText.tscn")
-signal attack_finished(target_button : BattleActorButton)
+class_name BattleActorButton extends TextureButton
 
 const RECOIL : int = 8
+const HIT_TEXT : PackedScene = preload("res://Scenes/HitText.tscn")
+
+signal attack_finished(target_button : BattleActorButton)
+
 @export var actor_class : String = ""         # Must match a key in Data.class_configs
 
-@onready var anim_sprite      : AnimatedSprite2D = $AnimatedSprite2D
-@onready var start_pos        : Vector2         = position
-@onready var recoil_direction : int             = 1 if global_position.x > Globals.GAME_SIZE.x * 0.5 else -1
+@onready var anim_sprite      : AnimatedSprite2D = $AnimatedSprite2D if has_node("AnimatedSprite2D") else null
+@onready var start_pos        : Vector2          = position
+@onready var recoil_direction : int              = 1 if global_position.x > Globals.GAME_SIZE.x * 0.5 else -1
 
 # Runtime state
-var data        : BattleActor = null
-var tween       : Tween        = null
-var attack_anim : String       = ""
-
+var actor        :BattleActor  = null
+var data         :BattleActor  = null
+var tween        :Tween        = null
+var attack_anim  :String       = ""
+var idle_anim    :String       = ""
+var hurt_anim    :String       = ""
 
 func _ready() -> void:
-	# 1) Validate and fetch class config
-	if actor_class == "":
-		push_error("BattleActorButton: actor_class not set")
-		return
-
-	var class_cfg = Data.class_configs.get(actor_class)
-	if typeof(class_cfg) != TYPE_DICTIONARY:
-		push_error("BattleActorButton: Unknown class '%s'" % actor_class)
-		return
-
-	# 2) Pull in animation name & texture path
-	attack_anim    = class_cfg.get("attack_anim", "")
-	var tex_path   = class_cfg.get("texture_path", "")
-	if tex_path != "":
-		texture_normal = load(tex_path)
-
-	# 3) Assign sprite sheet frames once
-	if attack_anim != "" and anim_sprite:
-		anim_sprite.frames = preload("res://Assets/Animations/Animations.tres")
-
-	# 4) Wire up the click handler
-	connect("pressed", Callable(self, "_on_pressed"))
+	pass
 
 func set_data(_data : BattleActor) -> void:
 	# 1) Assign the BattleActor resource
@@ -56,32 +35,39 @@ func set_data(_data : BattleActor) -> void:
 	if data.texture:
 		texture_normal = data.texture
 
+func _set_actor(value:BattleActor) -> void:
+	actor = value
+	set_data(actor)
 
 func _on_pressed() -> void:
 	# This is where you select your actual target. For demo:
 	var target : BattleActorButton
-	attack(target)
+	_attack(target)
 
-
-func attack(target_btn : BattleActorButton) -> void:
-	# 1) Slide forward
-	data.act()
-	await tween.finished
-
-	# 2) Play the sprite‐sheet attack animation
-	if attack_anim != "":
+func _attack(target_btn : BattleActorButton) -> void:
+	#data.act()
+	#await tween.finished
+	if attack_anim != "" and anim_sprite:
 		anim_sprite.play(attack_anim)
 		await anim_sprite.animation_finished
-
-	# 3) Deal damage
+		anim_sprite.play(idle_anim)
+	else:
+		print("Warning: attack animation '%s' not found!" % attack_anim)
 	target_btn.data.healhurt(-data.strength)
-
-	## 4) Recoil back
-	#_recoil()
 	await get_tree().create_timer(0.5).timeout
-
-	# 5) Notify battle manager
+	# Return to idle animation
+	if idle_anim != "" and anim_sprite:
+		anim_sprite.play(idle_anim)
 	emit_signal("attack_finished", target_btn)
+
+func play_hurt_animation():
+	if hurt_anim != "" and anim_sprite:
+		anim_sprite.play(hurt_anim)
+		await anim_sprite.animation_finished
+		if idle_anim != "" and anim_sprite:
+			anim_sprite.play(idle_anim)
+	else:
+		print("Warning: hurt animation '%s' not found!" % hurt_anim)
 
 func _on_data_acting() -> void:
 	# Slide‐in tween when data.act() fires
@@ -101,7 +87,7 @@ func _recoil() -> Tween:
 	tween.parallel().tween_property(self, "self_modulate",Color.WHITE, 0.25).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
 	return tween
 
-func action_slide() -> Tween:
+func _action_slide() -> Tween:
 	if tween: tween.kill()
 	tween = create_tween()
 	tween.tween_property(self, "position:x", start_pos.x + (RECOIL * recoil_direction * -1), 0.5).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_IN)
@@ -113,6 +99,7 @@ func _on_data_hp_changed(hp : int, change : int) -> void:
 	hit_text.text     = str(abs(change))
 	add_child(hit_text)
 	hit_text.position = Vector2(size.x * 0.5, -4)
+	play_hurt_animation()
 
 	if change < 0:
 		_recoil()

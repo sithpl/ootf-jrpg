@@ -5,6 +5,7 @@ signal defeated()
 signal acting()
 
 var class_key: String = ""
+var attack_anim: String = ""
 var name: String = "Not Set"
 var hp_max: int = 1 
 var hp: int = hp_max
@@ -45,7 +46,6 @@ func healhurt(value: int):
 	change = hp - hp_start
 	emit_signal("hp_changed", hp, change)
 	hp_changed.emit(hp, change)
-	
 	if !has_hp():
 		defeated.emit()
 
@@ -77,3 +77,7 @@ func has_hp():
 
 func can_act():
 	return has_hp()
+
+func set_attack_anim(val:String):
+	attack_anim = val
+	print("BattleActor attack_anim set to:", attack_anim)
