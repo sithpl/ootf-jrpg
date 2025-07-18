@@ -4,6 +4,7 @@ signal hp_changed(hp, change)
 signal defeated()
 signal acting()
 
+var class_key: String = ""
 var name: String = "Not Set"
 var hp_max: int = 1 
 var hp: int = hp_max

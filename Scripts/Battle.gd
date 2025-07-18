@@ -217,51 +217,52 @@ func _begin_enemy_turn() -> void:
 
 func _resolve_action(actor: BattleActor, target: BattleActor, act: Actions) -> void:
 	print("Battle.gd/_resolve_action() called")
-	# block every button and early-out guards
 	_set_buttons_enabled(false)
 	_menu_cursor.hide()
-	
+
 	if not actor.can_act() or not target.has_hp():
 		return
-		
-	# 1) Slide actor in
-	var actor_btn = _get_button_for_actor(actor)
-	if actor_btn:
-		var tween_slide = actor_btn.action_slide()
-		await tween_slide.finished
-		
-	# 2) Apply effect
+
+	# grab the UI buttons for both participants
+	var actor_btn  = _get_button_for_actor(actor)  as BattleActorButton
+	var target_btn = _get_button_for_actor(target) as BattleActorButton
+
+	if not actor_btn or not target_btn:
+		push_error("Couldn’t find UI button for actor or target")
+		return
+
 	match act:
 		Actions.FIGHT:
-			var dmg = actor.strength
-			target.healhurt(-dmg)
-			_log_action("%s attacks %s for %d damage!" % [actor.name, target.name, dmg])
-			# 3) Recoil on target
-			var target_btn = _get_button_for_actor(target)
-			if target_btn:
-				var tween_hit = target_btn.recoil()
-				await tween_hit.finished
-			# remove from turn_order if they dropped to 0 hp
+			# CALL the button’s attack() method and wait for it to finish
+			await actor_btn.attack(target_btn)
+			# Log after the attack sequence completes
+			_log_action("%s attacks %s for %d damage!" % [actor.name, target.name, actor.strength])
+
+			# If the target just died, prune them out of turn order
 			if not target.has_hp():
 				var idx = turn_order.find(target)
-				if idx != -1:
-					# if the dead one was before our current pointer, shift back
+				if idx >= 0:
 					if idx < current_turn_idx:
 						current_turn_idx -= 1
 					turn_order.remove_at(idx)
+
 		Actions.MAGIC:
-			# Implement magic logic
 			_log_action("%s casts a spell!" % actor.name)
+			# your magic logic here…
+
 		Actions.ITEM:
-			# Implement item logic
 			_log_action("%s uses an item!" % actor.name)
+			# your item logic…
+
 		Actions.DEFEND:
 			_log_action("%s defends!" % actor.name)
+			# your defend logic…
+
 		_:
 			pass
-	# once all animations and death‐pruning are done
+
+	# small delay, then next turn
 	await get_tree().create_timer(0.2).timeout
-	# Unblock them again for the next turn
 	_set_buttons_enabled(true)
 	_advance_index()
 	_next_turn()
@@ -461,8 +462,4 @@ func _set_buttons_enabled(enabled: bool) -> void:
 	# 3) your player‐select buttons
 	for btn in _players_menu.get_buttons():
 		btn.disabled = not enabled
-
-	# 4) if you ever use PopupMenu (the Menu node) for keyboard shortcuts,
-	#    you can disable menu items by index:
-	# for i in range(_options_menu.get_item_count()):
-	#     _options_menu.set_item_disabled(i, not enabled)
+		

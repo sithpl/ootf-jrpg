@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://buhojghfeg4r2"]
+[gd_scene load_steps=17 format=3 uid="uid://buhojghfeg4r2"]
 
 [ext_resource type="Script" uid="uid://duujsym6v6wka" path="res://Scripts/Battle.gd" id="1_p46lj"]
 [ext_resource type="PackedScene" uid="uid://dggmt4f88v4jj" path="res://Scenes/WindowDefault.tscn" id="1_wvl2i"]
@@ -9,7 +9,10 @@
 [ext_resource type="AudioStream" uid="uid://ctfu05aiai88b" path="res://Assets/Audio/Battle/battle_theme.wav" id="3_262jj"]
 [ext_resource type="PackedScene" uid="uid://ce3mvvn7dqjjf" path="res://Scenes/PlayerInfoBar.tscn" id="3_c5ef4"]
 [ext_resource type="Script" uid="uid://c3g6ec23bdh1g" path="res://Scripts/Menu.gd" id="5_c5ef4"]
+[ext_resource type="Texture2D" uid="uid://v85weovepx1y" path="res://Assets/Players/Knight.png" id="7_tiokb"]
+[ext_resource type="Texture2D" uid="uid://djjcfxcf1xl4m" path="res://Assets/Players/Mage.png" id="8_0qgg5"]
 [ext_resource type="PackedScene" uid="uid://c7llgdviardiq" path="res://Scenes/MenuCursor.tscn" id="8_u22qb"]
+[ext_resource type="Texture2D" uid="uid://b4v2gqbbl1a5y" path="res://Assets/Players/Paladin.png" id="9_n5y6x"]
 [ext_resource type="PackedScene" uid="uid://tlqftavjyptl" path="res://Scenes/DownCursor.tscn" id="10_qxnh6"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_p46lj"]
@@ -109,6 +112,9 @@ offset_left = 12.0
 offset_top = 24.0
 offset_right = 28.0
 offset_bottom = 42.0
+texture_normal = ExtResource("7_tiokb")
+stretch_mode = 0
+metadata/_edit_use_anchors_ = true
 
 [node name="PlayerButton3" parent="Players" instance=ExtResource("3_1samx")]
 layout_mode = 0
@@ -116,6 +122,7 @@ offset_left = 20.0
 offset_top = 44.0
 offset_right = 36.0
 offset_bottom = 62.0
+texture_normal = ExtResource("8_0qgg5")
 
 [node name="PlayerButton4" parent="Players" instance=ExtResource("3_1samx")]
 layout_mode = 0
@@ -123,6 +130,8 @@ offset_left = 28.0
 offset_top = 64.0
 offset_right = 44.0
 offset_bottom = 82.0
+texture_normal = ExtResource("9_n5y6x")
+stretch_mode = 3
 
 [node name="GUIMargin" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -149,7 +158,6 @@ patch_margin_right = 4
 patch_margin_bottom = 4
 
 [node name="ScrollContainer" type="ScrollContainer" parent="GUIMargin/Bottom/Enemies"]
-custom_minimum_size = Vector2(63, 48)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -165,14 +173,9 @@ vertical_scroll_mode = 3
 
 [node name="MarginContainer" type="MarginContainer" parent="GUIMargin/Bottom/Enemies/ScrollContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_constants/margin_top = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="GUIMargin/Bottom/Enemies/ScrollContainer/MarginContainer"]
-custom_minimum_size = Vector2(55, 0)
 layout_mode = 2
-theme_override_constants/separation = 4
 
 [node name="EnemyInfo" type="Label" parent="GUIMargin/Bottom/Enemies/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
