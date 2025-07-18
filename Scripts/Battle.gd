@@ -1,50 +1,37 @@
 class_name Battle extends Control
 
-enum States {
-	INTRO,
-	IDLE,
-	PLAYER_SELECT,
-	PLAYER_TARGET,
-	ENEMY_TURN,
-	VICTORY,
-	GAMEOVER
-}
+enum States { INTRO, IDLE, PLAYER_SELECT, PLAYER_TARGET, ENEMY_TURN, VICTORY, GAMEOVER }
 
-enum Actions {
-	FIGHT,
-	MAGIC,
-	ITEM,
-	DEFEND
-}
+enum Actions { FIGHT, MAGIC, ITEM, DEFEND }
 
 @export var transition_time := 0.7
 
 const MAX_LOG_LINES := 3
 
 # Battle flow
-var state: States = States.IDLE
-var _orig_positions := {}
-var turn_order: Array[BattleActor] = []
-var current_turn_idx: int = 0
-var current_actor: BattleActor = null
-var action: Actions = Actions.FIGHT
-var action_log: Array[String] = []
-var EnemyButtonScene: PackedScene = preload("res://scenes/EnemyButton.tscn")
-var _enemy_info_nodes: Array[Label] = []
+var state                         :States             = States.IDLE
+var _orig_positions               := {}
+var turn_order                    :Array[BattleActor] = []
+var current_turn_idx              :int                = 0
+var current_actor                 :BattleActor        = null
+var action                        :Actions            = Actions.FIGHT
+var action_log                    :Array[String]      = []
+var EnemyButtonScene              :PackedScene        = preload("res://scenes/EnemyButton.tscn")
+var _enemy_info_nodes             :Array[Label]       = []
 
 # UI nodes
-@onready var _battle_music: AudioStreamPlayer = $BattleMusic
-@onready var _log_label: Label = $ActionLogLabel
-@onready var _gui: Control = $GUIMargin
-@onready var _options: WindowDefault = $Options
-@onready var _options_menu: Menu = $Options/Options
-@onready var _enemies_menu: Menu = $Enemies
-@onready var _enemy_slots := $Enemies.get_children()
-@onready var _enemy_info_scroll : ScrollContainer = $GUIMargin/Bottom/Enemies/ScrollContainer
-@onready var _enemy_info_vbox   : VBoxContainer = _enemy_info_scroll.get_node("MarginContainer/VBoxContainer")
-@onready var _players_menu: Menu = $Players
-@onready var _menu_cursor: MenuCursor = $MenuCursor
-@onready var _down_cursor: Sprite2D = $DownCursor
+@onready var _battle_music        :AudioStreamPlayer  = $BattleMusic
+@onready var _log_label           :Label              = $ActionLogLabel
+@onready var _gui                 :Control            = $GUIMargin
+@onready var _options             :WindowDefault      = $Options
+@onready var _options_menu        :Menu               = $Options/Options
+@onready var _enemies_menu        :Menu               = $Enemies
+@onready var _enemy_slots:                            = $Enemies.get_children()
+@onready var _enemy_info_scroll   :ScrollContainer    = $GUIMargin/Bottom/Enemies/ScrollContainer
+@onready var _enemy_info_vbox     :VBoxContainer      = _enemy_info_scroll.get_node("MarginContainer/VBoxContainer")
+@onready var _players_menu        :Menu               = $Players
+@onready var _menu_cursor         :MenuCursor         = $MenuCursor
+@onready var _down_cursor         :Sprite2D           = $DownCursor
 
 func _ready():
 	_options.hide()
@@ -76,7 +63,7 @@ func _stash_and_offset_buttons() -> void:
 		btn.position.x -= screen_w
 
 func _play_intro() -> void:
-	print("Battle.gd/_play_intro() called")
+	#DEBUG print("Battle.gd/_play_intro() called")
 	state = States.INTRO
 
 	# 0) Spawn between 2 and 6 enemies (duplicates allowed)
@@ -103,7 +90,7 @@ func _play_intro() -> void:
 	_start_battle()
 
 func _start_battle() -> void:
-	print("Battle.gd/_start_battle() called")
+	#DEBUG print("Battle.gd/_start_battle() called")
 	# 1) Play battle theme
 	var theme_path = Data.get_battle_theme()
 	var theme_stream = load(theme_path)
@@ -126,7 +113,7 @@ func _start_battle() -> void:
 	_next_turn()
 
 func _next_turn() -> void:
-	print("Battle.gd/_next_turn() called")
+	#DEBUG print("Battle.gd/_next_turn() called")
 	# —— Reset UI ——
 	_options.hide()
 	_menu_cursor.hide()
@@ -160,7 +147,7 @@ func _next_turn() -> void:
 		_begin_enemy_turn()
 
 func _begin_player_turn() -> void:
-	print("Battle.gd/_begin_player_turn() called")
+	#DEBUG print("Battle.gd/_begin_player_turn() called")
 	_set_buttons_enabled(true)
 	state = States.PLAYER_SELECT
 
@@ -178,7 +165,7 @@ func _begin_player_turn() -> void:
 	_down_cursor.show()
 
 func _on_options_button_pressed(button: BaseButton) -> void:
-	print("Battle.gd/_on_options_button_pressed() called")
+	#DEBUG print("Battle.gd/_on_options_button_pressed() called")
 	$MenuCursor.play_confirm_sound()
 	match button.text:
 		"Fight": action = Actions.FIGHT
@@ -194,7 +181,7 @@ func _on_options_button_pressed(button: BaseButton) -> void:
 	_position_cursor_on_enemy(_enemies_menu.get_buttons()[0].data)
 
 func _on_enemies_button_pressed(button: EnemyButton) -> void:
-	print("Battle.gd/_on_options_button_pressed() called")
+	#DEBUG print("Battle.gd/_on_options_button_pressed() called")
 	$MenuCursor.play_confirm_sound()
 	# Immediately hide all target‐selection UI
 	_menu_cursor.hide()
@@ -206,6 +193,7 @@ func _on_enemies_button_pressed(button: EnemyButton) -> void:
 	await get_tree().create_timer(0.8).timeout
 
 func _begin_enemy_turn() -> void:
+	#DEBUG print("Battle.gd/_begin_enemy_turn() called")
 	_set_buttons_enabled(false)
 	state = States.ENEMY_TURN
 	_menu_cursor.hide()
@@ -216,7 +204,7 @@ func _begin_enemy_turn() -> void:
 	await _resolve_action(current_actor, target, Actions.FIGHT)
 
 func _resolve_action(actor: BattleActor, target: BattleActor, act: Actions) -> void:
-	print("Battle.gd/_resolve_action() called")
+	#DEBUG print("Battle.gd/_resolve_action() called")
 	_set_buttons_enabled(false)
 	_menu_cursor.hide()
 
@@ -233,8 +221,8 @@ func _resolve_action(actor: BattleActor, target: BattleActor, act: Actions) -> v
 
 	match act:
 		Actions.FIGHT:
-			# CALL the button’s attack() method and wait for it to finish
-			await actor_btn.attack(target_btn)
+			# CALL the button’s _attack() method and wait for it to finish
+			await actor_btn._attack(target_btn)
 			# Log after the attack sequence completes
 			_log_action("%s attacks %s for %d damage!" % [actor.name, target.name, actor.strength])
 
@@ -268,13 +256,13 @@ func _resolve_action(actor: BattleActor, target: BattleActor, act: Actions) -> v
 	_next_turn()
 
 func _advance_index() -> void:
-	print("Battle.gd/_advance_index() called")
+	#DEBUG print("Battle.gd/_advance_index() called")
 	if turn_order.size() == 0:
 		return
 	current_turn_idx = (current_turn_idx + 1) % turn_order.size()
 
 func _check_end() -> bool:
-	print("Battle.gd/_check_end() called")
+	#DEBUG print("Battle.gd/_check_end() called")
 	var any_player_alive = false
 	for p in Data.party:
 		if p.has_hp():
@@ -299,7 +287,7 @@ func _check_end() -> bool:
 	return false
 
 func _end_battle(result_state: States) -> void:
-	print("Battle.gd/_end_battle() called")
+	#DEBUG print("Battle.gd/_end_battle() called")
 	state = result_state
 	_options.hide()
 	_enemies_menu.hide()
@@ -333,13 +321,13 @@ func _position_cursor_on_player(actor: BattleActor) -> void:
 	_down_cursor.show()
 
 func _position_cursor_on_enemy(enemy: BattleActor) -> void:
-	# give Godot one frame to size/position all the new labels
+	# One frame to size/position all the new labels
 	await get_tree().process_frame
 
-	# find the matching Label in our cached array
+	# Find the matching Label in cached array
 	for lbl in _enemy_info_nodes:
 		if lbl.get_meta("actor") == enemy:
-			# this one line scrolls it into view:
+			# Scroll it into view:
 			_enemy_info_scroll.ensure_control_visible(lbl)
 			return
 
@@ -382,7 +370,7 @@ func _spawn_random_enemies(requested_count: int) -> void:
 	_reload_enemy_info(actors)
 
 func _slide_group(buttons: Array, duration: float):
-	# Moves a group of buttons from their current (off-screen) positionsback to _orig_positions over 'duration' seconds.
+	# Moves the group of buttons from their current (off-screen) positions back to _orig_positions over 'duration' seconds.
 	var elapsed := 0.0
 	while elapsed < duration:
 		var t = elapsed / duration
@@ -403,7 +391,7 @@ func _get_enemy_slots() -> Array:
 		return c is EnemyButton)
 
 func _reload_enemy_info(actors: Array) -> void:
-	# Clear out old labels
+	# Clear old labels
 	for child in _enemy_info_vbox.get_children():
 		child.queue_free()
 	_enemy_info_nodes.clear()
@@ -416,7 +404,7 @@ func _reload_enemy_info(actors: Array) -> void:
 		_enemy_info_vbox.add_child(lbl)
 		_enemy_info_nodes.append(lbl)
 
-		# remove it when that actor dies
+		# Remove Label when actor dies
 		actor.defeated.connect(func() -> void:
 			_on_enemy_defeated(actor))
 
@@ -435,31 +423,30 @@ func _on_enemy_button_focused(button: EnemyButton) -> void:
 	_highlight_and_scroll_info(actor)
 
 func _highlight_and_scroll_info(actor: BattleActor) -> void:
-	# 1) Highlight the matching Label, dim the rest
+	#Highlight the matching Label, dim the rest
 	for lbl in _enemy_info_nodes:
 		var is_target = lbl.get_meta("actor") == actor
 		lbl.self_modulate = Color(1,1,1) if is_target else Color(0.5,0.5,0.5)
 
-	# 2) Wait one frame for the VBox layout to settle
+	#Wait one frame for VBox layout to settle
 	await get_tree().process_frame
 
-	# 3) Bring the focused label into view
+	#Bring the focused label into view
 	for lbl in _enemy_info_nodes:
 		if lbl.get_meta("actor") == actor:
 			_enemy_info_scroll.ensure_control_visible(lbl)
 			return
 
 func _set_buttons_enabled(enabled: bool) -> void:
-	# 1) your Option buttons (those are BaseButtons inside your WindowDefault)
+	#Option buttons (BaseButtons inside WindowDefault)
 	for child in $Options.get_children():
 		if child is BaseButton:
 			child.disabled = not enabled
 
-	# 2) your enemy‐target buttons
+	#Enemy buttons
 	for btn in _enemies_menu.get_buttons():
 		btn.disabled = not enabled
 
-	# 3) your player‐select buttons
+	#Player buttons
 	for btn in _players_menu.get_buttons():
 		btn.disabled = not enabled
-		

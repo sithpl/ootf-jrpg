@@ -27,6 +27,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_p46lj")
+transition_time = null
 metadata/_edit_use_anchors_ = true
 
 [node name="BattleScene" type="TextureRect" parent="."]
