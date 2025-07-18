@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://rdh5xoiw7d5r"
-path="res://.godot/imported/slime_green.png-0217321d11468379da88e703d8aaf0d7.ctex"
+uid="uid://djjcfxcf1xl4m"
+path="res://.godot/imported/Mage.png-d012385afb005a62cebc883cd1e3e081.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Enemies/slime_green.png"
-dest_files=["res://.godot/imported/slime_green.png-0217321d11468379da88e703d8aaf0d7.ctex"]
+source_file="res://Assets/Players/Mage.png"
+dest_files=["res://.godot/imported/Mage.png-d012385afb005a62cebc883cd1e3e081.ctex"]
 
 [params]
 

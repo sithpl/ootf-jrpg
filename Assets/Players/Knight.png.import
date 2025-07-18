@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://rdh5xoiw7d5r"
-path="res://.godot/imported/slime_green.png-0217321d11468379da88e703d8aaf0d7.ctex"
+uid="uid://v85weovepx1y"
+path="res://.godot/imported/Knight.png-004f2e91c7bce6f49c05f30a3b68966f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Enemies/slime_green.png"
-dest_files=["res://.godot/imported/slime_green.png-0217321d11468379da88e703d8aaf0d7.ctex"]
+source_file="res://Assets/Players/Knight.png"
+dest_files=["res://.godot/imported/Knight.png-004f2e91c7bce6f49c05f30a3b68966f.ctex"]
 
 [params]
 

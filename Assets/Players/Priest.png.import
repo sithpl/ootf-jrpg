@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://rdh5xoiw7d5r"
-path="res://.godot/imported/slime_green.png-0217321d11468379da88e703d8aaf0d7.ctex"
+uid="uid://cmosprnhchjy6"
+path="res://.godot/imported/Priest.png-b7f39f65c9df28afb568ad56d270d20e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Enemies/slime_green.png"
-dest_files=["res://.godot/imported/slime_green.png-0217321d11468379da88e703d8aaf0d7.ctex"]
+source_file="res://Assets/Players/Priest.png"
+dest_files=["res://.godot/imported/Priest.png-b7f39f65c9df28afb568ad56d270d20e.ctex"]
 
 [params]
 
