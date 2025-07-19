@@ -32,43 +32,51 @@ static func get_random_enemies(count: int) -> Array:
 
 # ---------- CLASSES ----------
 
-enum ActorClass { SOLDIER, ARCHER, KNIGHT, PALADIN, MAGE, PRIEST, MAGUS }
+enum ActorClass { SOLDIER, RANGER, KNIGHT, PALADIN, MAGE, PRIEST, MAGUS }
 
 # ActorClass config
 var class_configs := {
+	
 	"Soldier": { "hp_max": 50, "mp_max": 10, "strength": 4, "speed": 2, 
 	"texture_path":  "res://Assets/Players/Soldier.png", 
-	"idle_anim": "soldier_idle", "attack_anim": "soldier_melee", "hurt_anim" : "soldier_hurt" },
-	"Archer": { "hp_max":  40, "mp_max": 20, "strength": 3,"speed": 4, 
-	"texture_path": "res://Assets/Players/Archer.png", 
-	"idle_anim": "archer_idle", "attack_anim": "archer_ranged" },
+	"idle_anim": "soldier_idle", "attack_anim": "soldier_melee", "hurt_anim" : "soldier_hurt", "death_anim" : "soldier_death", 
+	"skill_anim" : "soldier_skill"  },
+	
+	"Ranger": { "hp_max":  40, "mp_max": 20, "strength": 3,"speed": 4, 
+	"texture_path": "res://Assets/Players/Ranger.png", 
+	"idle_anim": "ranger_idle", "attack_anim": "ranger_ranged", "hurt_anim" : "ranger_hurt", "death_anim" : "ranger_death" },
+	
 	"Knight": { "hp_max": 70, "mp_max": 5, "strength": 6, "speed": 1, 
 	"texture_path": "res://Assets/Players/Knight.png", 
-	"idle_anim": "knight_idle", "attack_anim": "knight_melee", "hurt_anim" : "knight_hurt"  },
+	"idle_anim": "knight_idle", "attack_anim": "knight_melee", "hurt_anim" : "knight_hurt", "death_anim" : "Knight_death"  },
+	
 	"Paladin": { "hp_max": 50, "mp_max": 10, "strength": 5, "speed": 1, 
 	"texture_path": "res://Assets/Players/Paladin.png", 
-	"idle_anim": "paladin_idle", "attack_anim": "paladin_melee", "hurt_anim" : "paladin_hurt"  },
+	"idle_anim": "paladin_idle", "attack_anim": "paladin_melee", "hurt_anim" : "paladin_hurt", "death_anim" : "paladin_death"  },
+	
 	"Mage": { "hp_max": 30, "mp_max": 50, "strength": 2, "speed": 2, 
 	"texture_path": "res://Assets/Players/Mage.png", 
-	"idle_anim": "mage_idle", "attack_anim": "mage_melee" },
+	"idle_anim": "mage_idle", "attack_anim": "mage_melee", "hurt_anim" : "mage_hurt", "death_anim" : "mage_death"  },
+	
 	"Priest": { "hp_max": 40, "mp_max": 30, "strength": 1, "speed": 3, 
 	"texture_path": "res://Assets/Players/Priest.png", 
-	"idle_anim": "priest_idle", "attack_anim": "priest_melee", "hurt_anim" : "priest_hurt"  },
-	"Magus": { "hp_max": 40, "mp_max": 30, "strength": 1, "speed": 3, 
-	"texture_path": "res://Assets/Players/Magus.png", 
-	"idle_anim": "magus_idle", "attack_anim": "magus_melee" }
+	"idle_anim": "priest_idle", "attack_anim": "priest_melee", "hurt_anim" : "priest_hurt", "death_anim" : "priest_death"  },
+	
+	"Archer": { "hp_max": 40, "mp_max": 30, "strength": 1, "speed": 3, 
+	"texture_path": "res://Assets/Players/Archer.png", 
+	"idle_anim": "archer_idle", "attack_anim": "archer_melee", "hurt_anim" : "archer_hurt", "death_anim" : "archer_death"  }
 }
 
 # ---------- CHARACTERS & PARTY ----------
 
-var party_keys: Array[String] = ["Sith", "Clav", "Glenn", "Rage"]
+var party_keys: Array[String] = ["Sith", "Fraud", "Glenn", "Rage"]
 var party: Array[BattleActor] = []
 
 # Assign names to classes and assign bonuses
 var characters := {
 	"Sith": { "class": "Soldier", 
 	"bonuses": { "hp_max": 10, "strength": 2 }},
-	"Clabbe": { "class": "Archer", 
+	"Clabbe": { "class": "Ranger", 
 	"bonuses": { "speed": 2 }},
 	"Erik": { "class": "Mage", 
 	"bonuses": { "mp_max": 15, "strength": 1 }},
@@ -79,6 +87,8 @@ var characters := {
 	"Clav": { "class": "Paladin", 
 	"bonuses": { "hp_max": 5, "mp_max": 5, "strength": 1}},
 	"Bili": { "class": "Magus", 
+	"bonuses": { "mp_max": 5, "strength": 1}},
+	"Fraud": { "class": "Ranger", 
 	"bonuses": { "mp_max": 5, "strength": 1}},
 }
 
