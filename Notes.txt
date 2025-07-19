@@ -1,4 +1,9 @@
 
+---------- ISSUES ----------
+
+HitText isn't displaying the correct damage compared to ActionLogLabel
+
+
 ---------- CLASSES ----------
 
 Necromancer/Summoner class

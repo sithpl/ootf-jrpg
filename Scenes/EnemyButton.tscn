@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dqmdnvcv3j6cc" path="res://Scripts/EnemyButton.gd" id="2_8txii"]
 [ext_resource type="PackedScene" uid="uid://bsrq5nbx25gdv" path="res://Scenes/ATBBar.tscn" id="2_uahas"]
-[ext_resource type="SpriteFrames" uid="uid://bsp4n14njauus" path="res://Assets/Animations/Enemy.tres" id="3_lb7kf"]
+[ext_resource type="SpriteFrames" uid="uid://bsp4n14njauus" path="res://Assets/Animations/EnemyAnimations.tres" id="3_lb7kf"]
 
 [node name="EnemyButton" type="TextureButton"]
 offset_right = 24.0
