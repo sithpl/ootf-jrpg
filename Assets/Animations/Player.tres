@@ -1,13 +1,13 @@
 [gd_resource type="SpriteFrames" load_steps=286 format=3 uid="uid://dlwgqi40acwwm"]
 
-[ext_resource type="Texture2D" uid="uid://bm3ue1q46l4v1" path="res://Assets/Animations/Sheets/Classes/Archer.png" id="1_pm7hn"]
-[ext_resource type="Texture2D" uid="uid://d1jva0jv0etjf" path="res://Assets/Animations/Sheets/Classes/Knight.png" id="2_mpvyv"]
-[ext_resource type="Texture2D" uid="uid://clvqulgo530ed" path="res://Assets/Animations/Sheets/Classes/Lancer.png" id="3_8n22k"]
-[ext_resource type="Texture2D" uid="uid://bfonjyhlj30o5" path="res://Assets/Animations/Sheets/Classes/Mage.png" id="4_65k5e"]
-[ext_resource type="Texture2D" uid="uid://ehy4uyya8meo" path="res://Assets/Animations/Sheets/Classes/Paladin.png" id="5_x8e0v"]
-[ext_resource type="Texture2D" uid="uid://dje1dca0wxe0l" path="res://Assets/Animations/Sheets/Classes/Priest.png" id="6_0rvnl"]
-[ext_resource type="Texture2D" uid="uid://cr4sdt5u1sedc" path="res://Assets/Animations/Sheets/Classes/Ranger.png" id="7_wvqhp"]
-[ext_resource type="Texture2D" uid="uid://cuoexd8uglgow" path="res://Assets/Animations/Sheets/Classes/Soldier.png" id="8_u17ey"]
+[ext_resource type="Texture2D" uid="uid://bm3ue1q46l4v1" path="res://Assets/Animations/Soldier.png" id="1_pm7hn"]
+[ext_resource type="Texture2D" uid="uid://d1jva0jv0etjf" path="res://Assets/Animations/Knight.png" id="2_mpvyv"]
+[ext_resource type="Texture2D" uid="uid://clvqulgo530ed" path="res://Assets/Animations/Lancer.png" id="3_8n22k"]
+[ext_resource type="Texture2D" uid="uid://bfonjyhlj30o5" path="res://Assets/Animations/Mage.png" id="4_65k5e"]
+[ext_resource type="Texture2D" uid="uid://ehy4uyya8meo" path="res://Assets/Animations/Sheets/Paladin.png" id="5_x8e0v"]
+[ext_resource type="Texture2D" uid="uid://dje1dca0wxe0l" path="res://Assets/Animations/Sheets/Priest.png" id="6_0rvnl"]
+[ext_resource type="Texture2D" uid="uid://cr4sdt5u1sedc" path="res://Assets/Animations/Sheets/Ranger.png" id="7_wvqhp"]
+[ext_resource type="Texture2D" uid="uid://cuoexd8uglgow" path="res://Assets/Animations/Sheets/Soldier.png" id="8_u17ey"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hm0vl"]
 atlas = ExtResource("1_pm7hn")

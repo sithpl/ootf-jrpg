@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://bkuddhx0iepft"]
 
-[ext_resource type="Texture2D" uid="uid://b58wa1lsanvsd" path="res://Assets/Players/Archer.png" id="1_ioj8t"]
+[ext_resource type="Texture2D" uid="uid://b58wa1lsanvsd" path="res://Assets/soldier_1.png" id="1_ioj8t"]
 [ext_resource type="Script" uid="uid://cg12ujy303m2p" path="res://Scripts/PlayerButton.gd" id="2_hrsdt"]
 [ext_resource type="SpriteFrames" uid="uid://ckp6p7xi2xypx" path="res://Assets/Animations/Projectiles.tres" id="3_ioj8t"]
-[ext_resource type="SpriteFrames" uid="uid://dlwgqi40acwwm" path="res://Assets/Animations/Player.tres" id="3_ko5nr"]
+[ext_resource type="SpriteFrames" uid="uid://dlwgqi40acwwm" path="res://Assets/Animations/PlayerAnimations.tres" id="3_ko5nr"]
 
 [node name="PlayerButton" type="TextureButton"]
 offset_right = 15.0
