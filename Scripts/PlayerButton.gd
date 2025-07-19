@@ -14,7 +14,7 @@ func _ready():
 		if tex_path != "":
 			texture_normal = load(tex_path)
 		if anim_sprite:
-			anim_sprite.frames = preload("res://Assets/Animations/PlayerAnimations.tres")
+			anim_sprite.frames = preload("res://Assets/Animations/Player.tres")
 			if idle_anim != "" and anim_sprite:
 				texture_normal = null
 				anim_sprite.show()

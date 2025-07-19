@@ -1,0 +1,11 @@
+
+---------- CLASSES ----------
+
+Necromancer/Summoner class
+- "Siblings" function as demon/zombie spawns
+- Poison-type attack using coughing, sneezing, wiping nose, etc.
+
+---------- SKILLS ----------
+
+Ranger
+- Animal-based skills don't do "attacks," just silly stuff that will cause damage ("Dog licks viciously")
