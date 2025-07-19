@@ -81,7 +81,6 @@ var class_configs := {
 
 # party_keys: Names of characters currently in the party
 var party_keys            :Array[String]        = ["Sith", "Erik", "Fraud", "Dan"]
-
 # party: List of BattleActor instances for the current party
 var party                 :Array[BattleActor]   = []
 
@@ -175,6 +174,11 @@ var boss_theme            :String               = "res://Assets/Audio/Battle/bos
 var special_theme         :String               = "res://Assets/Audio/Battle/special_theme.wav"
 var victory_theme         :String               = "res://Assets/Audio/Battle/victory_theme.wav"
 var gameover_theme        :String               = "res://Assets/Audio/Battle/gameover_theme.wav"
+
+#var normal_themes: Array = [
+	#"res://Audio/Battle/battle_theme1.ogg",
+	#"res://Audio/Battle/battle_theme2.ogg",
+#]
 
 # Returns the path for the current battle theme music based on battle type
 func get_battle_theme() -> String:
