@@ -1,9 +1,13 @@
 class_name Battle extends Control
 
+# Enums for battle states and player actions
+enum States { INTRO, IDLE, PLAYER_SELECT, PLAYER_TARGET, ENEMY_TURN, VICTORY, GAMEOVER }
+enum Actions { FIGHT, SKILLS, ITEM, DEFEND }
+
 # Exports
 @export var transition_time       :                   = 0.7
 
-# Onreadys
+# Onready variables for UI and game elements
 @onready var _battle_music        :AudioStreamPlayer  = $BattleMusic
 @onready var _log_label           :Label              = $ActionLogLabel
 @onready var _gui                 :Control            = $GUIMargin
@@ -17,14 +21,10 @@ class_name Battle extends Control
 @onready var _menu_cursor         :MenuCursor         = $MenuCursor
 @onready var _down_cursor         :Sprite2D           = $DownCursor
 
-# Enums
-enum States { INTRO, IDLE, PLAYER_SELECT, PLAYER_TARGET, ENEMY_TURN, VICTORY, GAMEOVER }
-enum Actions { FIGHT, MAGIC, ITEM, DEFEND }
-
 # Constants
 const MAX_LOG_LINES               :                   = 3
 
-# Variables
+# Variables to track battle state and flow
 var input_locked                  :bool               = false
 var state                         :States             = States.IDLE
 var _orig_positions               :                   = {}
@@ -36,12 +36,14 @@ var action_log                    :Array[String]      = []
 var EnemyButtonScene              :PackedScene        = preload("res://scenes/EnemyButton.tscn")
 var _enemy_info_nodes             :Array[Label]       = []
 
+# Called when the scene is ready
 func _ready():
 	_options.hide()
 	_down_cursor.hide()
 	_gui.hide()
 	call_deferred("_play_intro")  # Defer so _ready finishes first
 
+# Handles global input events (like canceling target selection)
 func _unhandled_input(event: InputEvent) -> void:
 	if input_locked:
 		get_viewport().gui_disable_input = true
@@ -49,12 +51,14 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel") and state == States.PLAYER_TARGET:
 		_cancel_target_selection()
 
+# Adds a line to the battle log, maintaining max line count
 func _log_action(text: String) -> void:
 	action_log.append(text)
 	if action_log.size() > MAX_LOG_LINES:
 		action_log.pop_front()
 	_log_label.text = "\n".join(action_log)
 
+# Stores original button positions and offsets them for intro animation
 func _stash_and_offset_buttons() -> void:
 	print("Battle.gd/_stash_and_offset_buttons() called")
 	var screen_w = get_viewport_rect().size.x
@@ -69,6 +73,7 @@ func _stash_and_offset_buttons() -> void:
 		_orig_positions[btn] = btn.position
 		btn.position.x -= screen_w
 
+# Handles the intro sequence (spawning enemies, music, animations)
 func _play_intro() -> void:
 	print("Battle.gd/_play_intro() called")
 	state = States.INTRO
@@ -97,6 +102,7 @@ func _play_intro() -> void:
 	_gui.show()
 	_start_battle()
 
+# Begins the main battle loop, sets turn order, starts first turn
 func _start_battle() -> void:
 	print("Battle.gd/_start_battle() called")
 	# 1) Play battle theme
@@ -120,6 +126,7 @@ func _start_battle() -> void:
 	_gui.show()
 	_next_turn()
 
+# Advances to the next turn, handling dead actors and end conditions
 func _next_turn() -> void:
 	print("Battle.gd/_next_turn() called")
 	# Reset UI
@@ -154,6 +161,7 @@ func _next_turn() -> void:
 	else:
 		_begin_enemy_turn()
 
+# Handles player turn setup (enabling UI, setting focus, showing options)
 func _begin_player_turn() -> void:
 	print("Battle.gd/_begin_player_turn() called")
 	_set_buttons_enabled(true)
@@ -170,12 +178,13 @@ func _begin_player_turn() -> void:
 	await get_tree().process_frame
 	_position_cursor_on_player(current_actor)
 
+# Handles when a player chooses a battle option (Fight/Skills/Item/Defend)
 func _on_options_button_pressed(button: BaseButton) -> void:
 	print("Battle.gd/_on_options_button_pressed() called")
 	$MenuCursor.play_confirm_sound()
 	match button.text:
 		"Fight": action = Actions.FIGHT
-		"Magic": action = Actions.MAGIC
+		"Skills": action = Actions.SKILLS
 		"Item":  action = Actions.ITEM
 		"Defend": action = Actions.DEFEND
 	state = States.PLAYER_TARGET
@@ -189,6 +198,7 @@ func _on_options_button_pressed(button: BaseButton) -> void:
 	_enemies_menu.button_focus(0)
 	_position_cursor_on_enemy(_enemies_menu.get_buttons()[0].data)
 
+# Handles when player selects an enemy to target
 func _on_enemies_button_pressed(button: EnemyButton) -> void:
 	print("Battle.gd/_on_options_button_pressed() called")
 	$MenuCursor.play_confirm_sound()
@@ -201,6 +211,7 @@ func _on_enemies_button_pressed(button: EnemyButton) -> void:
 	_resolve_action(current_actor, target, action)
 	await get_tree().create_timer(0.8).timeout
 
+# Handles enemy turn logic (picking a target, resolving action)
 func _begin_enemy_turn() -> void:
 	print("Battle.gd/_begin_enemy_turn() called")
 	_set_buttons_enabled(false)
@@ -216,6 +227,7 @@ func _begin_enemy_turn() -> void:
 		return
 	await _resolve_action(current_actor, target, Actions.FIGHT)
 
+# Resolves the chosen action for current actor (attack, skill, item, defend)
 func _resolve_action(actor: BattleActor, target: BattleActor, act: Actions) -> void:
 	print("Battle.gd/_resolve_action() called")
 	_set_buttons_enabled(false)
@@ -234,12 +246,12 @@ func _resolve_action(actor: BattleActor, target: BattleActor, act: Actions) -> v
 
 	match act:
 		Actions.FIGHT:
-			# CALL the button’s _attack() method and wait for it to finish
+			# CALL _attack() and wait for it to finish
 			await actor_btn._attack(target_btn)
 			# Log after the attack sequence completes
 			_log_action("%s attacks %s for %d damage!" % [actor.name, target.name, actor.strength])
 
-			# If the target just died, prune them out of turn order
+			# If target just died, remove from turn order
 			if not target.has_hp():
 				var idx = turn_order.find(target)
 				if idx >= 0:
@@ -247,9 +259,9 @@ func _resolve_action(actor: BattleActor, target: BattleActor, act: Actions) -> v
 						current_turn_idx -= 1
 					turn_order.remove_at(idx)
 
-		Actions.MAGIC:
+		Actions.SKILLS:
 			_log_action("%s casts a spell!" % actor.name)
-			# your magic logic here…
+			# your skill logic here…
 
 		Actions.ITEM:
 			_log_action("%s uses an item!" % actor.name)
@@ -268,12 +280,14 @@ func _resolve_action(actor: BattleActor, target: BattleActor, act: Actions) -> v
 	_advance_index()
 	_next_turn()
 
+# Moves to the next actor in the turn order
 func _advance_index() -> void:
 	print("Battle.gd/_advance_index() called")
 	if turn_order.size() == 0:
 		return
 	current_turn_idx = (current_turn_idx + 1) % turn_order.size()
 
+# Checks if the battle should end (victory/defeat), returns true if so
 func _check_end() -> bool:
 	print("Battle.gd/_check_end() called")
 	set_process_input(false)
@@ -300,6 +314,7 @@ func _check_end() -> bool:
 
 	return false
 
+# Handles end-of-battle logic and transitions (music, UI, etc)
 func _end_battle(result_state: States) -> void:
 	print("Battle.gd/_end_battle() called")
 	set_process_input(true)
@@ -328,6 +343,7 @@ func _end_battle(result_state: States) -> void:
 	# Hide battle UI, return to map, etc.
 	_gui.hide()
 
+# Moves the cursor to the currently active player button
 func _position_cursor_on_player(actor: BattleActor) -> void:
 	print("Battle.gd/_position_cursor_on_player() called")
 	var idx = Data.party.find(actor)
@@ -337,6 +353,7 @@ func _position_cursor_on_player(actor: BattleActor) -> void:
 	_down_cursor.global_position = btn.global_position + Vector2(5, -10)
 	_down_cursor.show()
 
+# Moves the cursor and scrolls to the selected enemy info label
 func _position_cursor_on_enemy(enemy: BattleActor) -> void:
 	print("Battle.gd/_position_cursor_on_enemy() called")
 	# Find the matching Label in cached array
@@ -346,11 +363,13 @@ func _position_cursor_on_enemy(enemy: BattleActor) -> void:
 			_enemy_info_scroll.ensure_control_visible(lbl)
 			return
 
+# Hides both cursors from view
 func _position_cursor_off() -> void:
 	print("Battle.gd/_position_cursor_off() called")
 	_down_cursor.hide()
 	_menu_cursor.hide()
 
+# Cancels target selection, returns to options menu
 func _cancel_target_selection() -> void:
 	print("Battle.gd/_cancel_target_selection() called")
 	state = States.PLAYER_SELECT
@@ -364,6 +383,7 @@ func _cancel_target_selection() -> void:
 	_options_menu.button_focus()
 	_position_cursor_on_player(current_actor)
 
+# Finds the button associated with a given actor (player or enemy)
 func _get_button_for_actor(actor: BattleActor) -> BattleActorButton:
 	print("Battle.gd/_get_button_for_actor() called")
 	for btn in _players_menu.get_buttons():
@@ -374,6 +394,7 @@ func _get_button_for_actor(actor: BattleActor) -> BattleActorButton:
 			return btn
 	return null
 
+# Spawns a requested number of random enemies and sets up their UI
 func _spawn_random_enemies(requested_count: int) -> void:
 	print("Battle.gd/_spawn_random_enemies() called")
 	var actors = Data.get_random_enemies(requested_count)
@@ -390,6 +411,7 @@ func _spawn_random_enemies(requested_count: int) -> void:
 			#slot.set_data(null)  # optional, clears old data
 	_reload_enemy_info(actors)
 
+# Slides a group of buttons back to their starting positions
 func _slide_group(buttons: Array, duration: float):
 	# Moves the group of buttons from their current (off-screen) positions back to _orig_positions over 'duration' seconds.
 	var elapsed := 0.0
@@ -403,14 +425,17 @@ func _slide_group(buttons: Array, duration: float):
 	for btn in buttons:
 		btn.position = _orig_positions[btn]
 
+# Returns all visible, valid enemy buttons
 func get_buttons() -> Array:
 	return get_children().filter(func(c):
 		return c is EnemyButton and c.visible and c.data != null)
 
+# Returns all enemy slots in the info VBox
 func _get_enemy_slots() -> Array:
 	return _enemy_info_vbox.get_children().filter(func(c):
 		return c is EnemyButton)
 
+# Rebuilds the enemy info sidebar for currently active enemies
 func _reload_enemy_info(actors: Array) -> void:
 	# Clear old labels
 	for child in _enemy_info_vbox.get_children():
@@ -432,6 +457,7 @@ func _reload_enemy_info(actors: Array) -> void:
 	# Reset scroll to top
 	_enemy_info_scroll.scroll_vertical = 0
 
+# Removes enemy labels when defeated
 func _on_enemy_defeated(enemy: BattleActor) -> void:
 	for i in range(_enemy_info_nodes.size()-1, -1, -1):
 		if _enemy_info_nodes[i].get_meta("actor") == enemy:
@@ -439,10 +465,12 @@ func _on_enemy_defeated(enemy: BattleActor) -> void:
 			_enemy_info_nodes.remove_at(i)
 			break
 
+# Highlights and scrolls to enemy info when their button is focused
 func _on_enemy_button_focused(button: EnemyButton) -> void:
 	var actor = button.data
 	_highlight_and_scroll_info(actor)
 
+# Highlights selected enemy and dims others; scrolls to selected enemy
 func _highlight_and_scroll_info(actor: BattleActor) -> void:
 	#Highlight the matching Label, dim the rest
 	for lbl in _enemy_info_nodes:
@@ -458,6 +486,7 @@ func _highlight_and_scroll_info(actor: BattleActor) -> void:
 			_enemy_info_scroll.ensure_control_visible(lbl)
 			return
 
+# Enables or disables all player and enemy buttons, also disables process_input
 func _set_buttons_enabled(enabled: bool) -> void:
 	print("Battle.gd/_set_buttons_enabled() called")
 	# Option buttons (BaseButtons inside WindowDefault)
@@ -476,6 +505,7 @@ func _set_buttons_enabled(enabled: bool) -> void:
 		btn.disabled = not enabled
 		btn.set_process_input(enabled)
 
+# Returns a random alive party member for enemy targeting
 func _pick_random_alive_party_member() -> BattleActor:
 	var alive = Data.party.filter(func(p): return p.has_hp())
 	if alive.size() == 0:
