@@ -54,7 +54,6 @@ offset_left = 32.0
 offset_top = 64.0
 offset_right = 58.0
 offset_bottom = 80.0
-actor_class = ""
 
 [node name="EnemyButton2" parent="Enemies" instance=ExtResource("2_2h7oj")]
 layout_mode = 0
@@ -62,14 +61,12 @@ offset_left = 46.0
 offset_top = 32.0
 offset_right = 72.0
 offset_bottom = 48.0
-actor_class = ""
 
 [node name="EnemyButton3" parent="Enemies" instance=ExtResource("2_2h7oj")]
 layout_mode = 0
 offset_left = 59.0
 offset_top = 4.0
 offset_right = 85.0
-actor_class = ""
 
 [node name="EnemyButton4" parent="Enemies" instance=ExtResource("2_2h7oj")]
 layout_mode = 0
@@ -77,14 +74,12 @@ offset_left = 10.0
 offset_top = 32.0
 offset_right = 36.0
 offset_bottom = 48.0
-actor_class = ""
 
 [node name="EnemyButton5" parent="Enemies" instance=ExtResource("2_2h7oj")]
 layout_mode = 0
 offset_top = 64.0
 offset_right = 26.0
 offset_bottom = 80.0
-actor_class = ""
 
 [node name="EnemyButton6" parent="Enemies" instance=ExtResource("2_2h7oj")]
 layout_mode = 0
@@ -92,7 +87,6 @@ offset_left = 24.0
 offset_top = 5.0
 offset_right = 50.0
 offset_bottom = 21.0
-actor_class = ""
 
 [node name="Players" type="Control" parent="."]
 anchors_preset = 0
@@ -331,7 +325,7 @@ offset_right = 99.0
 offset_bottom = 156.0
 
 [node name="DownCursor" parent="." instance=ExtResource("10_qxnh6")]
-position = Vector2(234, 37)
+position = Vector2(233, 35)
 
 [node name="ActionLogLabel" type="Label" parent="."]
 layout_mode = 0

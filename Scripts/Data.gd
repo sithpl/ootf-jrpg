@@ -37,7 +37,12 @@ enum ActorClass { SOLDIER, RANGER, KNIGHT, PALADIN, MAGE, PRIEST, MAGUS }
 # ActorClass config
 var class_configs := {
 	
-	"Soldier": { "hp_max": 50, "mp_max": 10, "strength": 4, "speed": 2, 
+	#"Soldier": { "hp_max": 50, "mp_max": 10, "strength": 4, "speed": 2, 
+	#"texture_path":  "res://Assets/Players/Soldier.png", 
+	#"idle_anim": "soldier_idle", "attack_anim": "soldier_melee", "hurt_anim" : "soldier_hurt", "death_anim" : "soldier_death", 
+	#"skill_anim" : "soldier_skill"  },
+	
+	"Soldier": { "hp_max": 1, "mp_max": 1, "strength": 1, "speed": 1, 
 	"texture_path":  "res://Assets/Players/Soldier.png", 
 	"idle_anim": "soldier_idle", "attack_anim": "soldier_melee", "hurt_anim" : "soldier_hurt", "death_anim" : "soldier_death", 
 	"skill_anim" : "soldier_skill"  },
@@ -69,13 +74,15 @@ var class_configs := {
 
 # ---------- CHARACTERS & PARTY ----------
 
-var party_keys: Array[String] = ["Sith", "Fraud", "Glenn", "Rage"]
+var party_keys: Array[String] = ["Sith", "Sith", "Sith", "Sith"]
 var party: Array[BattleActor] = []
 
 # Assign names to classes and assign bonuses
 var characters := {
+	#"Sith": { "class": "Soldier", 
+	#"bonuses": { "hp_max": 10, "strength": 2 }},
 	"Sith": { "class": "Soldier", 
-	"bonuses": { "hp_max": 10, "strength": 2 }},
+	"bonuses": {}},
 	"Clabbe": { "class": "Ranger", 
 	"bonuses": { "speed": 2 }},
 	"Erik": { "class": "Mage", 
@@ -92,8 +99,7 @@ var characters := {
 	"bonuses": { "mp_max": 5, "strength": 1}},
 }
 
-# Create the characters, add the bonuses to base class, verify data parse
-func create_character(name:String) -> BattleActor:
+func create_character(name:String) -> BattleActor: # Create the characters, add the bonuses to base class, verify data parse
 	var char_cfg = characters[name]
 	var cls_name = char_cfg["class"]
 	var cls_cfg  = class_configs[cls_name]
@@ -103,15 +109,15 @@ func create_character(name:String) -> BattleActor:
 	var strength = cls_cfg.strength  + char_cfg.bonuses.get("strength",0)
 	var speed    = cls_cfg.speed     + char_cfg.bonuses.get("speed",0)
 	
-	# Debug print
-	print("Creating character: ", name)
-	print("Character Config: ", char_cfg)
-	print("Class Name: ", cls_name)
-	print("Class Config: ", cls_cfg)
-	print("Final Stats -> HP:", hp_max, " MP:", mp_max, " STR:", strength, " SPD:", speed)
+	# Character parse debug
+	#print("Creating character: ", name)
+	#print("Character Config: ", char_cfg)
+	#print("Class Name: ", cls_name)
+	#print("Class Config: ", cls_cfg)
+	#print("Final Stats -> HP:", hp_max, " MP:", mp_max, " STR:", strength, " SPD:", speed)
 	
 	var attack_anim = cls_cfg.get("attack_anim","<none>")
-	print("attack_anim for %s: %s" % [name, attack_anim])
+	#DEBUG print("attack_anim for %s: %s" % [name, attack_anim])
 	
 	var actor = BattleActor.new(0,0,hp_max,mp_max,speed,strength)
 	actor.name        = name
@@ -120,27 +126,27 @@ func create_character(name:String) -> BattleActor:
 	actor.class_key   = cls_name     # ← critical line
 	return actor
 
-# Rebuild the 'party' array from 'party_keys'
-func rebuild_party() -> void:
+func rebuild_party() -> void: # Rebuild the 'party' array from 'party_keys'
+	print("Data.gd/rebuild_party() called")
 	party.clear()
 	for name in party_keys:
 		party.append(create_character(name))
 
-# Replace the party and rebuild
-func set_party(new_keys:Array[String]) -> void:
+func set_party(new_keys:Array[String]) -> void: # Replace the party and rebuild
+	print("Data.gd/set_party() called")
 	party_keys = new_keys.duplicate()
 	rebuild_party()
 
-# Swap a single slot (for menu)
-func swap_party_member(slot:int, new_name:String) -> void:
+func swap_party_member(slot:int, new_name:String) -> void: # Swap a single slot (for menu)
+	print("Data.gd/swap_party_member() called")
 	if slot < 0 or slot >= party_keys.size():
-		push_error("Invalid party slot %d" % slot)
+		print("Invalid party slot %d" % slot)
 		return
 	party_keys[slot] = new_name
 	party[slot]     = create_character(new_name)
 
-# 6) Fetch current BattleActor list
-func get_party() -> Array[BattleActor]:
+func get_party() -> Array[BattleActor]: # Fetch current BattleActor list
+	print("Data.gd/get_party() called")
 	return party
 
 # ---------- MUSIC ----------
@@ -161,6 +167,7 @@ var gameover_theme:  String = "res://Assets/Audio/Battle/gameover_theme.wav"
 #]
 
 func get_battle_theme() -> String:
+	print("Data.gd/get_battle_theme() called")
 	match current_battle_type:
 		BattleType.INTRO:
 			return intro_theme

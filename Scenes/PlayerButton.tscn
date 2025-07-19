@@ -12,6 +12,6 @@ script = ExtResource("2_hrsdt")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(-44, -39)
 sprite_frames = ExtResource("3_ko5nr")
-animation = &"ranger_skill1"
+animation = &"ranger_death"
 centered = false
 flip_h = true
