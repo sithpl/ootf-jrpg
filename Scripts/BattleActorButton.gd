@@ -1,28 +1,28 @@
 class_name BattleActorButton extends TextureButton
 
-# Exports
-@export var actor_class : String = ""         # Must match a key in Data.class_configs
-
-# Onreadys
-@onready var anim_sprite      : AnimatedSprite2D = $AnimatedSprite2D if has_node("AnimatedSprite2D") else null
-@onready var start_pos        : Vector2          = position
-@onready var recoil_direction : int              = 1 if global_position.x > Globals.GAME_SIZE.x * 0.5 else -1
-
 # Signals
 signal attack_finished(target_button : BattleActorButton)
 
+# Exports
+@export var actor_class        :String           = ""         # Must match a key in Data.class_configs
+
+# Onreadys
+@onready var anim_sprite       :AnimatedSprite2D = $AnimatedSprite2D if has_node("AnimatedSprite2D") else null
+@onready var start_pos         :Vector2          = position
+@onready var recoil_direction  :int              = 1 if global_position.x > Globals.GAME_SIZE.x * 0.5 else -1
+
 # Constants
-const RECOIL     :int          = 8
-const HIT_TEXT   :PackedScene  = preload("res://Scenes/HitText.tscn")
+const RECOIL                   :int          = 8
+const HIT_TEXT                 :PackedScene  = preload("res://Scenes/HitText.tscn")
 
 # Variables
-var actor        :BattleActor  = null
-var data         :BattleActor  = null
-var tween        :Tween        = null
-var attack_anim  :String       = ""
-var idle_anim    :String       = ""
-var hurt_anim    :String       = ""
-var death_anim   :String       = ""
+var actor                      :BattleActor  = null
+var data                       :BattleActor  = null
+var tween                      :Tween        = null
+var attack_anim                :String       = ""
+var idle_anim                  :String       = ""
+var hurt_anim                  :String       = ""
+var death_anim                 :String       = ""
 
 func _ready() -> void:
 	pass

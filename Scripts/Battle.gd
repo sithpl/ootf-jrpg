@@ -1,5 +1,9 @@
 class_name Battle extends Control
 
+# Enums
+enum States { INTRO, IDLE, PLAYER_SELECT, PLAYER_TARGET, ENEMY_TURN, VICTORY, GAMEOVER }
+enum Actions { FIGHT, SKILLS, ITEM, DEFEND }
+
 # Exports
 @export var transition_time       :                   = 0.7
 
@@ -16,10 +20,6 @@ class_name Battle extends Control
 @onready var _players_menu        :Menu               = $Players
 @onready var _menu_cursor         :MenuCursor         = $MenuCursor
 @onready var _down_cursor         :Sprite2D           = $DownCursor
-
-# Enums
-enum States { INTRO, IDLE, PLAYER_SELECT, PLAYER_TARGET, ENEMY_TURN, VICTORY, GAMEOVER }
-enum Actions { FIGHT, MAGIC, ITEM, DEFEND }
 
 # Constants
 const MAX_LOG_LINES               :                   = 3
@@ -175,7 +175,7 @@ func _on_options_button_pressed(button: BaseButton) -> void:
 	$MenuCursor.play_confirm_sound()
 	match button.text:
 		"Fight": action = Actions.FIGHT
-		"Magic": action = Actions.MAGIC
+		"Skills": action = Actions.SKILLS
 		"Item":  action = Actions.ITEM
 		"Defend": action = Actions.DEFEND
 	state = States.PLAYER_TARGET
@@ -234,12 +234,12 @@ func _resolve_action(actor: BattleActor, target: BattleActor, act: Actions) -> v
 
 	match act:
 		Actions.FIGHT:
-			# CALL the button’s _attack() method and wait for it to finish
+			# CALL _attack() and wait for it to finish
 			await actor_btn._attack(target_btn)
 			# Log after the attack sequence completes
 			_log_action("%s attacks %s for %d damage!" % [actor.name, target.name, actor.strength])
 
-			# If the target just died, prune them out of turn order
+			# If target just died, remove from turn order
 			if not target.has_hp():
 				var idx = turn_order.find(target)
 				if idx >= 0:
@@ -247,9 +247,9 @@ func _resolve_action(actor: BattleActor, target: BattleActor, act: Actions) -> v
 						current_turn_idx -= 1
 					turn_order.remove_at(idx)
 
-		Actions.MAGIC:
+		Actions.SKILLS:
 			_log_action("%s casts a spell!" % actor.name)
-			# your magic logic here…
+			# your skill logic here…
 
 		Actions.ITEM:
 			_log_action("%s uses an item!" % actor.name)

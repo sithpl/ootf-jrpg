@@ -11,28 +11,30 @@ var attack_anim   :String      = ""
 var death_anim    :String      = ""
 
 var name          :String      = "Not Set"
-var hp_max        :int         = 1 
+var lvl           :int         = 0
+var gold          :int         = 0
 var hp            :int         = hp_max
-var mp_max        :int         = 0
-var mp            :int         = mp_max
+var hp_max        :int         = 1 
+var ap_max        :int         = 0
+var ap            :int         = ap_max
 var speed         :int         = 1
 var strength      :int         = 1
 var xp            :int         = 0
-var gold          :int         = 0
 
 var texture       :Texture     = null
 var friendly      :bool        = false
 
-func _init(_xp: int, _gold: int,_hp: int = hp_max, _mp: int = mp_max, _speed: int = speed, _strength: int = strength):
+func _init(_lvl: int, _gold: int,_hp: int = hp_max, _ap: int = ap_max, _speed: int = speed, _strength: int = strength):
 	#DEBUG print("BattleActor.gd/_init() called")
+	lvl = _lvl
+	gold = _gold
 	hp_max = _hp
 	hp = _hp
-	mp_max = _mp
-	mp = _mp
+	ap_max = _ap
+	ap = _ap
 	strength = _strength
 	speed = _speed
-	xp = _xp
-	gold = _gold
+	xp = lvl * 5
 
 func set_name_custom(value: String):
 	#DEBUG print("BattleActor.gd/set_name_custom() called")
@@ -46,10 +48,11 @@ func set_name_custom(value: String):
 
 func duplicate_custom():
 	#DEBUG print("BattleActor.gd/duplicate_custom() called")
-	var dup := BattleActor.new(xp, gold, hp_max, mp_max, speed, strength)
+	var dup := BattleActor.new(xp, gold, hp_max, ap_max, speed, strength)
 	dup.copy_from(self)
 	dup.set_name_custom(name) # <- triggers texture loading for enemies
 	dup.resource_name = name
+	print(name, " : ", xp)
 	return dup
 
 func copy_from(source: BattleActor):
@@ -57,8 +60,8 @@ func copy_from(source: BattleActor):
 	name = source.name
 	hp_max = source.hp_max
 	hp = source.hp
-	mp_max = source.mp_max
-	mp = source.mp
+	ap_max = source.ap_max
+	ap = source.ap
 	speed = source.speed
 	strength = source.strength
 	xp = source.xp
