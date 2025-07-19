@@ -1551,7 +1551,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_btcws")
 }],
-"loop": true,
+"loop": false,
 "name": &"ranger_hurt",
 "speed": 4.0
 }, {

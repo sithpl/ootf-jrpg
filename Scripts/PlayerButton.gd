@@ -1,5 +1,4 @@
-class_name PlayerButton
-extends BattleActorButton
+class_name PlayerButton extends BattleActorButton
 
 func _ready():
 	var idx = get_index()
@@ -10,6 +9,7 @@ func _ready():
 		attack_anim = class_cfg.get("attack_anim", "")
 		idle_anim = class_cfg.get("idle_anim", "")
 		hurt_anim = class_cfg.get("hurt_anim", "")
+		death_anim = class_cfg.get("death_anim", "")
 		var tex_path = class_cfg.get("texture_path", "")
 		if tex_path != "":
 			texture_normal = load(tex_path)

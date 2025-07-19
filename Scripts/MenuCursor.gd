@@ -26,6 +26,7 @@ func _process(_delta: float) -> void:
 	global_position = target.global_position + OFFSET
 
 func _on_viewport_gui_focus_changed(node: Control):
+	print("MenuCursor.gd/_on_viewport_gui_focus_changed() called")
 	call_deferred("_deferred_focus_change", node)
 	if node is BaseButton:
 		if target != node:
@@ -43,6 +44,7 @@ func _on_viewport_gui_focus_changed(node: Control):
 		set_process(false)
 
 func _on_target_tree_exiting(node: Control):
+	print("MenuCursor.gd/_on_target_tree_exiting() called")
 	if node == target:
 		target = null
 		set_process(false)
@@ -52,17 +54,22 @@ func play_confirm_sound():
 		confirm_sound.play()
 
 func _deferred_focus_change(node: Control) -> void:
-	# only show when Battle is in the correct state
-	if node is BaseButton and battle.state in [
-			battle.States.PLAYER_SELECT,
-			battle.States.PLAYER_TARGET
-		]:
+	print("MenuCursor.gd/_deferred_focus_change() called")
+	# only show when Battle is in the correct state AND the menu is visible
+	var menu_is_visible = false
+	if battle.state == battle.States.PLAYER_SELECT:
+		menu_is_visible = battle._options.visible
+	elif battle.state == battle.States.PLAYER_TARGET:
+		menu_is_visible = battle._enemies_menu.visible
+
+	if node is BaseButton and menu_is_visible:
 		_set_target(node)
 	else:
 		hide()
 		set_process(false)
 		
 func _set_target(node: Control) -> void:
+	print("MenuCursor.gd/_set_target() called")
 	# disconnect old target
 	if target:
 		target.tree_exiting.disconnect(_on_target_tree_exiting)
