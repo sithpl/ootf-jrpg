@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b58wa1lsanvsd"
-path="res://.godot/imported/Archer.png-8b09740a92cb8e6a0ba0350585dc394e.ctex"
+uid="uid://cr4sdt5u1sedc"
+path="res://.godot/imported/Ranger.png-49338e5486207a6e21f489c2ae63a85e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Players/Archer.png"
-dest_files=["res://.godot/imported/Archer.png-8b09740a92cb8e6a0ba0350585dc394e.ctex"]
+source_file="res://Assets/Animations/Sheets/Ranger.png"
+dest_files=["res://.godot/imported/Ranger.png-49338e5486207a6e21f489c2ae63a85e.ctex"]
 
 [params]
 

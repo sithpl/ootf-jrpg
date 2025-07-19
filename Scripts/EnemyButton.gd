@@ -5,6 +5,6 @@ func _ready():
 	pass
 
 func _on_data_is_defeated():
-	#DEBUG print("Enemy defeated")
+	print("EnemyButton.gd/_on_data_is_defeated() called")
 	await get_tree().create_timer(1.0).timeout
 	queue_free()

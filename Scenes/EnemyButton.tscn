@@ -8,7 +8,6 @@
 offset_right = 24.0
 offset_bottom = 20.0
 script = ExtResource("2_8txii")
-actor_class = null
 
 [node name="ATBBar" parent="." instance=ExtResource("2_uahas")]
 layout_mode = 0

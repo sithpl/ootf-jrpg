@@ -32,43 +32,58 @@ static func get_random_enemies(count: int) -> Array:
 
 # ---------- CLASSES ----------
 
-enum ActorClass { SOLDIER, ARCHER, KNIGHT, PALADIN, MAGE, PRIEST, MAGUS }
+enum ActorClass { SOLDIER, RANGER, KNIGHT, PALADIN, MAGE, PRIEST, MAGUS }
 
 # ActorClass config
 var class_configs := {
-	"Soldier": { "hp_max": 50, "mp_max": 10, "strength": 4, "speed": 2, 
+	
+	#"Soldier": { "hp_max": 50, "mp_max": 10, "strength": 4, "speed": 2, 
+	#"texture_path":  "res://Assets/Players/Soldier.png", 
+	#"idle_anim": "soldier_idle", "attack_anim": "soldier_melee", "hurt_anim" : "soldier_hurt", "death_anim" : "soldier_death", 
+	#"skill_anim" : "soldier_skill"  },
+	
+	"Soldier": { "hp_max": 1, "mp_max": 1, "strength": 1, "speed": 1, 
 	"texture_path":  "res://Assets/Players/Soldier.png", 
-	"idle_anim": "soldier_idle", "attack_anim": "soldier_melee", "hurt_anim" : "soldier_hurt" },
-	"Archer": { "hp_max":  40, "mp_max": 20, "strength": 3,"speed": 4, 
-	"texture_path": "res://Assets/Players/Archer.png", 
-	"idle_anim": "archer_idle", "attack_anim": "archer_ranged" },
+	"idle_anim": "soldier_idle", "attack_anim": "soldier_melee", "hurt_anim" : "soldier_hurt", "death_anim" : "soldier_death", 
+	"skill_anim" : "soldier_skill"  },
+	
+	"Ranger": { "hp_max":  40, "mp_max": 20, "strength": 3,"speed": 4, 
+	"texture_path": "res://Assets/Players/Ranger.png", 
+	"idle_anim": "ranger_idle", "attack_anim": "ranger_ranged", "hurt_anim" : "ranger_hurt", "death_anim" : "ranger_death" },
+	
 	"Knight": { "hp_max": 70, "mp_max": 5, "strength": 6, "speed": 1, 
 	"texture_path": "res://Assets/Players/Knight.png", 
-	"idle_anim": "knight_idle", "attack_anim": "knight_melee", "hurt_anim" : "knight_hurt"  },
+	"idle_anim": "knight_idle", "attack_anim": "knight_melee", "hurt_anim" : "knight_hurt", "death_anim" : "Knight_death"  },
+	
 	"Paladin": { "hp_max": 50, "mp_max": 10, "strength": 5, "speed": 1, 
 	"texture_path": "res://Assets/Players/Paladin.png", 
-	"idle_anim": "paladin_idle", "attack_anim": "paladin_melee", "hurt_anim" : "paladin_hurt"  },
+	"idle_anim": "paladin_idle", "attack_anim": "paladin_melee", "hurt_anim" : "paladin_hurt", "death_anim" : "paladin_death"  },
+	
 	"Mage": { "hp_max": 30, "mp_max": 50, "strength": 2, "speed": 2, 
 	"texture_path": "res://Assets/Players/Mage.png", 
-	"idle_anim": "mage_idle", "attack_anim": "mage_melee" },
+	"idle_anim": "mage_idle", "attack_anim": "mage_melee", "hurt_anim" : "mage_hurt", "death_anim" : "mage_death"  },
+	
 	"Priest": { "hp_max": 40, "mp_max": 30, "strength": 1, "speed": 3, 
 	"texture_path": "res://Assets/Players/Priest.png", 
-	"idle_anim": "priest_idle", "attack_anim": "priest_melee", "hurt_anim" : "priest_hurt"  },
-	"Magus": { "hp_max": 40, "mp_max": 30, "strength": 1, "speed": 3, 
-	"texture_path": "res://Assets/Players/Magus.png", 
-	"idle_anim": "magus_idle", "attack_anim": "magus_melee" }
+	"idle_anim": "priest_idle", "attack_anim": "priest_melee", "hurt_anim" : "priest_hurt", "death_anim" : "priest_death"  },
+	
+	"Archer": { "hp_max": 40, "mp_max": 30, "strength": 1, "speed": 3, 
+	"texture_path": "res://Assets/Players/Archer.png", 
+	"idle_anim": "archer_idle", "attack_anim": "archer_melee", "hurt_anim" : "archer_hurt", "death_anim" : "archer_death"  }
 }
 
 # ---------- CHARACTERS & PARTY ----------
 
-var party_keys: Array[String] = ["Sith", "Clav", "Glenn", "Rage"]
+var party_keys: Array[String] = ["Sith", "Sith", "Sith", "Sith"]
 var party: Array[BattleActor] = []
 
 # Assign names to classes and assign bonuses
 var characters := {
+	#"Sith": { "class": "Soldier", 
+	#"bonuses": { "hp_max": 10, "strength": 2 }},
 	"Sith": { "class": "Soldier", 
-	"bonuses": { "hp_max": 10, "strength": 2 }},
-	"Clabbe": { "class": "Archer", 
+	"bonuses": {}},
+	"Clabbe": { "class": "Ranger", 
 	"bonuses": { "speed": 2 }},
 	"Erik": { "class": "Mage", 
 	"bonuses": { "mp_max": 15, "strength": 1 }},
@@ -80,10 +95,11 @@ var characters := {
 	"bonuses": { "hp_max": 5, "mp_max": 5, "strength": 1}},
 	"Bili": { "class": "Magus", 
 	"bonuses": { "mp_max": 5, "strength": 1}},
+	"Fraud": { "class": "Ranger", 
+	"bonuses": { "mp_max": 5, "strength": 1}},
 }
 
-# Create the characters, add the bonuses to base class, verify data parse
-func create_character(name:String) -> BattleActor:
+func create_character(name:String) -> BattleActor: # Create the characters, add the bonuses to base class, verify data parse
 	var char_cfg = characters[name]
 	var cls_name = char_cfg["class"]
 	var cls_cfg  = class_configs[cls_name]
@@ -93,15 +109,15 @@ func create_character(name:String) -> BattleActor:
 	var strength = cls_cfg.strength  + char_cfg.bonuses.get("strength",0)
 	var speed    = cls_cfg.speed     + char_cfg.bonuses.get("speed",0)
 	
-	# Debug print
-	print("Creating character: ", name)
-	print("Character Config: ", char_cfg)
-	print("Class Name: ", cls_name)
-	print("Class Config: ", cls_cfg)
-	print("Final Stats -> HP:", hp_max, " MP:", mp_max, " STR:", strength, " SPD:", speed)
+	# Character parse debug
+	#print("Creating character: ", name)
+	#print("Character Config: ", char_cfg)
+	#print("Class Name: ", cls_name)
+	#print("Class Config: ", cls_cfg)
+	#print("Final Stats -> HP:", hp_max, " MP:", mp_max, " STR:", strength, " SPD:", speed)
 	
 	var attack_anim = cls_cfg.get("attack_anim","<none>")
-	print("attack_anim for %s: %s" % [name, attack_anim])
+	#DEBUG print("attack_anim for %s: %s" % [name, attack_anim])
 	
 	var actor = BattleActor.new(0,0,hp_max,mp_max,speed,strength)
 	actor.name        = name
@@ -110,27 +126,27 @@ func create_character(name:String) -> BattleActor:
 	actor.class_key   = cls_name     # ← critical line
 	return actor
 
-# Rebuild the 'party' array from 'party_keys'
-func rebuild_party() -> void:
+func rebuild_party() -> void: # Rebuild the 'party' array from 'party_keys'
+	print("Data.gd/rebuild_party() called")
 	party.clear()
 	for name in party_keys:
 		party.append(create_character(name))
 
-# Replace the party and rebuild
-func set_party(new_keys:Array[String]) -> void:
+func set_party(new_keys:Array[String]) -> void: # Replace the party and rebuild
+	print("Data.gd/set_party() called")
 	party_keys = new_keys.duplicate()
 	rebuild_party()
 
-# Swap a single slot (for menu)
-func swap_party_member(slot:int, new_name:String) -> void:
+func swap_party_member(slot:int, new_name:String) -> void: # Swap a single slot (for menu)
+	print("Data.gd/swap_party_member() called")
 	if slot < 0 or slot >= party_keys.size():
-		push_error("Invalid party slot %d" % slot)
+		print("Invalid party slot %d" % slot)
 		return
 	party_keys[slot] = new_name
 	party[slot]     = create_character(new_name)
 
-# 6) Fetch current BattleActor list
-func get_party() -> Array[BattleActor]:
+func get_party() -> Array[BattleActor]: # Fetch current BattleActor list
+	print("Data.gd/get_party() called")
 	return party
 
 # ---------- MUSIC ----------
@@ -151,6 +167,7 @@ var gameover_theme:  String = "res://Assets/Audio/Battle/gameover_theme.wav"
 #]
 
 func get_battle_theme() -> String:
+	print("Data.gd/get_battle_theme() called")
 	match current_battle_type:
 		BattleType.INTRO:
 			return intro_theme
