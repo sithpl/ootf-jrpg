@@ -1,7 +1,7 @@
 class_name Battle extends Control
 
 # Exports
-@export var transition_time := 0.7
+@export var transition_time       :                   = 0.7
 
 # Onreadys
 @onready var _battle_music        :AudioStreamPlayer  = $BattleMusic
@@ -10,7 +10,7 @@ class_name Battle extends Control
 @onready var _options             :WindowDefault      = $Options
 @onready var _options_menu        :Menu               = $Options/Options
 @onready var _enemies_menu        :Menu               = $Enemies
-@onready var _enemy_slots:                            = $Enemies.get_children()
+@onready var _enemy_slots         :                   = $Enemies.get_children()
 @onready var _enemy_info_scroll   :ScrollContainer    = $GUIMargin/Bottom/Enemies/ScrollContainer
 @onready var _enemy_info_vbox     :VBoxContainer      = _enemy_info_scroll.get_node("MarginContainer/VBoxContainer")
 @onready var _players_menu        :Menu               = $Players
@@ -22,11 +22,12 @@ enum States { INTRO, IDLE, PLAYER_SELECT, PLAYER_TARGET, ENEMY_TURN, VICTORY, GA
 enum Actions { FIGHT, MAGIC, ITEM, DEFEND }
 
 # Constants
-const MAX_LOG_LINES := 3
+const MAX_LOG_LINES               :                   = 3
 
 # Variables
+var input_locked                  :bool               = false
 var state                         :States             = States.IDLE
-var _orig_positions               := {}
+var _orig_positions               :                   = {}
 var turn_order                    :Array[BattleActor] = []
 var current_turn_idx              :int                = 0
 var current_actor                 :BattleActor        = null
@@ -42,6 +43,9 @@ func _ready():
 	call_deferred("_play_intro")  # Defer so _ready finishes first
 
 func _unhandled_input(event: InputEvent) -> void:
+	if input_locked:
+		get_viewport().gui_disable_input = true
+		return
 	if event.is_action_pressed("ui_cancel") and state == States.PLAYER_TARGET:
 		_cancel_target_selection()
 
@@ -68,6 +72,7 @@ func _stash_and_offset_buttons() -> void:
 func _play_intro() -> void:
 	print("Battle.gd/_play_intro() called")
 	state = States.INTRO
+	set_process_input(false)
 
 	# 0) Spawn between 2 and 6 enemies (duplicates allowed)
 	var spawn_count = randi_range(2, 6)
@@ -152,17 +157,17 @@ func _next_turn() -> void:
 func _begin_player_turn() -> void:
 	print("Battle.gd/_begin_player_turn() called")
 	_set_buttons_enabled(true)
+	set_process_input(true)
 	state = States.PLAYER_SELECT
 
 	_options.show()
-	_options_menu.button_focus(0)
+	_options_menu.button_enable_focus(true)           # Enable focus on options
+	_enemies_menu.button_enable_focus(false)          # Disable focus on enemies
+	_players_menu.button_enable_focus(false)          # Disable focus on players
 
-	#_menu_cursor.hide()
+	_options_menu.button_focus(0)
 	_down_cursor.hide()
-	
-	# wait one frame before moving & showing
 	await get_tree().process_frame
-	
 	_position_cursor_on_player(current_actor)
 
 func _on_options_button_pressed(button: BaseButton) -> void:
@@ -175,9 +180,12 @@ func _on_options_button_pressed(button: BaseButton) -> void:
 		"Defend": action = Actions.DEFEND
 	state = States.PLAYER_TARGET
 
-	# Hide options, show enemies
 	_options.hide()
 	_enemies_menu.show()
+	_enemies_menu.button_enable_focus(true)          # Enable focus on enemies
+	_players_menu.button_enable_focus(false)
+	_options_menu.button_enable_focus(false)
+
 	_enemies_menu.button_focus(0)
 	_position_cursor_on_enemy(_enemies_menu.get_buttons()[0].data)
 
@@ -196,6 +204,7 @@ func _on_enemies_button_pressed(button: EnemyButton) -> void:
 func _begin_enemy_turn() -> void:
 	print("Battle.gd/_begin_enemy_turn() called")
 	_set_buttons_enabled(false)
+	set_process_input(false)
 	state = States.ENEMY_TURN
 	_menu_cursor.hide()
 	_down_cursor.hide()
@@ -267,6 +276,7 @@ func _advance_index() -> void:
 
 func _check_end() -> bool:
 	print("Battle.gd/_check_end() called")
+	set_process_input(false)
 	var any_player_alive = false
 	for p in Data.party:
 		if p.has_hp():
@@ -292,6 +302,7 @@ func _check_end() -> bool:
 
 func _end_battle(result_state: States) -> void:
 	print("Battle.gd/_end_battle() called")
+	set_process_input(true)
 	state = result_state
 	_options.hide()
 	_enemies_menu.hide()
@@ -319,7 +330,6 @@ func _end_battle(result_state: States) -> void:
 
 func _position_cursor_on_player(actor: BattleActor) -> void:
 	print("Battle.gd/_position_cursor_on_player() called")
-	await get_tree().create_timer(1.0).timeout
 	var idx = Data.party.find(actor)
 	var btn = _players_menu.get_buttons()[idx]
 	
@@ -344,10 +354,12 @@ func _position_cursor_off() -> void:
 func _cancel_target_selection() -> void:
 	print("Battle.gd/_cancel_target_selection() called")
 	state = States.PLAYER_SELECT
-
 	_down_cursor.hide()
-
 	_options.show()
+	_options_menu.button_enable_focus(true)          # Re-enable options focus
+	_enemies_menu.button_enable_focus(false)
+	_players_menu.button_enable_focus(false)
+
 	_menu_cursor.show()
 	_options_menu.button_focus()
 	_position_cursor_on_player(current_actor)
@@ -447,18 +459,22 @@ func _highlight_and_scroll_info(actor: BattleActor) -> void:
 			return
 
 func _set_buttons_enabled(enabled: bool) -> void:
-	#Option buttons (BaseButtons inside WindowDefault)
+	print("Battle.gd/_set_buttons_enabled() called")
+	# Option buttons (BaseButtons inside WindowDefault)
 	for child in $Options.get_children():
 		if child is BaseButton:
 			child.disabled = not enabled
+		child.set_process_input(enabled)
 
-	#Enemy buttons
+	# Enemy buttons
 	for btn in _enemies_menu.get_buttons():
 		btn.disabled = not enabled
+		btn.set_process_input(enabled)
 
-	#Player buttons
+	# Player buttons
 	for btn in _players_menu.get_buttons():
 		btn.disabled = not enabled
+		btn.set_process_input(enabled)
 
 func _pick_random_alive_party_member() -> BattleActor:
 	var alive = Data.party.filter(func(p): return p.has_hp())

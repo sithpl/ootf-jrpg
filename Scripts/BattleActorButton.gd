@@ -12,8 +12,8 @@ class_name BattleActorButton extends TextureButton
 signal attack_finished(target_button : BattleActorButton)
 
 # Constants
-const RECOIL : int = 8
-const HIT_TEXT : PackedScene = preload("res://Scenes/HitText.tscn")
+const RECOIL     :int          = 8
+const HIT_TEXT   :PackedScene  = preload("res://Scenes/HitText.tscn")
 
 # Variables
 var actor        :BattleActor  = null

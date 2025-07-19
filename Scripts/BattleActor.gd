@@ -45,7 +45,7 @@ func set_name_custom(value: String):
 		#DEBUG print(name)
 
 func duplicate_custom():
-	print("BattleActor.gd/duplicate_custom() called")
+	#DEBUG print("BattleActor.gd/duplicate_custom() called")
 	var dup := BattleActor.new(xp, gold, hp_max, mp_max, speed, strength)
 	dup.copy_from(self)
 	dup.set_name_custom(name) # <- triggers texture loading for enemies
@@ -53,7 +53,7 @@ func duplicate_custom():
 	return dup
 
 func copy_from(source: BattleActor):
-	print("BattleActor.gd/copy_from() called")
+	#DEBUG print("BattleActor.gd/copy_from() called")
 	name = source.name
 	hp_max = source.hp_max
 	hp = source.hp
