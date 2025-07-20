@@ -360,6 +360,13 @@ func _end_battle(result_state: States) -> void:
 			if gameover_music:
 				_battle_music.stream = gameover_music
 				_battle_music.play()
+			
+			_enemies_menu.show()
+			_players_menu.show()
+			_top_menu.show()
+			
+			_top_text_label.text = "Good job, loser..."
+			await _wait_for_confirm()
 			print("YOU LOSE!")
 
 	# Hide battle UI, return to map, etc.
