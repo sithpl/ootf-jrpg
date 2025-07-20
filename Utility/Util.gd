@@ -1,5 +1,7 @@
 class_name Util extends Node
 
+const SCREEN_FLASH : PackedScene = preload("res://Scenes/ScreenFlash.tscn")
+
 static func interweave_arrays(arr1: Array, arr2: Array) -> Array:
 	var arr3: Array = []
 	if arr1.size() != arr2.size():
@@ -144,3 +146,13 @@ static func convert_int_array_to_bool_array(arr1: Array) -> Array:
 	for value in arr1:
 		arr2.append(value > 0)
 	return arr2
+
+static func screen_flash(node: Node, animation: String) -> ScreenFlash:
+	print("Util.gd/screen_flash() called")
+	var inst : ScreenFlash = SCREEN_FLASH.instantiate()
+	if node.owner == null:
+		node.add_child(inst)
+	else:
+		node.owner.add_child(inst)
+	inst.play(animation)
+	return inst

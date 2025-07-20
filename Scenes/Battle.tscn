@@ -1,16 +1,21 @@
-[gd_scene load_steps=14 format=3 uid="uid://buhojghfeg4r2"]
+[gd_scene load_steps=17 format=3 uid="uid://buhojghfeg4r2"]
 
 [ext_resource type="Script" uid="uid://duujsym6v6wka" path="res://Scripts/Battle.gd" id="1_p46lj"]
 [ext_resource type="PackedScene" uid="uid://dggmt4f88v4jj" path="res://Scenes/WindowDefault.tscn" id="1_wvl2i"]
 [ext_resource type="PackedScene" uid="uid://nc557d57bl5u" path="res://Scenes/EnemyButton.tscn" id="2_2h7oj"]
-[ext_resource type="Texture2D" uid="uid://bqm5ix0xuv5pv" path="res://Assets/Forest_01_300%.png" id="2_6yjxy"]
+[ext_resource type="Texture2D" uid="uid://bqm5ix0xuv5pv" path="res://Assets/Forest_01.png" id="2_6yjxy"]
 [ext_resource type="PackedScene" uid="uid://bkuddhx0iepft" path="res://Scenes/PlayerButton.tscn" id="3_1samx"]
 [ext_resource type="Script" uid="uid://bf24p0v61c4ro" path="res://Scripts/WindowDefault.gd" id="3_8teo4"]
 [ext_resource type="AudioStream" uid="uid://ctfu05aiai88b" path="res://Assets/Audio/Battle/battle_theme.wav" id="3_262jj"]
 [ext_resource type="PackedScene" uid="uid://ce3mvvn7dqjjf" path="res://Scenes/PlayerInfoBar.tscn" id="3_c5ef4"]
 [ext_resource type="Script" uid="uid://c3g6ec23bdh1g" path="res://Scripts/Menu.gd" id="5_c5ef4"]
+[ext_resource type="Texture2D" uid="uid://dc3abl7gyrlwq" path="res://Assets/UI/fantasy-ui-borders.svg" id="7_l0uqe"]
 [ext_resource type="PackedScene" uid="uid://c7llgdviardiq" path="res://Scenes/MenuCursor.tscn" id="8_u22qb"]
 [ext_resource type="PackedScene" uid="uid://tlqftavjyptl" path="res://Scenes/DownCursor.tscn" id="10_qxnh6"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_l0uqe"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_xmk5i"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_p46lj"]
 
@@ -90,9 +95,9 @@ offset_bottom = 21.0
 
 [node name="Players" type="Control" parent="."]
 anchors_preset = 0
-offset_left = 224.0
+offset_left = 234.0
 offset_top = 38.0
-offset_right = 276.0
+offset_right = 286.0
 offset_bottom = 122.0
 script = ExtResource("5_c5ef4")
 
@@ -104,26 +109,29 @@ offset_right = 20.0
 offset_bottom = 22.0
 
 [node name="PlayerButton2" parent="Players" instance=ExtResource("3_1samx")]
-layout_mode = 0
-offset_left = 12.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.134615
+anchor_right = 0.134615
+offset_left = 18.0
 offset_top = 24.0
-offset_right = 28.0
+offset_right = 34.0
 offset_bottom = 42.0
 stretch_mode = 0
 metadata/_edit_use_anchors_ = true
 
 [node name="PlayerButton3" parent="Players" instance=ExtResource("3_1samx")]
 layout_mode = 0
-offset_left = 20.0
+offset_left = 4.0
 offset_top = 44.0
-offset_right = 36.0
+offset_right = 20.0
 offset_bottom = 62.0
 
 [node name="PlayerButton4" parent="Players" instance=ExtResource("3_1samx")]
 layout_mode = 0
-offset_left = 28.0
+offset_left = 25.0
 offset_top = 64.0
-offset_right = 44.0
+offset_right = 41.0
 offset_bottom = 82.0
 stretch_mode = 3
 
@@ -135,6 +143,98 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_use_anchors_ = true
+
+[node name="Top" type="HBoxContainer" parent="GUIMargin"]
+custom_minimum_size = Vector2(200, 25)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+alignment = 1
+
+[node name="TextBox" type="NinePatchRect" parent="GUIMargin/Top"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("7_l0uqe")
+region_rect = Rect2(550, 164.297, 47.9385, 47.7028)
+patch_margin_left = 4
+patch_margin_top = 11
+patch_margin_right = 4
+patch_margin_bottom = 11
+
+[node name="ScrollContainer" type="ScrollContainer" parent="GUIMargin/Top/TextBox"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="GUIMargin/Top/TextBox/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="GUIMargin/Top/TextBox/ScrollContainer/MarginContainer"]
+layout_mode = 2
+text = "The party gains 99 experience points!"
+text_overrun_behavior = 3
+
+[node name="TextureRect" type="TextureRect" parent="GUIMargin/Top/TextBox"]
+self_modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("CanvasTexture_l0uqe")
+
+[node name="Battle" type="HBoxContainer" parent="GUIMargin"]
+visible = false
+custom_minimum_size = Vector2(125, 21)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+alignment = 1
+
+[node name="TextBox" type="NinePatchRect" parent="GUIMargin/Battle"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("7_l0uqe")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 4
+patch_margin_top = 11
+patch_margin_right = 4
+patch_margin_bottom = 11
+
+[node name="ScrollContainer" type="ScrollContainer" parent="GUIMargin/Battle/TextBox"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="GUIMargin/Battle/TextBox/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="GUIMargin/Battle/TextBox/ScrollContainer/MarginContainer"]
+layout_mode = 2
+text = "Firaga!"
+
+[node name="TextureRect" type="TextureRect" parent="GUIMargin/Battle/TextBox"]
+self_modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("CanvasTexture_xmk5i")
 
 [node name="Bottom" type="HBoxContainer" parent="GUIMargin"]
 custom_minimum_size = Vector2(200, 52)
@@ -215,25 +315,14 @@ patch_margin_top = 4
 patch_margin_right = 4
 patch_margin_bottom = 4
 
-[node name="TextureRect" type="TextureRect" parent="GUIMargin/Bottom/Players"]
-self_modulate = Color(0, 0, 0, 1)
-show_behind_parent = true
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = SubResource("CanvasTexture_p46lj")
-
 [node name="MarginContainer" type="MarginContainer" parent="GUIMargin/Bottom/Players"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 2.0
+offset_left = 1.5
 offset_top = 1.0
-offset_right = -2.0
+offset_right = -1.5
 offset_bottom = -2.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -254,8 +343,18 @@ layout_mode = 2
 [node name="PlayerInfoBar4" parent="GUIMargin/Bottom/Players/MarginContainer/PlayerInfos" instance=ExtResource("3_c5ef4")]
 layout_mode = 2
 
+[node name="TextureRect" type="TextureRect" parent="GUIMargin/Bottom/Players"]
+self_modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("CanvasTexture_p46lj")
+
 [node name="Options" parent="." instance=ExtResource("1_wvl2i")]
-visible = false
 custom_minimum_size = Vector2(48, 52)
 layout_mode = 2
 offset_left = 76.0
@@ -294,7 +393,7 @@ text = "Fight"
 [node name="Button4" type="Button" parent="Options/Options"]
 layout_mode = 2
 size_flags_horizontal = 4
-text = "Magic"
+text = "Skills"
 
 [node name="Button3" type="Button" parent="Options/Options"]
 layout_mode = 2

@@ -1,56 +1,61 @@
 class_name BattleActorButton extends TextureButton
 
+# Signals
+signal attack_finished(target_button : BattleActorButton)     # Notify when attack call is completed
+
 # Exports
-@export var actor_class : String = ""         # Must match a key in Data.class_configs
+@export var actor_class        :String           = ""         # Must match a key in Data.class_configs
 
 # Onreadys
-@onready var anim_sprite      : AnimatedSprite2D = $AnimatedSprite2D if has_node("AnimatedSprite2D") else null
-@onready var start_pos        : Vector2          = position
-@onready var recoil_direction : int              = 1 if global_position.x > Globals.GAME_SIZE.x * 0.5 else -1
-
-# Signals
-signal attack_finished(target_button : BattleActorButton)
+@onready var anim_sprite       :AnimatedSprite2D = $AnimatedSprite2D if has_node("AnimatedSprite2D") else null
+@onready var start_pos         :Vector2          = position
+@onready var recoil_direction  :int              = 1 if global_position.x > Globals.GAME_SIZE.x * 0.5 else -1
 
 # Constants
-const RECOIL     :int          = 8
-const HIT_TEXT   :PackedScene  = preload("res://Scenes/HitText.tscn")
+const RECOIL                   :int          = 8
+const HIT_TEXT                 :PackedScene  = preload("res://Scenes/HitText.tscn")
 
 # Variables
-var actor        :BattleActor  = null
-var data         :BattleActor  = null
-var tween        :Tween        = null
-var attack_anim  :String       = ""
-var idle_anim    :String       = ""
-var hurt_anim    :String       = ""
-var death_anim   :String       = ""
+var actor                      :BattleActor  = null           # The BattleActor this button represents (can be player or enemy)
+var data                       :BattleActor  = null           # Alias for actor (used in signal connections)
+var tween                      :Tween        = null           # Active Tween for animations
+var attack_anim                :String       = ""             # Name of attack animation
+var idle_anim                  :String       = ""             # Name of idle animation
+var hurt_anim                  :String       = ""             # Name of hurt animation
+var death_anim                 :String       = ""             # Name of death animation
+var skill1_anim                 :String       = ""            # Name of skill1 animation
 
 func _ready() -> void:
 	pass
 
+# Associate a BattleActor with this button and connect its signals
 func set_data(_data : BattleActor) -> void:
 	#DEBUG print("BattleActorButton.gd/set_data() called")
 	# 1) Assign the BattleActor resource
 	data = _data
-	# 2) Connect its signals
+	# 2) Connect its signals for health, defeat, and acting
 	data.hp_changed.connect(_on_data_hp_changed)
 	data.defeated.connect(_on_data_is_defeated)
 	data.acting.connect(_on_data_acting)
-	# 3) If the resource carries its own texture override, use it
+	# 3) Use the actor's texture if available
 	if data.texture:
 		texture_normal = data.texture
 
+# Set the BattleActor reference (for player buttons)
 func _set_actor(value:BattleActor) -> void:
 	print("BattleActorButton.gd/_set_actor() called")
 	actor = value
 	set_data(actor)
 
+# Called when this button is pressed (if not overridden by child)
 func _on_pressed() -> void:
 	print("BattleActorButton.gd/_on_pressed() called")
-	# 1) Select a target
+	# 1) Select a target (logic not implemented here)
 	var target : BattleActorButton
-	# 2) Call attack() function
+	# 2) Call attack (not used in current battle flow)
 	_attack(target)
 
+# Primary attack logic: plays animation, applies damage, emits signal when done
 func _attack(target_btn : BattleActorButton) -> void:
 	print("BattleActorButton.gd/_attack() called")
 	# 1) Play attack animation & wait, then switch back to idle animation
@@ -61,16 +66,17 @@ func _attack(target_btn : BattleActorButton) -> void:
 	#else:
 		## Output if attack_anim is null
 		#print("Warning: attack animation '%s' not found!")
-	# 2) Call healhurt() and apply damage to target
+	# 2) Apply damage to target BattleActor
 	target_btn.data.healhurt(-data.strength)
-	# 3) Give healhurt() to resolve
+	# 3) Wait for hit text animation
 	await get_tree().create_timer(0.5).timeout
 	# 4) Return to idle animation
 	if idle_anim != "" and anim_sprite:
 		anim_sprite.play(idle_anim)
-	# 5) Let em know that _attack() is done
+	# 5) Signal that attack is finished
 	emit_signal("attack_finished", target_btn)
 
+# Responds to BattleActor hp_changed signal: shows hit text, plays hurt animation, recoils
 func _on_data_hp_changed(hp : int, change : int) -> void:
 	print("BattleActorButton.gd/_on_data_hp_changed() called")
 	var hit_text : Label = HIT_TEXT.instantiate()
@@ -82,20 +88,21 @@ func _on_data_hp_changed(hp : int, change : int) -> void:
 		play_hurt_animation()
 		_recoil()
 
+# Animates a quick physical recoil when damaged
 func _recoil() -> Tween:
 	print("BattleActorButton.gd/_recoil() called")
-	# 1) If Tween is currently playing, stop it and void any set properties
+	# 1) Kill any current tween
 	if tween:
 		tween.kill()
-	# 2) Create new Tween
+	# 2) Create new Tween for position and color
 	tween = create_tween()
-	# 3) Push button backwards, flash red, move to original spot, make sure color is back to normal
 	tween.tween_property(self, "position:x",start_pos.x + (RECOIL * recoil_direction), 0.25).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 	tween.parallel().tween_property(self, "self_modulate",Color.RED, 0.25).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
 	tween.tween_property(self, "position:x", start_pos.x, 0.05).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 	tween.parallel().tween_property(self, "self_modulate",Color.WHITE, 0.25).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
 	return tween
 
+# Play hurt animation when damaged
 func play_hurt_animation():
 	print("BattleActorButton.gd/play_hurt_animation() called")
 	if hurt_anim != "" and anim_sprite:
@@ -109,12 +116,14 @@ func play_hurt_animation():
 		## Output if hurt_anim is null
 		#print("Warning: hurt animation '%s' not found!" % hurt_anim)
 
+# Responds to BattleActor defeated signal: plays death animation, greys out button
 func _on_data_is_defeated() -> void:
 	print("BattleActorButton.gd/_on_data_is_defeated() called")
 	play_death_animation()
 	# Grey‐out or remove, your choice
 	self_modulate = Color.BLACK
 
+# Play death animation
 func play_death_animation():
 	print("BattleActorButton.gd/play_death_animation() called")
 	if death_anim != "" and anim_sprite:
@@ -132,6 +141,7 @@ func play_death_animation():
 		## Output if death_anim is null
 		#print("Warning: death animation '%s' not found!" % death_anim)
 
+# Responds to BattleActor acting signal: slide animation for attack/turn start
 func _on_data_acting() -> void:
 	print("BattleActorButton.gd/_on_data_acting() called")
 	# Slide‐in tween when data.act() fires
@@ -141,11 +151,13 @@ func _on_data_acting() -> void:
 	tween.tween_property(self, "position:x",start_pos.x - (RECOIL * recoil_direction), 0.5).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_IN)
 	tween.tween_property(self, "position:x", start_pos.x, 0.1).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 
-func _action_slide() -> Tween: # TODO Maybe remove? Players have animations, enemies need to just flash and attack in place
+# Unused: old animation to slide forward when attacking
+# TODO Maybe remove? Players have animations, enemies need to just flash and attack in place
+func _action_slide() -> Tween: 
 	print("BattleActorButton.gd/_action_slide() called")
 	# 1) If Tween is currently playing, stop it and void any set properties
 	if tween: tween.kill()
-	# 2) Create new Tween
+	# 2) Create new Tween for alternate slide
 	tween = create_tween()
 	tween.tween_property(self, "position:x", start_pos.x + (RECOIL * recoil_direction * -1), 0.5).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_IN)
 	tween.tween_property(self, "position:x", start_pos.x, 0.1).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)

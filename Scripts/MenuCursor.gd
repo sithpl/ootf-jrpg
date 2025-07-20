@@ -1,37 +1,46 @@
 class_name MenuCursor extends TextureRect
 
-const OFFSET: Vector2 = Vector2(-18, -2)
+# Exports
+@export var battle_path   :NodePath   # Path to Battle node (optional)
 
-@export var battle_path : NodePath
+# Onreadys
+@onready var battle          :Battle              = $".."         # Reference to Battle node (assumes parent)
+@onready var move_sound      :AudioStreamPlayer   = $MoveSound
+@onready var confirm_sound   :AudioStreamPlayer   = $ConfirmSound
 
-var target: Node = null
+# Constants
+const OFFSET   :Vector2   = Vector2(-18, -2)   # Offset for cursor position relative to target button
 
-@onready var battle : Battle = $".."
-@onready var move_sound: AudioStreamPlayer = $MoveSound
-@onready var confirm_sound: AudioStreamPlayer = $ConfirmSound
+# Variables
+var target   :Node   = null   # The currently focused button
 
+# Called when node enters the scene tree
 func _ready():
 	get_viewport().gui_focus_changed.connect(_on_viewport_gui_focus_changed)
 	set_process(false)
 	hide()
 
+# Continuously updates cursor position to match target (if any)
 func _process(_delta: float) -> void:
-	# if target has been freed (or was never set), bail out immediately
+	# If target has been freed or never set, hide and stop processing
 	if target == null or not is_instance_valid(target):
 		hide()
 		set_process(false)
 		return
 
-	# safe to access now
+	# Safe to access now; position cursor at target + offset
 	global_position = target.global_position + OFFSET
 
+# Handles global focus changes in the viewport (when a button is focused/unfocused)
 func _on_viewport_gui_focus_changed(node: Control):
 	print("MenuCursor.gd/_on_viewport_gui_focus_changed() called")
 	call_deferred("_deferred_focus_change", node)
 	if node is BaseButton:
+		# Play move sound if target changes
 		if target != node:
 			if move_sound.stream:
 				move_sound.play()
+		# Disconnect old target's exiting signal
 		if target:
 			target.tree_exiting.disconnect(_on_target_tree_exiting)
 
@@ -43,19 +52,22 @@ func _on_viewport_gui_focus_changed(node: Control):
 		hide()
 		set_process(false)
 
+# Handles when the current target button is removed from the scene
 func _on_target_tree_exiting(node: Control):
 	print("MenuCursor.gd/_on_target_tree_exiting() called")
 	if node == target:
 		target = null
 		set_process(false)
 
+# Play confirmation sound (used when selecting an option)
 func play_confirm_sound():
 	if confirm_sound.stream:
 		confirm_sound.play()
 
+# Handles deferred logic for focus change (waits a frame for menu visibility)
 func _deferred_focus_change(node: Control) -> void:
 	print("MenuCursor.gd/_deferred_focus_change() called")
-	# only show when Battle is in the correct state AND the menu is visible
+	# Only show when Battle is in the correct state AND the menu is visible
 	var menu_is_visible = false
 	if battle.state == battle.States.PLAYER_SELECT:
 		menu_is_visible = battle._options.visible
@@ -68,15 +80,16 @@ func _deferred_focus_change(node: Control) -> void:
 		hide()
 		set_process(false)
 		
+# Assign new target for cursor and connect exiting signal
 func _set_target(node: Control) -> void:
 	print("MenuCursor.gd/_set_target() called")
-	# disconnect old target
+	# Disconnect old target
 	if target:
 		target.tree_exiting.disconnect(_on_target_tree_exiting)
-	# assign & connect new
+	# Assign & connect new target
 	target = node
 	target.tree_exiting.connect(_on_target_tree_exiting)
-	# position & show
+	# Position & show cursor
 	global_position = target.global_position + OFFSET
 	show()
 	set_process(true)

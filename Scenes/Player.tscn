@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://cptw5m2kqeo0u"]
+
+[ext_resource type="Script" uid="uid://dpy8xahorumuf" path="res://Scripts/Player.gd" id="1_kyqiw"]
+[ext_resource type="SpriteFrames" uid="uid://c3jf02eaihm66" path="res://Assets/Animations/OW_Player.tres" id="2_gntrk"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qbkls"]
+radius = 5.0
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_kyqiw"]
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_kyqiw")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+sprite_frames = ExtResource("2_gntrk")
+animation = &"_RESET"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(0, 2)
+shape = SubResource("CircleShape2D_qbkls")
+
+[node name="ForestMask" type="PointLight2D" parent="."]
+texture = SubResource("CompressedTexture2D_kyqiw")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(0.6, 0.6)
+
+[node name="AudioListener2D" type="AudioListener2D" parent="."]
+current = true
