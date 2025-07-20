@@ -24,6 +24,7 @@ static var enemies: Dictionary = {
 
 # Picks a requested number of random enemy types, duplicates them so each is a fresh instance.
 static func get_random_enemies(count: int) -> Array:
+	print("Data.gd/get_random_enemies() called")
 	var keys = enemies.keys()        # e.g. ["Goofball", "Slime Green"]
 	var picked = []
 	for i in range(count):
@@ -80,7 +81,8 @@ var class_configs := {
 # ---------- CHARACTERS & PARTY ----------
 
 # party_keys: Names of characters currently in the party
-var party_keys            :Array[String]        = ["Sith", "Erik", "Fraud", "Dan"]
+var party_keys            :Array[String]        = ["Clav", "Erik", "Fraud", "Dan"]
+
 # party: List of BattleActor instances for the current party
 var party                 :Array[BattleActor]   = []
 
@@ -174,11 +176,6 @@ var boss_theme            :String               = "res://Assets/Audio/Battle/bos
 var special_theme         :String               = "res://Assets/Audio/Battle/special_theme.wav"
 var victory_theme         :String               = "res://Assets/Audio/Battle/victory_theme.wav"
 var gameover_theme        :String               = "res://Assets/Audio/Battle/gameover_theme.wav"
-
-#var normal_themes: Array = [
-	#"res://Audio/Battle/battle_theme1.ogg",
-	#"res://Audio/Battle/battle_theme2.ogg",
-#]
 
 # Returns the path for the current battle theme music based on battle type
 func get_battle_theme() -> String:

@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://dr0wsyro7t0sa"]
+
+[ext_resource type="PackedScene" uid="uid://ch31885t7hhct" path="res://Scenes/Overworld.tscn" id="1_wbfu4"]
+[ext_resource type="Script" uid="uid://byhfmb0jt8rte" path="res://Game.gd" id="1_xkndl"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_xkndl")
+
+[node name="Overworld" parent="." instance=ExtResource("1_wbfu4")]
+
+[node name="CanvasLayer0" type="CanvasLayer" parent="."]
+
+[connection signal="enemy_encountered" from="Overworld" to="." method="_on_overworld_enemy_encountered"]
