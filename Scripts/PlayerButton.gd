@@ -17,7 +17,7 @@ func _ready():
 		if tex_path != "":
 			texture_normal = load(tex_path)                 # Set static texture
 		if anim_sprite:
-			anim_sprite.frames = preload("res://Assets/Animations/Player.tres")
+			anim_sprite.frames = preload("res://Assets/Animations/Battle_Player.tres")
 			if idle_anim != "" and anim_sprite:
 				texture_normal = null                       # Use AnimatedSprite2D, hide static texture
 				anim_sprite.show()

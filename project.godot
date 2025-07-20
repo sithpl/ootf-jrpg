@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="OOTF"
-run/main_scene="uid://buhojghfeg4r2"
+run/main_scene="uid://dr0wsyro7t0sa"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 

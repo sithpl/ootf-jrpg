@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dc3abl7gyrlwq"
-path="res://.godot/imported/fantasy-ui-borders.svg-bb1c618804537f718287b7080731fefb.ctex"
+path="res://.godot/imported/fantasy-ui-borders.svg-fc163755a19989cd31f16f774be4b5ba.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/fantasy-ui-borders.svg"
-dest_files=["res://.godot/imported/fantasy-ui-borders.svg-bb1c618804537f718287b7080731fefb.ctex"]
+source_file="res://Assets/UI/fantasy-ui-borders.svg"
+dest_files=["res://.godot/imported/fantasy-ui-borders.svg-fc163755a19989cd31f16f774be4b5ba.ctex"]
 
 [params]
 

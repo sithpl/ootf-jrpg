@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b2vh3ipnnpf6a"
-path="res://.godot/imported/circle_white.png-4fed4e01f5dec9c49e3deb1d28d9ca55.ctex"
+uid="uid://7b75wy6ggie5"
+path="res://.godot/imported/NPC_1.png-170c59c607a5b3f0b86aac9d73836c48.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/circle_white.png"
-dest_files=["res://.godot/imported/circle_white.png-4fed4e01f5dec9c49e3deb1d28d9ca55.ctex"]
+source_file="res://Assets/Animations/Sheets/NPCs/NPC_1.png"
+dest_files=["res://.godot/imported/NPC_1.png-170c59c607a5b3f0b86aac9d73836c48.ctex"]
 
 [params]
 

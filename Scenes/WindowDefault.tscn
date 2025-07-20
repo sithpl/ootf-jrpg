@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dggmt4f88v4jj"]
 
-[ext_resource type="Texture2D" uid="uid://dc3abl7gyrlwq" path="res://Assets/fantasy-ui-borders.svg" id="1_xf4fp"]
+[ext_resource type="Texture2D" uid="uid://dc3abl7gyrlwq" path="res://Assets/UI/fantasy-ui-borders.svg" id="1_xf4fp"]
 
 [node name="WindowDefault" type="NinePatchRect"]
 size_flags_horizontal = 3

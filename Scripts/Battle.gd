@@ -13,6 +13,8 @@ enum Actions { FIGHT, SKILLS, ITEM, DEFEND }
 @onready var _gui                 :Control            = $GUIMargin
 @onready var _options             :WindowDefault      = $Options
 @onready var _options_menu        :Menu               = $Options/Options
+@onready var _top_menu            :NinePatchRect      = $GUIMargin/Top/TextBox
+@onready var _top_text_label      :Label              = $GUIMargin/Top/TextBox/ScrollContainer/MarginContainer/Label
 @onready var _enemies_menu        :Menu               = $Enemies
 @onready var _enemy_slots         :                   = $Enemies.get_children()
 @onready var _enemy_info_scroll   :ScrollContainer    = $GUIMargin/Bottom/Enemies/ScrollContainer
@@ -25,6 +27,7 @@ enum Actions { FIGHT, SKILLS, ITEM, DEFEND }
 const MAX_LOG_LINES               :                   = 3
 
 # Variables to track battle state and flow
+var enemies_weighted              :Array              = []
 var input_locked                  :bool               = false
 var state                         :States             = States.IDLE
 var _orig_positions               :                   = {}
@@ -38,6 +41,7 @@ var _enemy_info_nodes             :Array[Label]       = []
 
 # Called when the scene is ready
 func _ready():
+	_top_menu.hide()
 	_options.hide()
 	_down_cursor.hide()
 	_gui.hide()
@@ -319,11 +323,11 @@ func _end_battle(result_state: States) -> void:
 	print("Battle.gd/_end_battle() called")
 	set_process_input(true)
 	state = result_state
+	_log_label.hide()
 	_options.hide()
-	_enemies_menu.hide()
+	#_enemies_menu.hide()
 	_menu_cursor.hide()
 
-	# Delay to let final logs/FX complete
 	await get_tree().create_timer(1.0).timeout
 
 	match state:
@@ -332,12 +336,37 @@ func _end_battle(result_state: States) -> void:
 			if victory_music:
 				_battle_music.stream = victory_music
 				_battle_music.play()
+			
+			_enemies_menu.show()
+			_players_menu.show()
+			_top_menu.show()
+			
+			var rewards = _calculate_battle_rewards()
+			var xp_text = "The party gains " + str(rewards["xp"]) + " experience points!"
+			var gold_text = "They also receive " + str(rewards["gold"]) + " gold!"
+			
+			# Show XP text, wait for input
+			_top_text_label.text = xp_text
+			await _wait_for_confirm()
+			
+			# Show Gold text, wait for input
+			_top_text_label.text = gold_text
+			await _wait_for_confirm()
+			
 			print("YOU WON!")
+			
 		States.GAMEOVER:
 			var gameover_music = load(Data.gameover_theme)
 			if gameover_music:
 				_battle_music.stream = gameover_music
 				_battle_music.play()
+			
+			_enemies_menu.show()
+			_players_menu.show()
+			_top_menu.show()
+			
+			_top_text_label.text = "Good job, loser..."
+			await _wait_for_confirm()
 			print("YOU LOSE!")
 
 	# Hide battle UI, return to map, etc.
@@ -465,6 +494,16 @@ func _on_enemy_defeated(enemy: BattleActor) -> void:
 			_enemy_info_nodes.remove_at(i)
 			break
 
+func _calculate_battle_rewards() -> Dictionary:
+	var total_xp = 0
+	var total_gold = 0
+	for btn in _enemies_menu.get_buttons():
+		var actor = btn.data
+		if actor != null:
+			total_xp += actor.xp
+			total_gold += actor.gold
+	return {"xp": total_xp, "gold": total_gold}
+	
 # Highlights and scrolls to enemy info when their button is focused
 func _on_enemy_button_focused(button: EnemyButton) -> void:
 	var actor = button.data
@@ -511,3 +550,10 @@ func _pick_random_alive_party_member() -> BattleActor:
 	if alive.size() == 0:
 		return null
 	return Util.choose(alive)
+
+# Helper function to wait for player confirmation input
+func _wait_for_confirm() -> void:
+	while true:
+		await get_tree().process_frame
+		if Input.is_action_just_pressed("ui_accept"):
+			break

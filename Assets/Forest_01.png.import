@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cmsa7ipbpl7gj"
-path="res://.godot/imported/hand_point_e.png-7d5f9eef74a8b746dae691b9a0bea151.ctex"
+uid="uid://bqm5ix0xuv5pv"
+path="res://.godot/imported/Forest_01.png-d93f7b0d96e5078ca8e37478c068ccb6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/hand_point_e.png"
-dest_files=["res://.godot/imported/hand_point_e.png-7d5f9eef74a8b746dae691b9a0bea151.ctex"]
+source_file="res://Assets/Forest_01.png"
+dest_files=["res://.godot/imported/Forest_01.png-d93f7b0d96e5078ca8e37478c068ccb6.ctex"]
 
 [params]
 

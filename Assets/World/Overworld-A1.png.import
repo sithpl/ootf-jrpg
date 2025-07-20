@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b58wa1lsanvsd"
-path="res://.godot/imported/soldier_1.png-ad34f6739c56147cfc752de347a19e19.ctex"
+uid="uid://cfyl77m2tdkhy"
+path="res://.godot/imported/Overworld-A1.png-986082eba00dc49910caef7de61d1189.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/soldier_1.png"
-dest_files=["res://.godot/imported/soldier_1.png-ad34f6739c56147cfc752de347a19e19.ctex"]
+source_file="res://Assets/World/Overworld-A1.png"
+dest_files=["res://.godot/imported/Overworld-A1.png-986082eba00dc49910caef7de61d1189.ctex"]
 
 [params]
 
