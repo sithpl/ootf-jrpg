@@ -147,12 +147,12 @@ static func convert_int_array_to_bool_array(arr1: Array) -> Array:
 		arr2.append(value > 0)
 	return arr2
 
-static func screen_flash(node: Node, animation: String) -> ScreenFlash:
-	print("Util.gd/screen_flash() called")
+static func screen_flash(node: Node, animation: String, use_owner: bool) -> ScreenFlash:
+	#DEBUG print("Util.gd/screen_flash() called")
 	var inst : ScreenFlash = SCREEN_FLASH.instantiate()
-	if node.owner == null:
-		node.add_child(inst)
-	else:
+	if use_owner and node.owner != null:
 		node.owner.add_child(inst)
+	else:
+		node.add_child(inst)
 	inst.play(animation)
 	return inst

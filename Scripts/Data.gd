@@ -20,11 +20,15 @@ var mobs                  :Array                = enemies.values()
 static var enemies: Dictionary = {
 	"Skeleton":         BattleActor.new( 2, 2, 5, 10, 2, 2 ),
 	"Slime Green":      BattleActor.new( 1, 1, 1, 5, 1, 1 ),
+	"Orc Rider":      BattleActor.new( 1, 1, 1, 5, 1, 1 ),
+	"Orc Elite":      BattleActor.new( 1, 1, 1, 5, 1, 1 ),
+	"Skeleton GS":      BattleActor.new( 1, 1, 1, 5, 1, 1 ),
+	"Clown":      BattleActor.new( 1, 1, 1, 5, 1, 1 ),
 }
 
 # Picks a requested number of random enemy types, duplicates them so each is a fresh instance.
 static func get_random_enemies(count: int) -> Array:
-	print("Data.gd/get_random_enemies() called")
+	#DEBUG print("Data.gd/get_random_enemies() called")
 	var keys = enemies.keys()        # e.g. ["Goofball", "Slime Green"]
 	var picked = []
 	for i in range(count):
@@ -34,10 +38,18 @@ static func get_random_enemies(count: int) -> Array:
 		picked.append(enemies[key].duplicate_custom())
 	return picked
 
+static func get_random_enemies_from_weighted(count: int, weighted_list: Array) -> Array:
+	#DEBUG print("Data.gd/get_random_enemies_from_weighted() called")
+	var picked = []
+	for i in range(count):
+		var key = Util.choose_weighted(weighted_list)
+		picked.append(enemies[key].duplicate_custom())
+	return picked
+
 # ---------- CLASSES ----------
 
 # Enums
-enum ActorClass { SOLDIER, RANGER, KNIGHT, PALADIN, MAGE, PRIEST, MAGUS }
+enum ActorClass { SOLDIER, RANGER, KNIGHT, PALADIN, MAGE, PRIEST, ARCHER, LANCER }
 
 # Variables
 
@@ -138,20 +150,20 @@ func create_character(name:String) -> BattleActor:
 
 # Rebuilds the party array from the party_keys list
 func rebuild_party() -> void:
-	print("Data.gd/rebuild_party() called")
+	#DEBUG print("Data.gd/rebuild_party() called")
 	party.clear()
 	for name in party_keys:
 		party.append(create_character(name))
 
 # Replaces the party with a new set of names and rebuilds the party array
 func set_party(new_keys:Array[String]) -> void:
-	print("Data.gd/set_party() called")
+	#DEBUG print("Data.gd/set_party() called")
 	party_keys = new_keys.duplicate()
 	rebuild_party()
 
 # Swaps a party member at the given slot for a new character
 func swap_party_member(slot:int, new_name:String) -> void:
-	print("Data.gd/swap_party_member() called")
+	#DEBUG print("Data.gd/swap_party_member() called")
 	if slot < 0 or slot >= party_keys.size():
 		print("Invalid party slot %d" % slot)
 		return
@@ -160,7 +172,7 @@ func swap_party_member(slot:int, new_name:String) -> void:
 
 # Returns the current party as an array of BattleActor instances
 func get_party() -> Array[BattleActor]:
-	print("Data.gd/get_party() called")
+	#DEBUG print("Data.gd/get_party() called")
 	return party
 
 # ---------- MUSIC ----------
@@ -170,8 +182,9 @@ enum BattleType { INTRO, NORMAL, BOSS, SPECIAL }
 
 # Variables
 var current_battle_type   :BattleType           = BattleType.NORMAL
+var zone_theme            :String               = "res://Assets/Audio/zone_theme.wav"
 var intro_theme           :String               = "res://Assets/Audio/Battle/intro_theme.wav"
-var zone_theme            :String               = "res://Assets/Audio/Battle/battle_theme.wav"
+var battle_theme          :String               = "res://Assets/Audio/Battle/battle_theme.wav"
 var boss_theme            :String               = "res://Assets/Audio/Battle/boss_theme.wav"
 var special_theme         :String               = "res://Assets/Audio/Battle/special_theme.wav"
 var victory_theme         :String               = "res://Assets/Audio/Battle/victory_theme.wav"
@@ -179,10 +192,12 @@ var gameover_theme        :String               = "res://Assets/Audio/Battle/gam
 
 # Returns the path for the current battle theme music based on battle type
 func get_battle_theme() -> String:
-	print("Data.gd/get_battle_theme() called")
+	#DEBUG print("Data.gd/get_battle_theme() called")
 	match current_battle_type:
 		BattleType.INTRO:
 			return intro_theme
+		BattleType.NORMAL:
+			return battle_theme
 		BattleType.BOSS:
 			return boss_theme
 		BattleType.SPECIAL:

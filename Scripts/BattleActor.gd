@@ -5,6 +5,8 @@ signal hp_changed(hp, change)              # Notify when HP changes
 signal defeated()                          # Notify when actor is defeated
 signal acting()                            # Notify when actor is acting
 
+var last_attempted_damage: int = 0
+
 # ---------- Actor Properties ----------
 
 var class_key     :String      = ""        # Class type (e.g. "Soldier", "Mage")
@@ -80,17 +82,18 @@ func copy_from(source: BattleActor):
 
 # Returns true if actor has HP left
 func has_hp():
-	print("BattleActor.gd/has_hp() called")
+	#DEBUG print("BattleActor.gd/has_hp() called")
 	return hp > 0
 
 # Returns true if actor can act (alive)
 func can_act():
-	print("BattleActor.gd/can_act() called")
+	#DEBUG print("BattleActor.gd/can_act() called")
 	return has_hp()
 
 # Heal or damage actor by value; emits hp_changed, defeated if killed
 func healhurt(value: int):
-	print("BattleActor.gd/healhurt() called")
+	#DEBUG print("BattleActor.gd/healhurt() called")
+	last_attempted_damage = value  # Store the attempted value
 	#DEBUG print("Damage: ", value)
 	var hp_start: int = hp
 	var change: int = 0
@@ -104,7 +107,7 @@ func healhurt(value: int):
 
 # Emits the acting signal for animation/feedback
 func act():
-	print("BattleActor.gd/act() called")
+	#DEBUG print("BattleActor.gd/act() called")
 	acting.emit()
 
 #func set_attack_anim(val:String):

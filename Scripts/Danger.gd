@@ -16,6 +16,7 @@ signal limit_reached()
 var limit : int = 0
 
 func _ready():
+	print("Danger.gd/_ready() called")
 	set_limit()
 	
 	if show_debug_text:
@@ -44,6 +45,7 @@ func countdown(amount: int = 1):
 	
 	if limit <= 0:
 		emit_signal("limit_reached")
+		print("signal -> limit_reached emitted!")
 		set_limit()
 	
 	if show_debug_text:
