@@ -1,0 +1,216 @@
+[gd_resource type="SpriteFrames" load_steps=31 format=3 uid="uid://ckp6p7xi2xypx"]
+
+[ext_resource type="Texture2D" uid="uid://dneqjcgko2cjt" path="res://Assets/Animations/Sheets/Spells/mage_attack_spell1.png" id="1_5gb6j"]
+[ext_resource type="Texture2D" uid="uid://cmtsfsa125l77" path="res://Assets/Animations/Sheets/Spells/mage_attack_spell2.png" id="2_8pfe4"]
+[ext_resource type="Texture2D" uid="uid://bitweeh3tectc" path="res://Assets/Animations/Sheets/Spells/priest_attack_spell.png" id="3_yjwlj"]
+[ext_resource type="Texture2D" uid="uid://c3djoev4ebphx" path="res://Assets/Animations/Sheets/Spells/priest_heal_spell.png" id="4_0s8ch"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xdjio"]
+atlas = ExtResource("1_5gb6j")
+region = Rect2(0, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_718my"]
+atlas = ExtResource("1_5gb6j")
+region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8pfe4"]
+atlas = ExtResource("1_5gb6j")
+region = Rect2(200, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yjwlj"]
+atlas = ExtResource("1_5gb6j")
+region = Rect2(300, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0s8ch"]
+atlas = ExtResource("1_5gb6j")
+region = Rect2(400, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o0600"]
+atlas = ExtResource("1_5gb6j")
+region = Rect2(500, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nti4j"]
+atlas = ExtResource("1_5gb6j")
+region = Rect2(600, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ckr4x"]
+atlas = ExtResource("1_5gb6j")
+region = Rect2(700, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j7exb"]
+atlas = ExtResource("1_5gb6j")
+region = Rect2(800, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5cl3f"]
+atlas = ExtResource("1_5gb6j")
+region = Rect2(900, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pa2bq"]
+atlas = ExtResource("2_8pfe4")
+region = Rect2(0, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0hk4p"]
+atlas = ExtResource("2_8pfe4")
+region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ndpfd"]
+atlas = ExtResource("2_8pfe4")
+region = Rect2(200, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4v2ux"]
+atlas = ExtResource("2_8pfe4")
+region = Rect2(300, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hieif"]
+atlas = ExtResource("2_8pfe4")
+region = Rect2(400, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8jw6x"]
+atlas = ExtResource("2_8pfe4")
+region = Rect2(500, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ifsmk"]
+atlas = ExtResource("2_8pfe4")
+region = Rect2(600, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dqe7a"]
+atlas = ExtResource("3_yjwlj")
+region = Rect2(0, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eerr7"]
+atlas = ExtResource("3_yjwlj")
+region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cden0"]
+atlas = ExtResource("3_yjwlj")
+region = Rect2(200, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rrlxa"]
+atlas = ExtResource("3_yjwlj")
+region = Rect2(300, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bfqjb"]
+atlas = ExtResource("3_yjwlj")
+region = Rect2(400, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_14i5e"]
+atlas = ExtResource("4_0s8ch")
+region = Rect2(0, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kjj68"]
+atlas = ExtResource("4_0s8ch")
+region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4nl36"]
+atlas = ExtResource("4_0s8ch")
+region = Rect2(200, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w734n"]
+atlas = ExtResource("4_0s8ch")
+region = Rect2(300, 0, 100, 100)
+
+[resource]
+animations = [{
+"frames": [],
+"loop": false,
+"name": &"RESET",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xdjio")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_718my")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8pfe4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yjwlj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0s8ch")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o0600")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nti4j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ckr4x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j7exb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5cl3f")
+}],
+"loop": false,
+"name": &"mage_attack_spell1",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pa2bq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0hk4p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ndpfd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4v2ux")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hieif")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8jw6x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ifsmk")
+}],
+"loop": false,
+"name": &"mage_attack_spell2",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dqe7a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eerr7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cden0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rrlxa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bfqjb")
+}],
+"loop": false,
+"name": &"priest_attack_spell",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_14i5e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kjj68")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4nl36")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w734n")
+}],
+"loop": false,
+"name": &"priest_heal_spell",
+"speed": 4.0
+}]
