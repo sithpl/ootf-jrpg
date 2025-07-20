@@ -18,7 +18,7 @@ func _ready():
 
 # Updates health display and highlights when HP changes
 func _on_data_hp_changed(hp: int, _change: int):
-	print("PlayerInfoBar.gd/_on_data_hp_changed() called")
+	#DEBUG print("PlayerInfoBar.gd/_on_data_hp_changed() called")
 	_health.text = str(hp)
 	if hp == 0:
 		modulate = Color.DARK_RED       # Visually indicate the character is defeated

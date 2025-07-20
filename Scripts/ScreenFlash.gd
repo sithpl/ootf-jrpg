@@ -6,10 +6,11 @@ func _ready():
 	play("RESET")
 
 func play(anim: String):
-	print("ScreenFlash.gd/play() called")
+	#DEBUG print("ScreenFlash.gd/play() called")
 	_animation_player.play(anim)
+	await _animation_player.animation_finished
 
 func _on_animation_player_animation_finished(_anim_name: StringName) -> void:
-	print(_anim_name)
-	print("ScreenFlash.gd/_on_AnimationPlayer_animation_finished() called")
+	#DEBUG print(_anim_name)
+	#DEBUG print("ScreenFlash.gd/_on_AnimationPlayer_animation_finished() called")
 	queue_free()

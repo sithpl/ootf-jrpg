@@ -43,13 +43,13 @@ func set_data(_data : BattleActor) -> void:
 
 # Set the BattleActor reference (for player buttons)
 func _set_actor(value:BattleActor) -> void:
-	print("BattleActorButton.gd/_set_actor() called")
+	#DEBUG print("BattleActorButton.gd/_set_actor() called")
 	actor = value
 	set_data(actor)
 
 # Called when this button is pressed (if not overridden by child)
 func _on_pressed() -> void:
-	print("BattleActorButton.gd/_on_pressed() called")
+	#DEBUG print("BattleActorButton.gd/_on_pressed() called")
 	# 1) Select a target (logic not implemented here)
 	var target : BattleActorButton
 	# 2) Call attack (not used in current battle flow)
@@ -57,7 +57,7 @@ func _on_pressed() -> void:
 
 # Primary attack logic: plays animation, applies damage, emits signal when done
 func _attack(target_btn : BattleActorButton) -> void:
-	print("BattleActorButton.gd/_attack() called")
+	#DEBUG print("BattleActorButton.gd/_attack() called")
 	# 1) Play attack animation & wait, then switch back to idle animation
 	if attack_anim != "" and anim_sprite:
 		anim_sprite.play(attack_anim)
@@ -76,35 +76,40 @@ func _attack(target_btn : BattleActorButton) -> void:
 	# 5) Signal that attack is finished
 	emit_signal("attack_finished", target_btn)
 
-# Responds to BattleActor hp_changed signal: shows hit text, plays hurt animation, recoils
-func _on_data_hp_changed(hp : int, change : int) -> void:
-	print("BattleActorButton.gd/_on_data_hp_changed() called")
-	var hit_text : Label = HIT_TEXT.instantiate()
-	hit_text.text     = str(abs(change))
-	add_child(hit_text)
-	hit_text.position = Vector2(size.x * 0.5, -4)
-
+# Responds to BattleActor hp_changed signal: plays hurt/recoil, then shows hit text
+func _on_data_hp_changed(_hp : int, change : int) -> void:
+	#DEBUG print("BattleActorButton.gd/_on_data_hp_changed() called")
 	if change < 0:
 		play_hurt_animation()
-		_recoil()
+		_recoil()  # Ensure recoil finishes before showing hit text
+	
+	await get_tree().create_timer(0.5).timeout
+
+	# Show hit text after recoil
+	var hit_text : Label = HIT_TEXT.instantiate()
+	hit_text.z_index  = 100  # Ensure it's above enemy sprites
+	hit_text.text     = str(abs(data.last_attempted_damage))  # Show attempted damage, not HP change
+	# Center the text above the button
+	hit_text.position = Vector2(self.size.x * 0.5 - hit_text.size.x * 0.5, -hit_text.size.y - 8)
+	add_child(hit_text)
 
 # Animates a quick physical recoil when damaged
 func _recoil() -> Tween:
-	print("BattleActorButton.gd/_recoil() called")
+	#DEBUG print("BattleActorButton.gd/_recoil() called")
 	# 1) Kill any current tween
 	if tween:
 		tween.kill()
 	# 2) Create new Tween for position and color
 	tween = create_tween()
 	tween.tween_property(self, "position:x",start_pos.x + (RECOIL * recoil_direction), 0.25).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
-	tween.parallel().tween_property(self, "self_modulate",Color.RED, 0.25).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
+	#tween.parallel().tween_property(self, "self_modulate",Color.RED, 0.25).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
 	tween.tween_property(self, "position:x", start_pos.x, 0.05).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
-	tween.parallel().tween_property(self, "self_modulate",Color.WHITE, 0.25).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
+	#tween.parallel().tween_property(self, "self_modulate",Color.WHITE, 0.25).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
 	return tween
 
 # Play hurt animation when damaged
 func play_hurt_animation():
-	print("BattleActorButton.gd/play_hurt_animation() called")
+	#DEBUG print("BattleActorButton.gd/play_hurt_animation() called")
 	if hurt_anim != "" and anim_sprite:
 		# 1) Play hurt animation & wait
 		anim_sprite.play(hurt_anim)
@@ -118,14 +123,14 @@ func play_hurt_animation():
 
 # Responds to BattleActor defeated signal: plays death animation, greys out button
 func _on_data_is_defeated() -> void:
-	print("BattleActorButton.gd/_on_data_is_defeated() called")
+	#DEBUG print("BattleActorButton.gd/_on_data_is_defeated() called")
 	play_death_animation()
 	# Grey‐out or remove, your choice
 	self_modulate = Color.BLACK
 
 # Play death animation
 func play_death_animation():
-	print("BattleActorButton.gd/play_death_animation() called")
+	#DEBUG print("BattleActorButton.gd/play_death_animation() called")
 	if death_anim != "" and anim_sprite:
 		# 1) Play hurt animation & wait
 		anim_sprite.play(hurt_anim)
@@ -143,7 +148,7 @@ func play_death_animation():
 
 # Responds to BattleActor acting signal: slide animation for attack/turn start
 func _on_data_acting() -> void:
-	print("BattleActorButton.gd/_on_data_acting() called")
+	#DEBUG print("BattleActorButton.gd/_on_data_acting() called")
 	# Slide‐in tween when data.act() fires
 	if tween:
 		tween.kill()
@@ -154,7 +159,7 @@ func _on_data_acting() -> void:
 # Unused: old animation to slide forward when attacking
 # TODO Maybe remove? Players have animations, enemies need to just flash and attack in place
 func _action_slide() -> Tween: 
-	print("BattleActorButton.gd/_action_slide() called")
+	#DEBUG print("BattleActorButton.gd/_action_slide() called")
 	# 1) If Tween is currently playing, stop it and void any set properties
 	if tween: tween.kill()
 	# 2) Create new Tween for alternate slide

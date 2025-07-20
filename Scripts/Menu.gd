@@ -107,7 +107,7 @@ func button_enable_focus(on: bool):
 		button.set_focus_mode(mode)
 
 func button_focus(n: int = index):
-	await get_tree().process_frame
+	#await get_tree().process_frame
 	if get_child_count() > 0:
 		button_enable_focus(true)
 		n = clampi(n, 0, get_buttons_count()-1)
