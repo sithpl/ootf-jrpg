@@ -4,7 +4,7 @@
 [ext_resource type="SpriteFrames" uid="uid://c3jf02eaihm66" path="res://Assets/Animations/OW_Player.tres" id="2_gntrk"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_qbkls"]
-radius = 5.0
+radius = 13.0
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_kyqiw"]
 
@@ -14,10 +14,9 @@ script = ExtResource("1_kyqiw")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.5, 0.5)
 sprite_frames = ExtResource("2_gntrk")
-animation = &"_RESET"
+animation = &"DOWN"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 position = Vector2(0, 2)
 shape = SubResource("CircleShape2D_qbkls")
 
