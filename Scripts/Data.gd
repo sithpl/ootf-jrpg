@@ -1,5 +1,11 @@
 extends Node
 
+# ---------- SCENE TRANSITIONS ----------
+
+var tile_transitions : Dictionary = {
+	Vector2(21,6): "Town_Discord",
+}
+
 # Called when the node is added to the scene tree
 func _ready():
 	rebuild_party()
@@ -178,13 +184,14 @@ func get_party() -> Array[BattleActor]:
 # ---------- MUSIC ----------
 
 # Enums
-enum BattleType { INTRO, NORMAL, BOSS, SPECIAL }
+enum BattleType { INTRO, TOWN, NORMAL, BOSS, SPECIAL }
 
 # Variables
 var current_battle_type   :BattleType           = BattleType.NORMAL
 var zone_theme            :String               = "res://Assets/Audio/zone_theme.wav"
 var intro_theme           :String               = "res://Assets/Audio/Battle/intro_theme.wav"
 var battle_theme          :String               = "res://Assets/Audio/Battle/battle_theme.wav"
+var town_theme            :String               = "res://Assets/Audio/town_theme.wav"
 var boss_theme            :String               = "res://Assets/Audio/Battle/boss_theme.wav"
 var special_theme         :String               = "res://Assets/Audio/Battle/special_theme.wav"
 var victory_theme         :String               = "res://Assets/Audio/Battle/victory_theme.wav"
@@ -196,6 +203,8 @@ func get_battle_theme() -> String:
 	match current_battle_type:
 		BattleType.INTRO:
 			return intro_theme
+		BattleType.TOWN:
+			return town_theme
 		BattleType.NORMAL:
 			return battle_theme
 		BattleType.BOSS:

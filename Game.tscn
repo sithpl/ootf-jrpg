@@ -15,3 +15,5 @@ pitch_scale = 1.25
 [node name="Overworld" parent="." instance=ExtResource("1_wbfu4")]
 
 [node name="CanvasLayer0" type="CanvasLayer" parent="."]
+
+[connection signal="tile_transition_entered" from="Overworld" to="." method="_on_overworld_tile_transition_entered"]
