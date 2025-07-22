@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cbpserdrtjr6e"]
 
-[ext_resource type="Script" uid="uid://cedot7cysxh8i" path="res://Scripts/BattleActorButton.gd" id="1_llmvi"]
+[ext_resource type="Script" uid="uid://cedot7cysxh8i" path="res://Scripts/Battle/BattleActorButton.gd" id="1_llmvi"]
 
 [node name="BattleActorButton" type="TextureButton"]
 anchors_preset = 15

@@ -3,7 +3,7 @@ extends Node
 # ---------- SCENE TRANSITIONS ----------
 
 var tile_transitions : Dictionary = {
-	Vector2(21,6): "Town_Discord",
+	Vector2(20,6): "Town_Discord",
 }
 
 # Called when the node is added to the scene tree
@@ -89,17 +89,21 @@ var class_configs := {
 
 	"Archer": { "hp_max": 40, "ap_max": 30, "strength": 1, "speed": 3, 
 	"texture_path": "res://Assets/Players/Archer.png", 
-	"idle_anim": "archer_idle", "attack_anim": "archer_melee", "hurt_anim" : "archer_hurt", "death_anim" : "archer_death"  },
+	"idle_anim": "archer_idle", "attack_anim": "archer_ranged", "hurt_anim" : "archer_hurt", "death_anim" : "archer_death"  },
 
 	"Lancer": { "hp_max": 40, "ap_max": 30, "strength": 1, "speed": 3, 
 	"texture_path": "res://Assets/Players/Lancer.png", 
-	"idle_anim": "lancer_idle", "attack_anim": "lancer_melee", "hurt_anim" : "lancer_hurt", "death_anim" : "lancer_death"  }
+	"idle_anim": "lancer_idle", "attack_anim": "lancer_melee", "hurt_anim" : "lancer_hurt", "death_anim" : "lancer_death"  },
+	
+	"Dogue": { "hp_max": 40, "ap_max": 30, "strength": 1, "speed": 3, 
+	"texture_path": "res://Assets/Players/Dogue.png", 
+	"idle_anim": "dogue_idle", "attack_anim": "dogue_melee", "hurt_anim" : "dogue_hurt", "death_anim" : "dogue_death"  },
 }
 
 # ---------- CHARACTERS & PARTY ----------
 
 # party_keys: Names of characters currently in the party
-var party_keys            :Array[String]        = ["Clav", "Erik", "Fraud", "Dan"]
+var party_keys            :Array[String]        = ["Sayree", "Slam", "Woofshank", "Skoot"]
 
 # party: List of BattleActor instances for the current party
 var party                 :Array[BattleActor]   = []
@@ -123,6 +127,14 @@ var characters := {
 	"Fraud": { "class": "Ranger", 
 	"bonuses": { "ap_max": 5, "strength": 1}},
 	"Dan": { "class": "Mage", 
+	"bonuses": { "ap_max": 20, "speed" : 1}},
+	"Sayree": { "class": "Paladin", 
+	"bonuses": { "ap_max": 20, "speed" : 1}},
+	"Skoot": { "class": "Archer", 
+	"bonuses": { "ap_max": 20, "speed" : 1}},
+	"Slam": { "class": "Lancer", 
+	"bonuses": { "ap_max": 20, "speed" : 1}},
+	"Woofshank": { "class": "Dogue", 
 	"bonuses": { "ap_max": 20, "speed" : 1}},
 }
 
@@ -180,36 +192,3 @@ func swap_party_member(slot:int, new_name:String) -> void:
 func get_party() -> Array[BattleActor]:
 	#DEBUG print("Data.gd/get_party() called")
 	return party
-
-# ---------- MUSIC ----------
-
-# Enums
-enum BattleType { INTRO, TOWN, NORMAL, BOSS, SPECIAL }
-
-# Variables
-var current_battle_type   :BattleType           = BattleType.NORMAL
-var zone_theme            :String               = "res://Assets/Audio/zone_theme.wav"
-var intro_theme           :String               = "res://Assets/Audio/Battle/intro_theme.wav"
-var battle_theme          :String               = "res://Assets/Audio/Battle/battle_theme.wav"
-var town_theme            :String               = "res://Assets/Audio/town_theme.wav"
-var boss_theme            :String               = "res://Assets/Audio/Battle/boss_theme.wav"
-var special_theme         :String               = "res://Assets/Audio/Battle/special_theme.wav"
-var victory_theme         :String               = "res://Assets/Audio/Battle/victory_theme.wav"
-var gameover_theme        :String               = "res://Assets/Audio/Battle/gameover_theme.wav"
-
-# Returns the path for the current battle theme music based on battle type
-func get_battle_theme() -> String:
-	#DEBUG print("Data.gd/get_battle_theme() called")
-	match current_battle_type:
-		BattleType.INTRO:
-			return intro_theme
-		BattleType.TOWN:
-			return town_theme
-		BattleType.NORMAL:
-			return battle_theme
-		BattleType.BOSS:
-			return boss_theme
-		BattleType.SPECIAL:
-			return special_theme
-		_:
-			return zone_theme

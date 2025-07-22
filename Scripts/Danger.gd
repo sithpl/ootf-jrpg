@@ -16,7 +16,7 @@ signal limit_reached()
 var limit : int = 0
 
 func _ready():
-	print("Danger.gd/_ready() called")
+	#DEBUG print("Danger.gd/_ready() called")
 	set_limit()
 	
 	if show_debug_text:
@@ -33,7 +33,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				_canvas_layer.visible = !_canvas_layer.visible
 
 func set_limit():
-	print("Danger.gd/set_limit() called")
+	#DEBUG print("Danger.gd/set_limit() called")
 	var spread : float = 0.5
 	limit = randf_range(limit_base * spread, limit_base * (1 + spread))
 	_debug_label.text = str(limit)
@@ -45,7 +45,7 @@ func countdown(amount: int = 1):
 	
 	if limit <= 0:
 		emit_signal("limit_reached")
-		print("signal -> limit_reached emitted!")
+		#DEBUG print("signal -> limit_reached emitted!")
 		set_limit()
 	
 	if show_debug_text:

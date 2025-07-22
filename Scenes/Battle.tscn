@@ -1,13 +1,13 @@
 [gd_scene load_steps=19 format=3 uid="uid://buhojghfeg4r2"]
 
-[ext_resource type="Script" uid="uid://duujsym6v6wka" path="res://Scripts/Battle.gd" id="1_p46lj"]
+[ext_resource type="Script" uid="uid://duujsym6v6wka" path="res://Scripts/Battle/Battle.gd" id="1_p46lj"]
 [ext_resource type="PackedScene" uid="uid://dggmt4f88v4jj" path="res://Scenes/WindowDefault.tscn" id="1_wvl2i"]
 [ext_resource type="PackedScene" uid="uid://nc557d57bl5u" path="res://Scenes/EnemyButton.tscn" id="2_2h7oj"]
 [ext_resource type="Texture2D" uid="uid://bqm5ix0xuv5pv" path="res://Assets/Forest_01.png" id="2_6yjxy"]
 [ext_resource type="PackedScene" uid="uid://bkuddhx0iepft" path="res://Scenes/PlayerButton.tscn" id="3_1samx"]
-[ext_resource type="Script" uid="uid://bf24p0v61c4ro" path="res://Scripts/WindowDefault.gd" id="3_8teo4"]
+[ext_resource type="Script" uid="uid://bf24p0v61c4ro" path="res://Scripts/Battle/WindowDefault.gd" id="3_8teo4"]
 [ext_resource type="PackedScene" uid="uid://ce3mvvn7dqjjf" path="res://Scenes/PlayerInfoBar.tscn" id="3_c5ef4"]
-[ext_resource type="Script" uid="uid://c3g6ec23bdh1g" path="res://Scripts/Menu.gd" id="5_c5ef4"]
+[ext_resource type="Script" uid="uid://c3g6ec23bdh1g" path="res://Scripts/Battle/Menu.gd" id="5_c5ef4"]
 [ext_resource type="Texture2D" uid="uid://dc3abl7gyrlwq" path="res://Assets/UI/fantasy-ui-borders.svg" id="7_l0uqe"]
 [ext_resource type="PackedScene" uid="uid://c7llgdviardiq" path="res://Scenes/MenuCursor.tscn" id="8_u22qb"]
 [ext_resource type="PackedScene" uid="uid://tlqftavjyptl" path="res://Scenes/DownCursor.tscn" id="10_qxnh6"]
@@ -65,9 +65,6 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_p46lj")
 metadata/_edit_use_anchors_ = true
-
-[node name="BattleMusic" type="AudioStreamPlayer" parent="."]
-volume_db = -20.0
 
 [node name="BattleScene" type="TextureRect" parent="."]
 layout_mode = 1
@@ -138,7 +135,7 @@ stretch_mode = 5
 anchors_preset = 0
 offset_left = 234.0
 offset_top = 38.0
-offset_right = 286.0
+offset_right = 292.0
 offset_bottom = 122.0
 script = ExtResource("5_c5ef4")
 
@@ -146,8 +143,8 @@ script = ExtResource("5_c5ef4")
 layout_mode = 0
 offset_left = 4.0
 offset_top = 4.0
-offset_right = 20.0
-offset_bottom = 22.0
+offset_right = 24.0
+offset_bottom = 24.0
 stretch_mode = 5
 
 [node name="PlayerButton2" parent="Players" instance=ExtResource("3_1samx")]
@@ -157,8 +154,8 @@ anchor_left = 0.134615
 anchor_right = 0.134615
 offset_left = 18.0
 offset_top = 24.0
-offset_right = 34.0
-offset_bottom = 42.0
+offset_right = 38.0
+offset_bottom = 44.0
 stretch_mode = 5
 metadata/_edit_use_anchors_ = true
 
@@ -166,16 +163,16 @@ metadata/_edit_use_anchors_ = true
 layout_mode = 0
 offset_left = 4.0
 offset_top = 44.0
-offset_right = 20.0
-offset_bottom = 62.0
+offset_right = 24.0
+offset_bottom = 64.0
 stretch_mode = 5
 
 [node name="PlayerButton4" parent="Players" instance=ExtResource("3_1samx")]
 layout_mode = 0
 offset_left = 25.0
 offset_top = 64.0
-offset_right = 41.0
-offset_bottom = 82.0
+offset_right = 45.0
+offset_bottom = 84.0
 stretch_mode = 5
 
 [node name="GUIMargin" type="MarginContainer" parent="."]

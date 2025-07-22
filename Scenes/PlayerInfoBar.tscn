@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://ce3mvvn7dqjjf"]
 
 [ext_resource type="PackedScene" uid="uid://bsrq5nbx25gdv" path="res://Scenes/ATBBar.tscn" id="1_aulq1"]
-[ext_resource type="Script" uid="uid://ducjmhqthl6ol" path="res://Scripts/PlayerInfoBar.gd" id="1_we0bl"]
+[ext_resource type="Script" uid="uid://ducjmhqthl6ol" path="res://Scripts/Battle/PlayerInfoBar.gd" id="1_we0bl"]
 
 [sub_resource type="Animation" id="Animation_ye2r6"]
 length = 0.001
@@ -47,20 +47,20 @@ offset_bottom = 8.0
 script = ExtResource("1_we0bl")
 
 [node name="Name" type="Label" parent="."]
-custom_minimum_size = Vector2(32, 0)
+custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Player"
 
 [node name="Health" type="Label" parent="."]
-custom_minimum_size = Vector2(16, 0)
+custom_minimum_size = Vector2(12, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "9999"
 horizontal_alignment = 2
 
 [node name="Mana" type="Label" parent="."]
-custom_minimum_size = Vector2(12, 0)
+custom_minimum_size = Vector2(8, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "999"
