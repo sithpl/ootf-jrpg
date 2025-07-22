@@ -24,7 +24,7 @@ func get_enemies_weighted_at_cell(pos: Vector2) -> Array:
 
 	# Check bounds
 	if area_index < 0 or area_index >= AREAS_WEIGHTED.size():
-		print("Invalid area_index: ", area_index)
+		#DEBUG print("Invalid area_index: ", area_index)
 		return []
 
 	var weighted = AREAS_WEIGHTED[area_index]
@@ -33,7 +33,7 @@ func get_enemies_weighted_at_cell(pos: Vector2) -> Array:
 	if weighted == null or weighted == []:
 		return []
 	if typeof(weighted) == TYPE_INT and weighted == -5:
-		print("Tile marked as no encounter (-5).")
+		#DEBUG print("Tile marked as no encounter (-5).")
 		return []
 
 	return weighted

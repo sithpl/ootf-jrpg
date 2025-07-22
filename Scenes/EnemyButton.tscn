@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://nc557d57bl5u"]
 
 [ext_resource type="Texture2D" uid="uid://dytwnp65biiga" path="res://Assets/Enemies/orc_rider.png" id="1_kdywh"]
-[ext_resource type="Script" uid="uid://dqmdnvcv3j6cc" path="res://Scripts/EnemyButton.gd" id="2_8txii"]
+[ext_resource type="Script" uid="uid://dqmdnvcv3j6cc" path="res://Scripts/Battle/EnemyButton.gd" id="2_8txii"]
 [ext_resource type="PackedScene" uid="uid://bsrq5nbx25gdv" path="res://Scenes/ATBBar.tscn" id="2_uahas"]
 
 [sub_resource type="Animation" id="Animation_kdywh"]

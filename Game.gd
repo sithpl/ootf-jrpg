@@ -6,58 +6,109 @@ class_name Game extends Node2D
 const BATTLE : PackedScene = preload("res://Scenes/Battle.tscn")
 const OVERWORLD : PackedScene = preload("res://Scenes/Overworld.tscn")
 
-var _overworld : Overworld
+var _world_map : Node2D
 
 func _ready():
-	_overworld = $Overworld
-	if not _overworld.is_connected("enemy_encountered", Callable(self, "_on_overworld_enemy_encountered")):
-		_overworld.connect("enemy_encountered", Callable(self, "_on_overworld_enemy_encountered"))
+	_world_map = $Overworld
+	if not _world_map.is_connected("enemy_encountered", Callable(self, "_on_overworld_enemy_encountered")):
+		_world_map.connect("enemy_encountered", Callable(self, "_on_overworld_enemy_encountered"))
+	if not _world_map.is_connected("tile_transition_entered", Callable(self, "_on_overworld_tile_transition_entered")):
+		_world_map.connect("tile_transition_entered", Callable(self, "_on_overworld_tile_transition_entered"))
 
-func transition_scene(scene: Node):
+func transition_scene(scene: Node, destination: String = ""):
+	print("Game.gd/transition_scene() called")
 	Globals.player.enable(false)
-	remove_child(_overworld)
-	await get_tree().create_timer(0.5).timeout
+	await play_overworld_animation("fade_out")
 	
+	# Remove old world map if it's our child
+	if _world_map.get_parent() == self:
+		remove_child.call_deferred(_world_map)
+	await get_tree().create_timer(0.1).timeout
+
+	var player_node = scene.get_node_or_null("Player")
+	
+	if Globals.returning_from_battle:
+		if player_node:
+			print("Returning from battle, restoring last battle position")
+			player_node.position = Globals.last_player_position
+		Globals.returning_from_battle = false
+		# DO NOT clear last_player_position here!
+	else:
+		# Map-to-map transition: clear last_player_position
+		Globals.has_last_player_position = false
+	
+	# Positioning logic for Overworld and Towns
+	var entry_point_name = Globals.last_exit
+	print("Trying entry point:", entry_point_name)
+	if entry_point_name != null and entry_point_name != "":
+		var entry = scene.get_node_or_null("EntryPoints/" + entry_point_name)
+		print("Entry found:", entry)
+		if entry and player_node:
+			player_node.position = entry.position
+		else:
+			print("Entry point not found, using fallback.")
+			player_node.position = Vector2(0,0)
+	elif destination.begins_with("Town"):
+		var scene_name = scene.name
+		if destination.begins_with("Town") or scene_name.begins_with("Town"):
+			print("Town destination detected")
+			var town_entry = scene.get_node_or_null("EntryPoints/Entrance")
+			print("Town entry found:", town_entry)
+			if town_entry and player_node:
+				player_node.position = town_entry.position
+
+	if player_node:
+		Globals.player = player_node
+
 	add_child(scene)
-	Globals.player = _overworld._player
-	Globals.player.enable(true)
-	# After adding the new scene, try to disable Danger
+	_world_map = scene
+	if _world_map.has_signal("enemy_encountered"):
+		if not _world_map.is_connected("enemy_encountered", Callable(self, "_on_overworld_enemy_encountered")):
+			_world_map.connect("enemy_encountered", Callable(self, "_on_overworld_enemy_encountered"))
+		if _world_map.has_signal("tile_transition_entered"):
+			if not _world_map.is_connected("tile_transition_entered", Callable(self, "_on_overworld_tile_transition_entered")):
+				_world_map.connect("tile_transition_entered", Callable(self, "_on_overworld_tile_transition_entered"))
 
 func _on_overworld_enemy_encountered(enemies_weighted: Array) -> void:
-	overworld_music(true)
 	print("Game.gd/_on_overworld_enemy_encountered() called")
-	Globals.last_player_position = _overworld._player.position
+	MusicManager.pause_music()
+	Globals.last_player_position = _world_map._player.position
 	_battle_trigger_sfx.play()
 	Globals.player.enable(false)
 	await Util.screen_flash(_canvas_layer0, "battle_start", false).tree_exiting
-	remove_child.call_deferred(_overworld)
+	remove_child.call_deferred(_world_map)
 
 	var inst : Battle = BATTLE.instantiate()
 	inst.enemies_weighted = enemies_weighted
 	_canvas_layer0.add_child.call_deferred(inst)
 	await inst.tree_exiting
+	Globals.returning_from_battle
 
 	# Instance new overworld, connect signal
-	_overworld = OVERWORLD.instantiate()
-	self.call_deferred("add_child", _overworld)  # <-- FIXED: add as child of Game
-	_overworld.connect("enemy_encountered", Callable(self, "_on_overworld_enemy_encountered"))
-	print("_overworld signal connected? ", _overworld.is_connected("enemy_encountered", Callable(self, "_on_overworld_enemy_encountered")))
+	_world_map = OVERWORLD.instantiate()
+	self.call_deferred("add_child", _world_map)
+	_world_map.connect("enemy_encountered", Callable(self, "_on_overworld_enemy_encountered"))
+	_world_map.connect("tile_transition_entered", Callable(self, "_on_overworld_tile_transition_entered"))
 	Globals.player.enable(true)
 
-# THIS DOESN'T WORK AND I AM OUT OF IDEAS
-func overworld_music(paused: bool):
-	var overworld_scene = get_node("Overworld")
-	if overworld_scene:
-		var audio_player = overworld_scene.get_node("ZoneMusic")
-		if audio_player:
-			if paused and audio_player.playing:
-				audio_player.stream_paused = true
-				print("Zone music paused")
-			elif not paused and audio_player.stream_paused:
-				audio_player.stream_paused = false
-				print("Zone music resumed")
-
 func _on_overworld_tile_transition_entered(destination: String) -> void:
-	var scene : Node = load("res://Scenes/" + destination + ".tscn").instantiate()
-	print(scene)
-	transition_scene(scene)
+	# Only clear when not returning from battle
+	if not Globals.returning_from_battle:
+		Globals.last_player_position = Vector2.ZERO  # or your chosen sentinel, or set your validity flag to false
+
+	if destination == _world_map.name:
+		transition_scene(_world_map)
+	else:
+		var scene : Node = load("res://Scenes/" + destination + ".tscn").instantiate()
+		if scene.has_signal("tile_transition_entered"):
+			print("Connected tile_transition_entered for", scene)
+			scene.connect("tile_transition_entered", Callable(self, "_on_overworld_tile_transition_entered"))
+		print(scene)
+		transition_scene(scene, destination)
+
+func play_overworld_animation(anim_name: String):
+	var overworld = get_node_or_null("Overworld")
+	if overworld:
+		var anim_player = overworld.get_node("AnimationPlayer")
+		if anim_player:
+			anim_player.play(anim_name)

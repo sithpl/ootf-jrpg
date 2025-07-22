@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cfyl77m2tdkhy"
-path="res://.godot/imported/Overworld-A1.png-986082eba00dc49910caef7de61d1189.ctex"
+uid="uid://dtm3oxbhtqhl6"
+path="res://.godot/imported/Dogue.png-8bae7071abb0220478820c8e252e6974.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/World/Overworld-A1.png"
-dest_files=["res://.godot/imported/Overworld-A1.png-986082eba00dc49910caef7de61d1189.ctex"]
+source_file="res://Assets/Players/Dogue.png"
+dest_files=["res://.godot/imported/Dogue.png-8bae7071abb0220478820c8e252e6974.ctex"]
 
 [params]
 

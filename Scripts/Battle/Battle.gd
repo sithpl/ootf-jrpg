@@ -8,7 +8,6 @@ enum Actions { FIGHT, SKILLS, ITEM, FLEE }
 @export var transition_time       :                   = 0.7
 
 # Onready variables for UI and game elements
-@onready var _battle_music        :AudioStreamPlayer  = $BattleMusic
 @onready var _log_label           :Label              = $ActionLogLabel
 @onready var _gui                 :Control            = $GUIMargin
 @onready var _options             :WindowDefault      = $Options
@@ -88,10 +87,7 @@ func _play_intro() -> void:
 	_spawn_random_enemies(spawn_count)
 
 	# 1) Play ONLY the intro theme
-	var theme_stream = load(Data.intro_theme)
-	if theme_stream:
-		_battle_music.stream = theme_stream
-		_battle_music.play()
+	MusicManager.play_type_theme(MusicManager.ThemeType.INTRO)
 
 	# 2) Cache orig positions & move offscreen
 	_stash_and_offset_buttons()
@@ -111,10 +107,7 @@ func _start_battle() -> void:
 	#DEBUG print("Battle.gd/_start_battle() called")
 	
 	 #1) Play battle theme
-	var theme_stream = load(Data.battle_theme)
-	if theme_stream:
-		_battle_music.stream = theme_stream
-		_battle_music.play()
+	MusicManager.play_type_theme(MusicManager.ThemeType.BATTLE)
 
 	turn_order.clear()
 	# 1) All players are guaranteed valid
@@ -206,7 +199,6 @@ func _on_options_button_pressed(button: BaseButton) -> void:
 		await _slide_group(_players_menu.get_buttons(), 1.0, 1) # Slide left
 		await _wait_for_confirm()
 		_gui.hide()
-		_battle_music.stop()
 		queue_free()
 	else:
 		state = States.PLAYER_TARGET
@@ -357,10 +349,7 @@ func _end_battle(result_state: States) -> void:
 
 	match state:
 		States.VICTORY:
-			var victory_music = load(Data.victory_theme)
-			if victory_music:
-				_battle_music.stream = victory_music
-				_battle_music.play()
+			MusicManager.play_type_theme(MusicManager.ThemeType.VICTORY)
 			
 			_enemies_menu.show()
 			_players_menu.show()
@@ -379,23 +368,22 @@ func _end_battle(result_state: States) -> void:
 			# Show Gold text, wait for input
 			_top_text_label.text = gold_text
 			await _wait_for_confirm()
+			MusicManager.stop_music()
 			$AnimationPlayer.play("fade_out")
 			await $AnimationPlayer.animation_finished
 			queue_free()
 			print("YOU WON!")
 			
 		States.GAMEOVER:
-			var gameover_music = load(Data.gameover_theme)
-			if gameover_music:
-				_battle_music.stream = gameover_music
-				_battle_music.play()
-			
+			MusicManager.play_type_theme(MusicManager.ThemeType.GAMEOVER)
 			_enemies_menu.show()
 			_players_menu.show()
 			_top_menu.show()
 			
 			_top_text_label.text = "Good job, loser..."
 			await _wait_for_confirm()
+			await get_tree().create_timer(1.0).timeout
+			get_tree().change_scene_to_file("res://Scenes/Game.tscn")
 			print("YOU LOSE!")
 
 	# Hide battle UI, return to map, etc.
