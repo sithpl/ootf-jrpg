@@ -16,7 +16,7 @@ func _ready():
 		_world_map.connect("tile_transition_entered", Callable(self, "_on_overworld_tile_transition_entered"))
 
 func transition_scene(scene: Node, destination: String = ""):
-	print("Game.gd/transition_scene() called")
+	#DEBUG print("Game.gd/transition_scene() called")
 	Globals.player.enable(false)
 	await play_overworld_animation("fade_out")
 	
@@ -39,21 +39,21 @@ func transition_scene(scene: Node, destination: String = ""):
 	
 	# Positioning logic for Overworld and Towns
 	var entry_point_name = Globals.last_exit
-	print("Trying entry point:", entry_point_name)
+	#DEBUG print("Trying entry point:", entry_point_name)
 	if entry_point_name != null and entry_point_name != "":
 		var entry = scene.get_node_or_null("EntryPoints/" + entry_point_name)
-		print("Entry found:", entry)
+		#DEBUG print("Entry found:", entry)
 		if entry and player_node:
 			player_node.position = entry.position
 		else:
-			print("Entry point not found, using fallback.")
+			#DEBUG print("Entry point not found, using fallback.")
 			player_node.position = Vector2(0,0)
 	elif destination.begins_with("Town"):
 		var scene_name = scene.name
 		if destination.begins_with("Town") or scene_name.begins_with("Town"):
-			print("Town destination detected")
+			#DEBUG print("Town destination detected")
 			var town_entry = scene.get_node_or_null("EntryPoints/Entrance")
-			print("Town entry found:", town_entry)
+			#DEBUG print("Town entry found:", town_entry)
 			if town_entry and player_node:
 				player_node.position = town_entry.position
 
@@ -70,7 +70,7 @@ func transition_scene(scene: Node, destination: String = ""):
 				_world_map.connect("tile_transition_entered", Callable(self, "_on_overworld_tile_transition_entered"))
 
 func _on_overworld_enemy_encountered(enemies_weighted: Array) -> void:
-	print("Game.gd/_on_overworld_enemy_encountered() called")
+	#DEBUG print("Game.gd/_on_overworld_enemy_encountered() called")
 	MusicManager.pause_music()
 	Globals.last_player_position = _world_map._player.position
 	_battle_trigger_sfx.play()
@@ -103,7 +103,7 @@ func _on_overworld_tile_transition_entered(destination: String) -> void:
 		if scene.has_signal("tile_transition_entered"):
 			print("Connected tile_transition_entered for", scene)
 			scene.connect("tile_transition_entered", Callable(self, "_on_overworld_tile_transition_entered"))
-		print(scene)
+		#DEBUG print(scene)
 		transition_scene(scene, destination)
 
 func play_overworld_animation(anim_name: String):
@@ -112,3 +112,38 @@ func play_overworld_animation(anim_name: String):
 		var anim_player = overworld.get_node("AnimationPlayer")
 		if anim_player:
 			anim_player.play(anim_name)
+
+func show_dialogue(npc: NPC):
+	#DEBUG print("Game.gd/show_dialogue() called")
+	print("Game.show_dialogue called for: ", npc.npc_id)
+	Globals.player.movement_locked = true
+	print("movement_locked = ", Globals.player.movement_locked)
+
+	var perks = Globals.player_perks if Globals.player_perks != null else []
+	var party_members = Globals.party_members if Globals.party_members != null else []
+	var dialogue = npc.get_formatted_dialogue(perks, party_members)
+
+	print("Input.is_action_pressed(ui_accept): ", Input.is_action_pressed("ui_accept"))
+	TextUi.show_dialogue_box(dialogue)
+	#DEBUG print("Game.gd/show_dialogue() -> TextUI.gd/show_dialogue_box() called")
+	#DEBUG print(dialogue)
+	
+	print("Waiting for confirmation...")
+	await TextUi.confirmed
+	print("Confirmed signal received!")
+	
+	TextUi.hide_dialogue_box()
+	
+	#DEBUG print("Game.gd/show_dialogue() -> TextUI.gd/hide_dialogue_box() called")
+	Globals.player.movement_locked = false
+	print("movement_locked = ", Globals.player.movement_locked)
+
+# Waits for a fresh press, not just the key being down
+func _wait_for_confirm():
+	while Input.is_action_pressed(&"ui_accept"):
+		await get_tree().process_frame
+	while true:
+		await get_tree().process_frame
+		if Input.is_action_just_pressed(&"ui_accept"):
+			emit_signal("confirmed")
+			break

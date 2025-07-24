@@ -5,7 +5,7 @@ signal moved(pos, run_factor)
 
 # Onreadys
 @onready var _anim_sprite : AnimatedSprite2D = $AnimatedSprite2D
-@onready var _forest_mask : Light2D = $ForestMask
+var movement_locked: bool = false
 
 # Constants
 const SPEED : int = 110
@@ -17,6 +17,10 @@ func _ready():
 	idle()
 
 func _process(_delta: float):
+	if Globals.player.movement_locked:
+		return
+		print("Movement locked")
+		
 	var movement : Vector2 = Math.get_four_direction_vector(false)
 	if movement.is_equal_approx(Vector2.ZERO):
 		idle()
@@ -34,7 +38,7 @@ func _process(_delta: float):
 	
 func idle():
 	_anim_sprite.set_frame(IDLE_FRAME)
-	_anim_sprite.animation_finished
+	_anim_sprite.stop()
 	pass
 
 func enable(on: bool):
