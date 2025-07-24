@@ -27,9 +27,9 @@ func _ready():
 func _unhandled_key_input(event: InputEvent) -> void:
 	if event.pressed:
 		match event.keycode:
-			KEY_D:
+			KEY_P:
 				enabled = !enabled
-			KEY_E:
+			KEY_O:
 				_canvas_layer.visible = !_canvas_layer.visible
 
 func set_limit():

@@ -12,9 +12,9 @@ stream = ExtResource("3_u44n3")
 volume_db = -10.0
 pitch_scale = 1.25
 
-[node name="Overworld" parent="." instance=ExtResource("1_wbfu4")]
-
 [node name="CanvasLayer0" type="CanvasLayer" parent="."]
+
+[node name="Overworld" parent="." instance=ExtResource("1_wbfu4")]
 
 [connection signal="enemy_encountered" from="Overworld" to="." method="_on_overworld_enemy_encountered"]
 [connection signal="tile_transition_entered" from="Overworld" to="." method="_on_overworld_tile_transition_entered"]

@@ -1,0 +1,93 @@
+[gd_scene load_steps=3 format=3 uid="uid://d4ftse12rnt8x"]
+
+[ext_resource type="Script" uid="uid://br26508xpdrau" path="res://Scripts/TextUI.gd" id="1_x1yl5"]
+[ext_resource type="Texture2D" uid="uid://dc3abl7gyrlwq" path="res://Assets/UI/fantasy-ui-borders.svg" id="2_8wyk6"]
+
+[node name="TextUI" type="CanvasLayer"]
+layer = 100
+script = ExtResource("1_x1yl5")
+
+[node name="GUIMargin" type="MarginContainer" parent="."]
+top_level = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AreaNameBox" type="HBoxContainer" parent="GUIMargin"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="NinePatchRect" type="NinePatchRect" parent="GUIMargin/AreaNameBox"]
+custom_minimum_size = Vector2(100, 25)
+layout_mode = 2
+texture = ExtResource("2_8wyk6")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="GUIMargin/AreaNameBox/NinePatchRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="GUIMargin/AreaNameBox/NinePatchRect/MarginContainer"]
+layout_mode = 2
+text = "Discord"
+horizontal_alignment = 1
+
+[node name="ColorRect" type="ColorRect" parent="GUIMargin/AreaNameBox/NinePatchRect"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="DialogueBox" type="HBoxContainer" parent="GUIMargin"]
+custom_minimum_size = Vector2(200, 52)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+
+[node name="NinePatchRect" type="NinePatchRect" parent="GUIMargin/DialogueBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("2_8wyk6")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="GUIMargin/DialogueBox/NinePatchRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="GUIMargin/DialogueBox/NinePatchRect/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "Hey man!!"
+
+[node name="ColorRect" type="ColorRect" parent="GUIMargin/DialogueBox/NinePatchRect"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)

@@ -7044,8 +7044,9 @@ tile_map_data = PackedByteArray("AAAAAAsAAQAAAAAAAAAAAAwAAQAAAAAAAAAAAA0AAQAAAAA
 tile_set = SubResource("TileSet_vd8s3")
 script = ExtResource("6_d6kyl")
 
-[node name="Player" parent="." instance=ExtResource("4_8lvve")]
+[node name="Player" parent="." groups=["player"] instance=ExtResource("4_8lvve")]
 position = Vector2(217, 77)
+scale = Vector2(1.5, 1.5)
 
 [node name="Danger" parent="." instance=ExtResource("9_vd8s3")]
 
@@ -7057,7 +7058,7 @@ libraries = {
 [node name="EntryPoints" type="Node" parent="."]
 
 [node name="Town_Discord_SouthGate" type="Marker2D" parent="EntryPoints"]
-position = Vector2(333, 121)
+position = Vector2(336, 123)
 
 [connection signal="moved" from="Player" to="." method="_on_player_moved"]
 [connection signal="limit_reached" from="Danger" to="." method="_on_danger_limit_reached"]

@@ -3,7 +3,11 @@ extends Node
 # ---------- SCENE TRANSITIONS ----------
 
 var tile_transitions : Dictionary = {
+	# Discord
 	Vector2(20,6): "Town_Discord",
+	Vector2(20,5): "Town_Discord",
+	Vector2(21,6): "Town_Discord",
+	Vector2(21,5): "Town_Discord"
 }
 
 # Called when the node is added to the scene tree
@@ -103,7 +107,7 @@ var class_configs := {
 # ---------- CHARACTERS & PARTY ----------
 
 # party_keys: Names of characters currently in the party
-var party_keys            :Array[String]        = ["Sayree", "Slam", "Woofshank", "Skoot"]
+var party_keys            :Array[String]        = ["Bili", "Glenn", "Woofshank", "Skoot"]
 
 # party: List of BattleActor instances for the current party
 var party                 :Array[BattleActor]   = []

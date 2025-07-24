@@ -9,12 +9,15 @@ signal tile_transition_entered(destination)
 @onready var _danger              :Danger            = $Danger
 @onready var _main_map            :MainMap           = $MainMap
 @onready var _enemy_spawn_areas   :EnemySpawnAreas   = $EnemySpawnAreas
+@onready var area_name : String = "World Map"
 
 var _danger_paused: bool = false
 
 func _ready():
 	if get_name() == "Overworld" and Globals.last_player_position != Vector2.ZERO:
 		_player.position = Globals.last_player_position
+	if area_name != null:
+		TextUi.show_area_name(area_name)
 	overworld_entrance()
 	if MusicManager.music_player.stream_paused:
 		MusicManager.resume_music()
@@ -39,8 +42,8 @@ func _on_danger_limit_reached() -> void:
 		return
 	emit_signal("enemy_encountered", enemies_weighted)
 	print("signal -> enemy_encountered emitted!")
-	print(enemies_weighted)
-	
+	#DEBUG print(enemies_weighted)
+
 func overworld_entrance():
 	self.modulate = Color(0, 0, 0, 1) # Start fully black
 	$AnimationPlayer.play("fade_in")  # Play fade_in animation
