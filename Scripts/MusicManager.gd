@@ -1,11 +1,13 @@
 extends Node
 
-@onready var music_player : AudioStreamPlayer = $AudioStreamPlayer
+@onready var music_player : AudioStreamPlayer = $Music
+@onready var sfx_player : AudioStreamPlayer = $SFX
 
 # Enums
 enum ThemeType { ZONE, INTRO, TOWN, BATTLE, BOSS, SPECIAL, VICTORY, GAMEOVER }
 
 # Variables
+var interact_sfx          :String = "res://Assets/Audio/interact_sfx.wav"
 var zone_theme            :String = "res://Assets/Audio/zone_theme.wav"
 var intro_theme           :String = "res://Assets/Audio/Battle/intro_theme.wav"
 var town_theme            :String = "res://Assets/Audio/town_theme.wav"
@@ -76,3 +78,7 @@ func pause_music():
 func resume_music():
 	if music_player:
 		music_player.stream_paused = false
+
+func interact():
+	sfx_player.stream = load(interact_sfx)
+	sfx_player.play()

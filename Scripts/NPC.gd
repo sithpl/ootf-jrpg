@@ -80,7 +80,7 @@ var npc_database := {
 		"hoegetter_dialogue": {},
 		"portrait": "res://Assets/Portraits/bob.png",
 		"animation_set": "male_actor_5"
-	}
+	},
 }
 
 var npc_animations = {
@@ -146,6 +146,13 @@ var npc_animations = {
 		"move_left": "male_actor_4_LEFT",
 		"move_right": "male_actor_4_RIGHT",
 		"scale": Vector2(0.7, 0.7)
+	},
+	"male_actor_5": {
+		"move_up": "male_actor_5_UP",
+		"move_down": "male_actor_5_DOWN",
+		"move_left": "male_actor_5_LEFT",
+		"move_right": "male_actor_5_RIGHT",
+		"scale": Vector2(1.1, 1.1)
 	},
 	"female_actor_1": {
 		"move_up": "female_actor_1_UP",

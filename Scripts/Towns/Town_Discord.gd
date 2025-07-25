@@ -9,35 +9,14 @@ signal tile_transition_entered(destination)
 
 # List of NPCs for this town
 var npc_data = [
-	{
-		"npc_id": "kanili",
-		"position": Vector2(-227, 318)
-	},
-	{
-		"npc_id": "cracker",
-		"position": Vector2(-103, 318)
-		# No spawn_direction; will use default
-	},
-	{
-		"npc_id": "shadow",
-		"position": Vector2(-265, 318)
-	},
-	{
-		"npc_id": "drak",
-		"position": Vector2(-696, 64)
-	},
-	{
-		"npc_id": "friz",
-		"position": Vector2(-636, 64)
-	},
-	{
-		"npc_id": "erik",
-		"position": Vector2(-576, 64)
-	},
-	{
-		"npc_id": "dan",
-		"position": Vector2(-516, 64)
-	},
+	{ "npc_id": "kanili"},
+	{ "npc_id": "cracker"},
+	{ "npc_id": "shadow"},
+	{ "npc_id": "drak"},
+	{ "npc_id": "friz"},
+	{ "npc_id": "erik"},
+	{ "npc_id": "dan"},
+	{ "npc_id": "fraud"},
 ]
 
 func _ready():
@@ -49,13 +28,14 @@ func _ready():
 		)
 	if area_name != null:
 		TextUi.show_area_name(area_name)
-	# Spawn town NPCs
+	# Spawn town NPCs using Marker2Ds
+	var npc_locations = $NPCLocations
 	for data in npc_data:
 		var npc = npc_scene.instantiate()
 		npc.npc_id = data["npc_id"]
-		#npc.recruitable = data["recruitable"]
-		if npc.should_spawn():
-			npc.position = data["position"]
+		var marker = npc_locations.get_node(data["npc_id"]) # Match npc_id to Marker2D name
+		if marker and npc.should_spawn():
+			npc.position = marker.position
 			add_child(npc)
 		else:
 			npc.queue_free()

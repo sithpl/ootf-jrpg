@@ -5,5 +5,7 @@
 [node name="MusicManager" type="Node"]
 script = ExtResource("1_iysw5")
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="Music" type="AudioStreamPlayer" parent="."]
 volume_db = -10.0
+
+[node name="SFX" type="AudioStreamPlayer" parent="."]

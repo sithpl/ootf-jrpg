@@ -15,7 +15,7 @@ script = ExtResource("1_tdvfm")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.8, 0.8)
 sprite_frames = ExtResource("2_fo5tq")
-animation = &"female_villager_1_DOWN"
+animation = &"RESET"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(2.38419e-07, 3)
