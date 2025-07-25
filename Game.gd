@@ -116,6 +116,7 @@ func play_overworld_animation(anim_name: String):
 func show_dialogue(npc: NPC):
 	#DEBUG print("Game.gd/show_dialogue() called")
 	print("Game.show_dialogue called for: ", npc.npc_id)
+	MusicManager.interact()
 	Globals.player.movement_locked = true
 	print("movement_locked = ", Globals.player.movement_locked)
 
