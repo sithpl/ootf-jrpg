@@ -57,12 +57,11 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="Top" type="HBoxContainer" parent="MarginContainer/Window/VBoxContainer"]
-custom_minimum_size = Vector2(0, 20)
+[node name="NPC" type="HBoxContainer" parent="MarginContainer/Window/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="ShopGreeting" type="NinePatchRect" parent="MarginContainer/Window/VBoxContainer/Top"]
+[node name="ShopGreeting" type="NinePatchRect" parent="MarginContainer/Window/VBoxContainer/NPC"]
 custom_minimum_size = Vector2(150, 20)
 layout_mode = 2
 texture = ExtResource("2_c2t1s")
@@ -72,7 +71,7 @@ patch_margin_top = 4
 patch_margin_right = 4
 patch_margin_bottom = 4
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Window/VBoxContainer/Top/ShopGreeting"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Window/VBoxContainer/NPC/ShopGreeting"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -81,13 +80,13 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 8
 
-[node name="Label" type="Label" parent="MarginContainer/Window/VBoxContainer/Top/ShopGreeting/MarginContainer"]
+[node name="Label" type="Label" parent="MarginContainer/Window/VBoxContainer/NPC/ShopGreeting/MarginContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 7
 text = "\"Buy somethin' or get lost, kid\""
 vertical_alignment = 1
 
-[node name="ShopType" type="NinePatchRect" parent="MarginContainer/Window/VBoxContainer/Top"]
+[node name="ShopType" type="NinePatchRect" parent="MarginContainer/Window/VBoxContainer/NPC"]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -98,7 +97,7 @@ patch_margin_top = 4
 patch_margin_right = 4
 patch_margin_bottom = 4
 
-[node name="Label" type="Label" parent="MarginContainer/Window/VBoxContainer/Top/ShopType"]
+[node name="Label" type="Label" parent="MarginContainer/Window/VBoxContainer/NPC/ShopType"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -109,8 +108,84 @@ text = "Shopkeeper"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Top" type="HBoxContainer" parent="MarginContainer/Window/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Select" type="NinePatchRect" parent="MarginContainer/Window/VBoxContainer/Top"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.5
+texture = ExtResource("2_c2t1s")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Window/VBoxContainer/Top/Select"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Window/VBoxContainer/Top/Select/MarginContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="MarginContainer/Window/VBoxContainer/Top/Select/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Buy"
+
+[node name="Button2" type="Button" parent="MarginContainer/Window/VBoxContainer/Top/Select/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Sell"
+
+[node name="Button3" type="Button" parent="MarginContainer/Window/VBoxContainer/Top/Select/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Exit"
+
+[node name="Resource" type="NinePatchRect" parent="MarginContainer/Window/VBoxContainer/Top"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("2_c2t1s")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Window/VBoxContainer/Top/Resource"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Window/VBoxContainer/Top/Resource/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Amount" type="Label" parent="MarginContainer/Window/VBoxContainer/Top/Resource/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "9999"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/Window/VBoxContainer/Top/Resource/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "G"
+
 [node name="Middle" type="NinePatchRect" parent="MarginContainer/Window/VBoxContainer"]
-custom_minimum_size = Vector2(0, 105)
+custom_minimum_size = Vector2(0, 85)
 layout_mode = 2
 size_flags_vertical = 4
 texture = ExtResource("2_c2t1s")
@@ -173,34 +248,9 @@ patch_margin_top = 4
 patch_margin_right = 4
 patch_margin_bottom = 4
 
-[node name="Gold" type="NinePatchRect" parent="MarginContainer/Window/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 8
-texture = ExtResource("2_c2t1s")
-region_rect = Rect2(550, 164, 48, 48)
-patch_margin_left = 4
-patch_margin_top = 4
-patch_margin_right = 4
-patch_margin_bottom = 4
-
-[node name="Label" type="Label" parent="MarginContainer/Window/VBoxContainer/HBoxContainer/Gold"]
-layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_top = -4.4375
-offset_bottom = 4.4375
-grow_horizontal = 2
-grow_vertical = 2
-text = "9999g"
-horizontal_alignment = 1
-
 [node name="ShopCursor" parent="." instance=ExtResource("3_c2t1s")]
 layout_mode = 0
-offset_left = -4.0
-offset_top = 39.0
-offset_right = 28.0
-offset_bottom = 71.0
+offset_left = 16.0
+offset_top = 29.0
+offset_right = 48.0
+offset_bottom = 61.0

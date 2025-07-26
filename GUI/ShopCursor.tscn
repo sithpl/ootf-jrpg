@@ -15,7 +15,7 @@ script = ExtResource("2_w86uv")
 
 [node name="MoveSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_2wy7i")
-volume_db = -10.0
+volume_db = -15.0
 
 [node name="ConfirmSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_5o2a5")

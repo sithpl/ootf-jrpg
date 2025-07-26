@@ -1,16 +1,20 @@
 class_name Shopkeeper extends Node2D
 
+# Exported shop ID and animation set
 @export var shop_id: String
 @export var shop_anim: String
+
+# Node references
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var shopui : ShopUI = $CanvasLayer/ShopUI
+@onready var shop_cursor : ShopCursor = $CanvasLayer/ShopUI/ShopCursor
 
 const SHOPUI : PackedScene = preload("res://GUI/ShopUI.tscn")
 
 var dialogue_index := 0
 var shop_can_interact = false
 
-# All NPC data in one dictionary, now with inventory as {item_id: stock}
+# Shop data, including inventory and dialogues
 var shop_database := {
 	"armory": {
 		"name": "Tammy",
@@ -38,6 +42,7 @@ var shop_database := {
 	},
 }
 
+# Animation settings for shopkeeper types
 var shop_animations = {
 	"male_villager_1": {
 		"move_up": "male_villager_1_UP",
@@ -69,9 +74,11 @@ func _ready():
 			animated_sprite.scale = shop_animations[shop_anim].get("scale", Vector2(1, 1))
 	set_spawn_direction("move_down")
 
+# Called when player interacts with shopkeeper
 func interact():
 	show_greeting_dialogue()
 
+# Show greeting and dialogue before opening shop
 func show_greeting_dialogue():
 	MusicManager.interact()
 	Globals.player.movement_locked = true
@@ -85,6 +92,7 @@ func show_greeting_dialogue():
 	Globals.player.movement_locked = false
 	_on_greeting_finished()
 
+# Get current dialogue line
 func get_dialogue() -> String:
 	if not shop_database.has(shop_id):
 		return "..."
@@ -97,36 +105,42 @@ func get_dialogue() -> String:
 		return dialogue_line
 	return "..."
 
+# Format dialogue with shopkeeper's name
 func get_formatted_dialogue() -> String:
 	var name = shop_database.get(shop_id, {}).get("name", "???")
 	var line = get_dialogue()
 	return "%s: %s" % [name, line]
 
+# After dialogue, show shop menu
 func _on_greeting_finished():
 	show_buy_sell_menu()
 
+# Show the shop UI with current inventory
 func show_buy_sell_menu():
-	# Get shop's inventory dict from shop_database
 	var inventory_dict := {}
 	if shop_database.has(shop_id):
 		inventory_dict = shop_database[shop_id].get("inventory", {})
 
-	# Map inventory IDs to actual Item resources using ItemDatabase (must be autoloaded singleton)
-	# Build an array of {item: Item, stock: int}
+	# Build shop items list for UI
 	var items_with_stock := []
 	for item_id in inventory_dict.keys():
 		var item = Item.get_item(item_id)
 		if item:
 			items_with_stock.append({"item": item, "stock": inventory_dict[item_id]})
 
-	shopui.populate_items(items_with_stock) # ShopUI must support this format
+	shopui.populate_items(items_with_stock)
+	if not shopui.visible:
+		shopui.open()
+	else:
+		shopui.visible = true
 	shopui.open()
 
+# Hide the shop UI
 func hide_buy_sell_menu():
 	shopui.close()
 
+# Change inventory stock for an item
 func change_stock(item_id: String, delta: int):
-	print("Shopkeeper.gd/change_stock() called")
 	if shop_database.has(shop_id):
 		var inventory = shop_database[shop_id].get("inventory", {})
 		if inventory.has(item_id):
@@ -134,53 +148,48 @@ func change_stock(item_id: String, delta: int):
 			if inventory[item_id] <= 0:
 				inventory.erase(item_id)
 		elif delta > 0:
-			# Add new item to inventory if adding stock
 			inventory[item_id] = delta
-		# Save back to shop_database
 		shop_database[shop_id]["inventory"] = inventory
 
-# Called whenever an item is purchased from the shop UI
+# When player buys an item
 func _on_item_purchased(item: Item, amount: int):
-	print("Shopkeeper.gd/on_item_purchased() called")
-	# Reduce shop inventory
+	shop_cursor.play_confirm_sound()
 	var inventory_dict = shop_database[shop_id].get("inventory", {})
-	var item_id = item.id  # Or however you uniquely identify the item
+	var item_id = item.id
 	if inventory_dict.has(item_id):
 		inventory_dict[item_id] -= amount
 		if inventory_dict[item_id] <= 0:
 			inventory_dict.erase(item_id)
 		shop_database[shop_id]["inventory"] = inventory_dict
 
-	# Add to player inventory (you may need to adjust this for your player inventory system)
 	PlayerInventory.add_item(item.id, amount)
+	# TODO Adjust player money, play sound, etc.
 
-	# Optionally adjust player money here (e.g., Globals.player.money -= item.price * amount)
-	# Optionally play a sound, show a confirmation, etc.
-
-	# Refresh the shop UI to show updated stock
+	# Refresh the shop UI
 	show_buy_sell_menu()
 
-# Optionally handle item selection (focus) for side-panel details or description
+# When player selects an item in the shop
 func _on_item_selected(item: Item):
-	print("Shopkeeper.gd/on_item_selected() called")
-	# Example: Show item details in a side-panel or popup
-	# $ItemDescriptionLabel.text = item.description
 	pass
 
+# Set the shopkeeper facing direction/animation
 func set_spawn_direction(direction: String):
 	if shop_animations.has(shop_anim):
 		var anim_name = shop_animations[shop_anim].get(direction, "")
 		if anim_name != "":
 			animated_sprite.set_animation(anim_name)
 
+# Player enters shop interaction area
 func _on_interaction_range_body_entered(body):
 	if body.is_in_group("player"):
 		shop_can_interact = true
 
+# Player leaves shop interaction area
 func _on_interaction_range_body_exited(body):
 	if body.is_in_group("player"):
 		shop_can_interact = false
 
+# Handle input for shop interaction and closing
 func _unhandled_input(event):
 	if shop_can_interact and event.is_action_pressed("ui_accept"):
 		var shop_ui = find_child("ShopUI", true, false)

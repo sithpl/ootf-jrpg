@@ -32,6 +32,6 @@ func get_all_items() -> Array:
 		result.append({"item_id": id, "count": items[id]})
 	return result
 
-# Optional: Clear inventory
+# Clear inventory
 func clear():
 	items.clear()

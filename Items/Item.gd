@@ -1,15 +1,16 @@
-extends Resource
-class_name Item
+class_name Item extends Resource
 
+# Item properties
 @export var id: String
 @export var name: String
 @export var description: String
 @export var price: int
 @export var icon: Texture2D
 
+# Stores all registered items by id
 static var ALL_ITEMS := {}
 
-# Building items
+# Update item fields and return self
 func update(new_id, n, p, d):
 	id = new_id
 	name = n
@@ -17,7 +18,7 @@ func update(new_id, n, p, d):
 	description = d
 	return self
 
-# Static method to register all items
+# Register all items in the static ALL_ITEMS dict
 static func register_items():
 	ALL_ITEMS.clear()
 	ALL_ITEMS["iron_sword"]   = Item.new().update("iron_sword", "Sword", 100, "A sharp blade")
@@ -28,7 +29,6 @@ static func register_items():
 	ALL_ITEMS["ether"]        = Item.new().update("ether", "Ether", 50, "Restores 20 MP")
 	# Add more items as needed
 
-# Static method to fetch an item by ID
+# Return the item with the given id
 static func get_item(id: String) -> Item:
 	return ALL_ITEMS.get(id)
-	print(id)
