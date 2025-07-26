@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://c7llgdviardiq"]
+
+[ext_resource type="Texture2D" uid="uid://cmsa7ipbpl7gj" path="res://Assets/UI/hand_point_e.png" id="1_4641a"]
+[ext_resource type="Script" uid="uid://me2pmmair5hb" path="res://Battle/MenuCursor.gd" id="2_oxkco"]
+[ext_resource type="AudioStream" uid="uid://dl8srn1rn86jj" path="res://Assets/Audio/UI/confirmation-ding (lower).wav" id="3_82fh1"]
+[ext_resource type="AudioStream" uid="uid://x1tyjn66ac5w" path="res://Assets/Audio/UI/confirmation-ding (higher.wav" id="4_40wpi"]
+
+[node name="MenuCursor" type="TextureRect"]
+offset_right = 32.0
+offset_bottom = 32.0
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_4641a")
+stretch_mode = 2
+script = ExtResource("2_oxkco")
+
+[node name="MoveSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_82fh1")
+volume_db = -10.0
+
+[node name="ConfirmSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_40wpi")
+volume_db = -10.0

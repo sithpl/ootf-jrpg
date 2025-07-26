@@ -1,0 +1,81 @@
+[gd_scene load_steps=6 format=3 uid="uid://ce3mvvn7dqjjf"]
+
+[ext_resource type="PackedScene" uid="uid://bsrq5nbx25gdv" path="res://Battle/ATBBar.tscn" id="1_aulq1"]
+[ext_resource type="Script" uid="uid://ducjmhqthl6ol" path="res://Battle/PlayerInfoBar.gd" id="1_we0bl"]
+
+[sub_resource type="Animation" id="Animation_ye2r6"]
+length = 0.001
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_i6ton"]
+resource_name = "highlight"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Color(1, 1, 1, 1), Color(0.505344, 0.505344, 0.505344, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_tmrr8"]
+_data = {
+&"RESET": SubResource("Animation_ye2r6"),
+&"highlight": SubResource("Animation_i6ton")
+}
+
+[node name="BattlePlayerBar" type="HBoxContainer"]
+offset_right = 150.0
+offset_bottom = 8.0
+script = ExtResource("1_we0bl")
+
+[node name="Name" type="Label" parent="."]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Player"
+
+[node name="Health" type="Label" parent="."]
+custom_minimum_size = Vector2(12, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "9999"
+horizontal_alignment = 2
+
+[node name="Mana" type="Label" parent="."]
+custom_minimum_size = Vector2(8, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "999"
+horizontal_alignment = 2
+
+[node name="Status" type="Label" parent="."]
+custom_minimum_size = Vector2(12, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Normal"
+
+[node name="ATBBar" parent="." instance=ExtResource("1_aulq1")]
+layout_mode = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_tmrr8")
+}

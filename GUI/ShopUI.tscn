@@ -1,0 +1,206 @@
+[gd_scene load_steps=4 format=3 uid="uid://bksmmlncedmkm"]
+
+[ext_resource type="Script" uid="uid://hhh7nc71q7fy" path="res://GUI/ShopUI.gd" id="1_qk54v"]
+[ext_resource type="Texture2D" uid="uid://dc3abl7gyrlwq" path="res://Assets/UI/fantasy-ui-borders.svg" id="2_c2t1s"]
+[ext_resource type="PackedScene" uid="uid://od888d4uyfe5" path="res://GUI/ShopCursor.tscn" id="3_c2t1s"]
+
+[node name="ShopUI" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchor_right = 0.775
+anchor_bottom = 1.0
+offset_left = 36.0
+offset_right = 38.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+script = ExtResource("1_qk54v")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -36.0
+offset_right = 34.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+metadata/_edit_use_anchors_ = true
+
+[node name="Window" type="NinePatchRect" parent="MarginContainer"]
+layout_mode = 2
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Window"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Top" type="HBoxContainer" parent="MarginContainer/Window/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="ShopGreeting" type="NinePatchRect" parent="MarginContainer/Window/VBoxContainer/Top"]
+custom_minimum_size = Vector2(150, 20)
+layout_mode = 2
+texture = ExtResource("2_c2t1s")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Window/VBoxContainer/Top/ShopGreeting"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+
+[node name="Label" type="Label" parent="MarginContainer/Window/VBoxContainer/Top/ShopGreeting/MarginContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 7
+text = "\"Buy somethin' or get lost, kid\""
+vertical_alignment = 1
+
+[node name="ShopType" type="NinePatchRect" parent="MarginContainer/Window/VBoxContainer/Top"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("2_c2t1s")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="Label" type="Label" parent="MarginContainer/Window/VBoxContainer/Top/ShopType"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Shopkeeper"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Middle" type="NinePatchRect" parent="MarginContainer/Window/VBoxContainer"]
+custom_minimum_size = Vector2(0, 105)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("2_c2t1s")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Window/VBoxContainer/Middle"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+metadata/_edit_use_anchors_ = true
+
+[node name="ItemList" type="VBoxContainer" parent="MarginContainer/Window/VBoxContainer/Middle/MarginContainer"]
+layout_mode = 2
+
+[node name="HeaderRow" type="HBoxContainer" parent="MarginContainer/Window/VBoxContainer/Middle/MarginContainer/ItemList"]
+layout_mode = 2
+
+[node name="Item" type="Label" parent="MarginContainer/Window/VBoxContainer/Middle/MarginContainer/ItemList/HeaderRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+text = "Item"
+
+[node name="Cost" type="Label" parent="MarginContainer/Window/VBoxContainer/Middle/MarginContainer/ItemList/HeaderRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Cost"
+
+[node name="Detail" type="Label" parent="MarginContainer/Window/VBoxContainer/Middle/MarginContainer/ItemList/HeaderRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+text = "Detail"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Window/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="Bottom" type="NinePatchRect" parent="MarginContainer/Window/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+size_flags_stretch_ratio = 5.0
+texture = ExtResource("2_c2t1s")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="Gold" type="NinePatchRect" parent="MarginContainer/Window/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+texture = ExtResource("2_c2t1s")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="Label" type="Label" parent="MarginContainer/Window/VBoxContainer/HBoxContainer/Gold"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -4.4375
+offset_bottom = 4.4375
+grow_horizontal = 2
+grow_vertical = 2
+text = "9999g"
+horizontal_alignment = 1
+
+[node name="ShopCursor" parent="." instance=ExtResource("3_c2t1s")]
+layout_mode = 0
+offset_left = -4.0
+offset_top = 39.0
+offset_right = 28.0
+offset_bottom = 71.0

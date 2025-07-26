@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://dggmt4f88v4jj"]
+
+[ext_resource type="Texture2D" uid="uid://dc3abl7gyrlwq" path="res://Assets/UI/fantasy-ui-borders.svg" id="1_xf4fp"]
+
+[node name="WindowDefault" type="NinePatchRect"]
+size_flags_horizontal = 3
+texture = ExtResource("1_xf4fp")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 34
+patch_margin_top = 34
+patch_margin_right = 34
+patch_margin_bottom = 34

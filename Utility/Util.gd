@@ -1,6 +1,6 @@
 class_name Util extends Node
 
-const SCREEN_FLASH : PackedScene = preload("res://Scenes/ScreenFlash.tscn")
+const SCREEN_FLASH : PackedScene = preload("res://World/ScreenFlash.tscn")
 
 static func interweave_arrays(arr1: Array, arr2: Array) -> Array:
 	var arr3: Array = []
@@ -69,10 +69,17 @@ static func audio_play_varied_pitch_2d(node: AudioStreamPlayer2D, base_range: fl
 
 static func set_keys_to_names(dict: Dictionary) -> void:
 	var keys: Array = dict.keys()
-	#DEBUG print(keys)
 	if dict[keys[0]] is RefCounted:
 		for key in keys:
-			dict[key].set_name_custom(key)
+			var obj = dict[key]
+			# Try custom method first
+			if obj.has_method("set_name_custom"):
+				obj.set_name_custom(key)
+			# Fallback to built-in resource_name
+			elif "resource_name" in obj:
+				obj.resource_name = key
+			else:
+				print("Warning: Object has no way to set a name:", obj)
 	else:
 		print("Error: Dictionary must have instanced references in it. Exiting convert_keys_to_names()...")
 

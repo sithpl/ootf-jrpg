@@ -17,11 +17,12 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-Debug="*res://Scripts/Debug.gd"
-Data="*res://Scripts/Data.gd"
-Globals="*res://Scripts/Globals.gd"
-TextUi="*res://Scenes/TextUI.tscn"
-MusicManager="*res://Scenes/MusicManager.tscn"
+Debug="*res://Misc/Debug.gd"
+Data="*res://Misc/Data.gd"
+Globals="*res://Misc/Globals.gd"
+TextUi="*res://GUI/TextUI.tscn"
+MusicManager="*res://Misc/MusicManager.tscn"
+PlayerInventory="*res://Characters/PlayerInventory.gd"
 
 [display]
 
