@@ -61,6 +61,6 @@ func update_character_slots():
 			var char_data = Data.characters[char_name]
 			var actor = party[i]
 			var portrait_path = char_data.get("portrait", "")
-			slot.set_character(char_name, portrait_path, actor.hp, actor.hp_max, actor.ap, actor.ap_max, actor.speed)
+			slot.set_character(char_name, portrait_path, actor.base_hp, actor.hp_max, actor.base_ap, actor.ap_max, actor.attack, actor.defense, actor.magic, actor.speed)
 		else:
 			slot.set_character("", "", 0, 0, 0, 0, 0)

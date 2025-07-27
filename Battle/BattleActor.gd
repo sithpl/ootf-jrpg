@@ -16,12 +16,14 @@ var death_anim    :String      = ""        # Name of death animation
 var name          :String      = "Not Set" # Display name
 var lvl           :int         = 0         # Level
 var gold          :int         = 0         # Gold
-var hp            :int         = hp_max    # Current HP
+var base_hp       :int         = hp_max    # Current HP
 var hp_max        :int         = 1         # Max HP
+var base_ap       :int         = ap_max    # Current AP
 var ap_max        :int         = 0         # Max AP (Action Points)
-var ap            :int         = ap_max    # Current AP
+var attack        :int         = 1         
+var defense       :int         = 1         
+var magic         :int         = 1         
 var speed         :int         = 1         # Turn order speed
-var strength      :int         = 1         # Physical power
 var xp            :int         = 0         # EXP
 
 var texture       :Texture     = null      # Sprite/texture for UI
@@ -30,15 +32,17 @@ var friendly      :bool        = false     # Is this a player character?
 # ---------- Actor Initialization ----------
 
 # Sets up actor stats at creation
-func _init(_lvl: int, _gold: int,_hp: int = hp_max, _ap: int = ap_max, _speed: int = speed, _strength: int = strength):
+func _init(_lvl: int, _gold: int, _hp: int = base_hp, _ap: int = base_ap, _attack : int = attack, _defense: int = defense, _magic: int = magic, _speed: int = speed):
 	#DEBUG print("BattleActor.gd/_init() called")
 	lvl = _lvl
 	gold = _gold
 	hp_max = _hp
-	hp = _hp
+	base_hp = _hp
 	ap_max = _ap
-	ap = _ap
-	strength = _strength
+	base_ap = _ap
+	attack = _attack
+	defense = _defense
+	magic = _magic
 	speed = _speed
 	xp = lvl * 5
 
@@ -56,7 +60,7 @@ func set_name_custom(value: String):
 # Create a copy of this actor, including stats and texture
 func duplicate_custom():
 	#DEBUG print("BattleActor.gd/duplicate_custom() called")
-	var dup := BattleActor.new(xp, gold, hp_max, ap_max, speed, strength)
+	var dup := BattleActor.new(xp, gold, base_hp, base_ap, attack, defense, magic, speed)
 	dup.copy_from(self)
 	dup.set_name_custom(name) # <- triggers texture loading for enemies
 	dup.resource_name = name
@@ -68,11 +72,13 @@ func copy_from(source: BattleActor):
 	#DEBUG print("BattleActor.gd/copy_from() called")
 	name = source.name
 	hp_max = source.hp_max
-	hp = source.hp
+	base_hp = source.base_hp
 	ap_max = source.ap_max
-	ap = source.ap
+	base_ap = source.base_ap
+	attack = source.attack
+	defense = source.defense
+	magic = source.magic
 	speed = source.speed
-	strength = source.strength
 	xp = source.xp
 	gold = source.gold
 	texture = source.texture
@@ -83,7 +89,7 @@ func copy_from(source: BattleActor):
 # Returns true if actor has HP left
 func has_hp():
 	#DEBUG print("BattleActor.gd/has_hp() called")
-	return hp > 0
+	return base_hp > 0
 
 # Returns true if actor can act (alive)
 func can_act():
@@ -95,13 +101,13 @@ func healhurt(value: int):
 	#DEBUG print("BattleActor.gd/healhurt() called")
 	last_attempted_damage = value  # Store the attempted value
 	#DEBUG print("Damage: ", value)
-	var hp_start: int = hp
+	var hp_start: int = base_hp
 	var change: int = 0
-	hp += value
-	hp = clamp(hp, 0, hp_max)
-	change = hp - hp_start
-	emit_signal("hp_changed", hp, change)
-	hp_changed.emit(hp, change)
+	base_hp += value
+	base_hp = clamp(base_hp, 0, hp_max)
+	change = base_hp - hp_start
+	emit_signal("hp_changed", base_hp, change)
+	hp_changed.emit(base_hp, change)
 	if !has_hp():
 		defeated.emit()
 

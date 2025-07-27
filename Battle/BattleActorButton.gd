@@ -67,7 +67,7 @@ func _attack(target_btn : BattleActorButton) -> void:
 		## Output if attack_anim is null
 		#print("Warning: attack animation '%s' not found!")
 	# 2) Apply damage to target BattleActor
-	target_btn.data.healhurt(-data.strength)
+	target_btn.data.healhurt(-data.attack)
 	# 3) Wait for hit text animation
 	await get_tree().create_timer(0.5).timeout
 	# 4) Return to idle animation

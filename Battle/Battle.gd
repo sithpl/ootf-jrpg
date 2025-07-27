@@ -270,7 +270,7 @@ func _resolve_action(actor: BattleActor, target: BattleActor, act: Actions) -> v
 			# CALL _attack() and wait for it to finish
 			await actor_btn._attack(target_btn)
 			# Log after the attack sequence completes
-			_log_action("%s attacks %s for %d!" % [actor.name, target.name, actor.strength])
+			_log_action("%s attacks %s for %d!" % [actor.name, target.name, actor.attack])
 
 			# If target just died, remove from turn order
 			if not target.has_hp():

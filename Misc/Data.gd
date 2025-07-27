@@ -39,14 +39,14 @@ var inventories : Array = []
 var mobs                  :Array                = enemies.values()
 
 # mobs config: Dictionary of available enemy types and their base stats.
-# Format: name: BattleActor.new(_lvl, _gold, _hp, _ap, _speed, _strength)
+# Format: name: BattleActor.new(_lvl, _gold, _hp, _ap, _attack, _defense, _magic, _speed)
 static var enemies: Dictionary = {
-	"Skeleton":         BattleActor.new( 2, 2, 5, 10, 2, 2 ),
-	"Slime Green":      BattleActor.new( 1, 1, 1, 5, 1, 1 ),
-	"Orc Rider":      BattleActor.new( 1, 1, 1, 5, 1, 1 ),
-	"Orc Elite":      BattleActor.new( 1, 1, 1, 5, 1, 1 ),
-	"Skeleton GS":      BattleActor.new( 1, 1, 1, 5, 1, 1 ),
-	"Clown":      BattleActor.new( 1, 1, 1, 5, 1, 1 ),
+	"Skeleton"          :BattleActor.new( 2, 2, 5, 10, 1, 1, 2, 2 ),
+	"Slime Green"       :BattleActor.new( 1, 1, 1, 5, 1, 1, 1, 1 ),
+	"Orc Rider"         :BattleActor.new( 1, 1, 1, 5, 1, 1, 1, 1 ),
+	"Orc Elite"         :BattleActor.new( 1, 1, 1, 5, 1, 1, 1, 1 ),
+	"Skeleton GS"       :BattleActor.new( 1, 1, 1, 5, 1, 1, 1, 1 ),
+	"Clown"             :BattleActor.new( 1, 1, 1, 5, 1, 1, 1, 1 ),
 }
 
 # Picks a requested number of random enemy types, duplicates them so each is a fresh instance.
@@ -74,138 +74,271 @@ static func get_random_enemies_from_weighted(count: int, weighted_list: Array) -
 # Enums
 enum ActorClass { SOLDIER, RANGER, KNIGHT, PALADIN, MAGE, PRIEST, ARCHER, LANCER }
 
-# Variables
-
 # class_configs: Stats and asset paths for each class.
-# Format: class_name: { "hp_max", "ap_max", "strength", "speed", "texture_path", animations... }
+# Format: class_name: { "base_hp", "base_ap", "attack", "defense", "magic", "speed", "texture_path", animations... }
 var class_configs := {
-	"Soldier": { "hp_max": 50, "ap_max": 10, "strength": 4, "speed": 2, 
-	"texture_path":  "res://Assets/Players/Soldier.png", 
-	"idle_anim": "soldier_idle", "attack_anim": "soldier_melee", "hurt_anim" : "soldier_hurt", "death_anim" : "soldier_death", 
-	"skill1_anim" : "soldier_skill1"  },
+	"Soldier": { 
+		"base_hp": 50, 
+		"base_ap": 10, 
+		"attack": 4, 
+		"defense": 3, 
+		"magic": 1, 
+		"speed": 2,
+		"texture_path":  "res://Assets/Players/Soldier.png", 
+		"idle_anim": "soldier_idle", 
+		"attack_anim": "soldier_melee", 
+		"hurt_anim" : "soldier_hurt", 
+		"death_anim" : "soldier_death", 
+		"skill1_anim" : "soldier_skill1"
+	},
 
-	"Ranger": { "hp_max":  40, "ap_max": 20, "strength": 3,"speed": 4, 
-	"texture_path": "res://Assets/Players/Ranger.png", 
-	"idle_anim": "ranger_idle", "attack_anim": "ranger_ranged", "hurt_anim" : "ranger_hurt", "death_anim" : "ranger_death" },
+	"Ranger": { 
+		"base_hp": 40, 
+		"base_ap": 20, 
+		"attack": 3, 
+		"defense": 2, 
+		"magic": 2, 
+		"speed": 4,
+		"texture_path": "res://Assets/Players/Ranger.png", 
+		"idle_anim": "ranger_idle", 
+		"attack_anim": "ranger_ranged", 
+		"hurt_anim" : "ranger_hurt", 
+		"death_anim" : "ranger_death"
+	},
 
-	"Knight": { "hp_max": 70, "ap_max": 5, "strength": 6, "speed": 1, 
-	"texture_path": "res://Assets/Players/Knight.png", 
-	"idle_anim": "knight_idle", "attack_anim": "knight_melee", "hurt_anim" : "knight_hurt", "death_anim" : "Knight_death"  },
+	"Knight": { 
+		"base_hp": 70, 
+		"base_ap": 5, 
+		"attack": 6, 
+		"defense": 5, 
+		"magic": 1, 
+		"speed": 1,
+		"texture_path": "res://Assets/Players/Knight.png", 
+		"idle_anim": "knight_idle", 
+		"attack_anim": "knight_melee", 
+		"hurt_anim" : "knight_hurt", 
+		"death_anim" : "knight_death"
+	},
 
-	"Paladin": { "hp_max": 50, "ap_max": 10, "strength": 5, "speed": 1, 
-	"texture_path": "res://Assets/Players/Paladin.png", 
-	"idle_anim": "paladin_idle", "attack_anim": "paladin_melee", "hurt_anim" : "paladin_hurt", "death_anim" : "paladin_death"  },
+	"Paladin": { 
+		"base_hp": 50, 
+		"base_ap": 10, 
+		"attack": 5, 
+		"defense": 4, 
+		"magic": 3, 
+		"speed": 1,
+		"texture_path": "res://Assets/Players/Paladin.png", 
+		"idle_anim": "paladin_idle", 
+		"attack_anim": "paladin_melee", 
+		"hurt_anim" : "paladin_hurt", 
+		"death_anim" : "paladin_death"
+	},
 
-	"Mage": { "hp_max": 30, "ap_max": 50, "strength": 2, "speed": 2, 
-	"texture_path": "res://Assets/Players/Mage.png", 
-	"idle_anim": "mage_idle", "attack_anim": "mage_melee", "hurt_anim" : "mage_hurt", "death_anim" : "mage_death"  },
+	"Mage": { 
+		"base_hp": 30, 
+		"base_ap": 50, 
+		"attack": 1, 
+		"defense": 1, 
+		"magic": 7, 
+		"speed": 2,
+		"texture_path": "res://Assets/Players/Mage.png", 
+		"idle_anim": "mage_idle", 
+		"attack_anim": "mage_melee", 
+		"hurt_anim" : "mage_hurt", 
+		"death_anim" : "mage_death"
+	},
 
-	"Priest": { "hp_max": 40, "ap_max": 30, "strength": 1, "speed": 3, 
-	"texture_path": "res://Assets/Players/Priest.png", 
-	"idle_anim": "priest_idle", "attack_anim": "priest_melee", "hurt_anim" : "priest_hurt", "death_anim" : "priest_death"  },
+	"Priest": { 
+		"base_hp": 40, 
+		"base_ap": 30, 
+		"attack": 2, 
+		"defense": 2, 
+		"magic": 6, 
+		"speed": 3,
+		"texture_path": "res://Assets/Players/Priest.png", 
+		"idle_anim": "priest_idle", 
+		"attack_anim": "priest_melee", 
+		"hurt_anim" : "priest_hurt", 
+		"death_anim" : "priest_death"
+	},
 
-	"Archer": { "hp_max": 40, "ap_max": 30, "strength": 1, "speed": 3, 
-	"texture_path": "res://Assets/Players/Archer.png", 
-	"idle_anim": "archer_idle", "attack_anim": "archer_ranged", "hurt_anim" : "archer_hurt", "death_anim" : "archer_death"  },
+	"Archer": { 
+		"base_hp": 40, 
+		"base_ap": 30, 
+		"attack": 3, 
+		"defense": 2, 
+		"magic": 2, 
+		"speed": 3,
+		"texture_path": "res://Assets/Players/Archer.png", 
+		"idle_anim": "archer_idle", 
+		"attack_anim": "archer_ranged", 
+		"hurt_anim" : "archer_hurt", 
+		"death_anim" : "archer_death"
+	},
 
-	"Lancer": { "hp_max": 40, "ap_max": 30, "strength": 1, "speed": 3, 
-	"texture_path": "res://Assets/Players/Lancer.png", 
-	"idle_anim": "lancer_idle", "attack_anim": "lancer_melee", "hurt_anim" : "lancer_hurt", "death_anim" : "lancer_death"  },
-	
-	"Dogue": { "hp_max": 40, "ap_max": 30, "strength": 1, "speed": 3, 
-	"texture_path": "res://Assets/Players/Dogue.png", 
-	"idle_anim": "dogue_idle", "attack_anim": "dogue_melee", "hurt_anim" : "dogue_hurt", "death_anim" : "dogue_death"  },
+	"Lancer": { 
+		"base_hp": 40, 
+		"base_ap": 30, 
+		"attack": 4, 
+		"defense": 3, 
+		"magic": 1, 
+		"speed": 3,
+		"texture_path": "res://Assets/Players/Lancer.png", 
+		"idle_anim": "lancer_idle", 
+		"attack_anim": "lancer_melee", 
+		"hurt_anim" : "lancer_hurt", 
+		"death_anim" : "lancer_death"
+	},
+
+	"Dogue": { 
+		"base_hp": 40, 
+		"base_ap": 30, 
+		"attack": 3, 
+		"defense": 2, 
+		"magic": 2, 
+		"speed": 3,
+		"texture_path": "res://Assets/Players/Dogue.png", 
+		"idle_anim": "dogue_idle", 
+		"attack_anim": "dogue_melee", 
+		"hurt_anim" : "dogue_hurt", 
+		"death_anim" : "dogue_death"
+	}
 }
 
 # ---------- CHARACTERS & PARTY ----------
 
 # party_keys: Names of characters currently in the party
-var party_keys            :Array[String]        = ["Erik", "Clabbe", "Clav", "Dan"]
+var party_keys            :Array[String]        = ["Clav", "Bili", "Glenn", "Fraud"]
 
 # party: List of BattleActor instances for the current party
 var party                 :Array[BattleActor]   = []
 
+# personalities: List of personality types with associated bonuses
+var personalities := {
+	"Brave":        { "attack": 2, "defense": 1 },
+	"Clever":       { "magic": 2, "speed": 1 },
+	"Loyal":        { "defense": 2, "base_hp": 5 },
+	"Energetic":    { "speed": 2, "base_ap": 5 },
+	"Kind":         { "magic": 1, "base_ap": 3 },
+	"Curious":      { "magic": 1, "attack": 1 },
+	"Calm":         { "defense": 1, "base_hp": 2 },
+	"Cheerful":     { "speed": 1, "base_ap": 2 },
+	"Bold":         { "attack": 2, "speed": 1 },
+	"Wise":         { "magic": 2, "defense": 1 },
+	"Optimistic":   { "base_hp": 3, "defense": 1 },
+	"Adventurous":  { "speed": 2, "attack": 1 },
+	"Resourceful":  { "base_ap": 3, "magic": 1 },
+	"Charismatic":  { "magic": 1, "defense": 1, "attack": 1 },
+	"Patient":      { "defense": 2, "base_hp": 2 },
+	"Creative":     { "magic": 2, "base_ap": 1 },
+	"Compassionate":{ "base_ap": 2, "magic": 1 },
+	"Quick-witted": { "speed": 2, "attack": 1 },
+	"Steadfast":    { "defense": 2, "attack": 1 },
+	"Supportive":   { "base_hp": 2, "base_ap": 2 },
+	"Focused":      { "attack": 1, "defense": 1, "speed": 1 },
+	"Ambitious":    { "attack": 2, "base_ap": 1 },
+	"Gentle":       { "magic": 1, "defense": 1 },
+	"Inspiring":    { "base_hp": 2, "attack": 1 },
+	"Trustworthy":  { "defense": 2 },
+	"Diligent":     { "base_ap": 2, "defense": 1 },
+	"Confident":    { "attack": 2, "speed": 1 },
+	"Playful":      { "speed": 2, "base_ap": 1 }
+}
+
 # characters: Data for each available character including class and stat bonuses
 var characters := {
 	"Sith": { "class": "Soldier", 
-	"bonuses": { "hp_max": 10, "strength": 2 },
+	"personality": "Kind",
 	"portrait": "res://Assets/Portraits/prt0048.png"},
 	
 	"Clabbe": { "class": "Ranger", 
-	"bonuses": { "speed": 2 },
+	"personality": "Brave",
 	"portrait": "res://Assets/Portraits/prt0014.png"},
 	
 	"Erik": { "class": "Lancer", 
-	"bonuses": { "ap_max": 15, "strength": 1 },
+	"personality": "Cheerful",
 	"portrait": "res://Assets/Portraits/prt0018.png"},
 	
 	"Rage": { "class": "Knight", 
-	"bonuses": { "hp_max": 5, "strength": 2 },
+	"personality": "Curious",
 	"portrait": "res://Assets/Portraits/prt0016.png"},
 	
 	"Glenn": { "class": "Priest", 
-	"bonuses": { "ap_max": 20, "speed" : 1},
+	"personality": "Calm",
 	"portrait": "res://Assets/Portraits/prt0005.png"},
 	
 	"Clav": { "class": "Paladin", 
-	"bonuses": { "hp_max": 5, "ap_max": 5, "strength": 1},
+	"personality": "Charismatic",
 	"portrait": "res://Assets/Portraits/prt0011.png"},
 	
 	"Bili": { "class": "Soldier", 
-	"bonuses": { "ap_max": 5, "strength": 1},
+	"personality": "Patient",
 	"portrait": "res://Assets/Portraits/prt0022.png"},
 	
 	"Fraud": { "class": "Ranger", 
-	"bonuses": { "ap_max": 5, "strength": 1},
+	"personality": "Quick-witted",
 	"portrait": "res://Assets/Portraits/prt0015.png"},
 	
 	"Dan": { "class": "Mage", 
-	"bonuses": { "ap_max": 20, "speed" : 1},
+	"personality": "Creative",
 	"portrait": "res://Assets/Portraits/prt0012.png"},
 	
 	"Sayree": { "class": "Paladin", 
-	"bonuses": { "ap_max": 20, "speed" : 1},
+	"personality": "Supportive",
 	"portrait": "res://Assets/Portraits/prt0009.png"},
 	
 	"Skoot": { "class": "Archer", 
-	"bonuses": { "ap_max": 20, "speed" : 1},
+	"personality": "Playful",
 	"portrait": "res://Assets/Portraits/prt0006.png"},
 	
 	"Slam": { "class": "Lancer", 
-	"bonuses": { "ap_max": 20, "speed" : 1},
+	"personality": "Confident",
 	"portrait": "res://Assets/Portraits/prt0021.png"},
 	
 	"Woofshank": { "class": "Dogue", 
-	"bonuses": { "ap_max": 20, "speed" : 1},
+	"personality": "Bold",
 	"portrait": "res://Assets/Portraits/prt0104.png"},
 }
 
 # Creates a BattleActor for the given character name, applying class stats and bonuses.
-func create_character(name:String) -> BattleActor:
+func create_character(name: String) -> BattleActor:
 	var char_cfg = characters[name]
 	var cls_name = char_cfg["class"]
-	var cls_cfg  = class_configs[cls_name]
+	var cls_cfg = class_configs[cls_name]
+	var pers_cfg = personalities.get(char_cfg.get("personality", ""), {})
 
-	var hp_max   = cls_cfg.hp_max    + char_cfg.bonuses.get("hp_max",0)
-	var ap_max   = cls_cfg.ap_max    + char_cfg.bonuses.get("ap_max",0)
-	var strength = cls_cfg.strength  + char_cfg.bonuses.get("strength",0)
-	var speed    = cls_cfg.speed     + char_cfg.bonuses.get("speed",0)
-	
-	# Character parse debug
-	#print("Creating character: ", name)
-	#print("Character Config: ", char_cfg)
-	#print("Class Name: ", cls_name)
-	#print("Class Config: ", cls_cfg)
-	#print("Final Stats -> HP:", hp_max, " AP:", ap_max, " STR:", strength, " SPD:", speed)
-	
-	var attack_anim = cls_cfg.get("attack_anim","<none>")
-	#DEBUG print("attack_anim for %s: %s" % [name, attack_anim])
-	
-	var actor = BattleActor.new(0,0,hp_max,ap_max,speed,strength)
+	# Get bonuses from character or their personality, if present
+	var bonus_dict = {}
+	if char_cfg.has("bonuses"):
+		bonus_dict = char_cfg.bonuses
+	if char_cfg.has("personality"):
+		var pers = char_cfg.personality
+		if personalities.has(pers):
+			# Merge bonuses from personality into bonus_dict
+			for k in personalities[pers]:
+				bonus_dict[k] = bonus_dict.get(k, 0) + personalities[pers][k]
+
+	# Use new stat field names and apply bonuses
+	var hp_max   = cls_cfg.base_hp   + bonus_dict.get("base_hp", 0)
+	var ap_max   = cls_cfg.base_ap   + bonus_dict.get("base_ap", 0)
+	var attack   = cls_cfg.attack    + bonus_dict.get("attack", 0)
+	var defense  = cls_cfg.defense   + bonus_dict.get("defense", 0)
+	var magic    = cls_cfg.magic     + bonus_dict.get("magic", 0)
+	var speed    = cls_cfg.speed     + bonus_dict.get("speed", 0)
+
+	var attack_anim = cls_cfg.get("attack_anim", "<none>")
+
+	var actor = BattleActor.new(0, 0, hp_max, ap_max, attack, defense, magic, speed)
 	actor.name        = name
-	#actor.texture     = load(cls_cfg.texture_path)
+	actor.class_key   = cls_name
 	actor.attack_anim = attack_anim
-	actor.class_key   = cls_name     # ← critical line
+	actor.hp_max      = hp_max
+	actor.ap_max      = ap_max
+	actor.attack      = attack
+	actor.defense     = defense
+	actor.magic       = magic
+	actor.speed       = speed
+
 	return actor
 
 # Rebuilds the party array from the party_keys list

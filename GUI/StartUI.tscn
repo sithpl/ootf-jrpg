@@ -88,13 +88,18 @@ layout_mode = 2
 text = "Equip"
 alignment = 0
 
+[node name="Check" type="Button" parent="StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Check"
+alignment = 0
+
 [node name="Save" type="Button" parent="StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Save"
 alignment = 0
 
 [node name="ColorRect" type="ColorRect" parent="StartMenu/HBoxContainer/Left/VBoxContainer"]
-custom_minimum_size = Vector2(50, 60)
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 color = Color(0, 0, 0, 1)
 

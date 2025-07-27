@@ -5,6 +5,8 @@
 [ext_resource type="Script" uid="uid://cdry00ct6h54u" path="res://GUI/CharacterSlot.gd" id="2_ft6u6"]
 
 [node name="CharacterSlot1" type="NinePatchRect"]
+offset_right = 214.0
+offset_bottom = 40.0
 size_flags_vertical = 3
 texture = ExtResource("1_rpgn4")
 region_rect = Rect2(550, 164, 48, 48)
@@ -24,11 +26,10 @@ grow_vertical = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
 layout_mode = 2
+theme_override_constants/separation = 6
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 4
 
 [node name="Portrait" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
@@ -64,22 +65,26 @@ size_flags_vertical = 3
 
 [node name="ATK" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer2"]
 layout_mode = 2
-size_flags_vertical = 0
+size_flags_horizontal = 3
+size_flags_vertical = 1
 text = "ATK"
 
 [node name="ATK#" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer2"]
 layout_mode = 2
-size_flags_vertical = 0
+size_flags_horizontal = 3
+size_flags_vertical = 1
 text = "99"
 
 [node name="DEF" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer2"]
 layout_mode = 2
-size_flags_vertical = 0
+size_flags_horizontal = 3
+size_flags_vertical = 1
 text = "DEF"
 
 [node name="DEF#" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer2"]
 layout_mode = 2
-size_flags_vertical = 0
+size_flags_horizontal = 3
+size_flags_vertical = 1
 text = "99"
 
 [node name="VBoxContainer3" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
@@ -118,25 +123,28 @@ text = "999/999"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer3"]
 layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 6
+size_flags_vertical = 3
 
 [node name="MAG" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer3/HBoxContainer2"]
 layout_mode = 2
-size_flags_vertical = 0
+size_flags_horizontal = 3
+size_flags_vertical = 1
 text = "MAG"
 
 [node name="MAG#" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer3/HBoxContainer2"]
 layout_mode = 2
-size_flags_vertical = 0
+size_flags_horizontal = 3
+size_flags_vertical = 1
 text = "99"
 
 [node name="SPD" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer3/HBoxContainer2"]
 layout_mode = 2
-size_flags_vertical = 0
+size_flags_horizontal = 3
+size_flags_vertical = 1
 text = "SPD"
 
 [node name="SPD#" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer3/HBoxContainer2"]
 layout_mode = 2
-size_flags_vertical = 0
+size_flags_horizontal = 3
+size_flags_vertical = 1
 text = "99"
