@@ -120,7 +120,7 @@ var class_configs := {
 # ---------- CHARACTERS & PARTY ----------
 
 # party_keys: Names of characters currently in the party
-var party_keys            :Array[String]        = ["Bili", "Glenn", "Woofshank", "Skoot"]
+var party_keys            :Array[String]        = ["Erik", "Clabbe", "Clav", "Dan"]
 
 # party: List of BattleActor instances for the current party
 var party                 :Array[BattleActor]   = []
@@ -128,31 +128,56 @@ var party                 :Array[BattleActor]   = []
 # characters: Data for each available character including class and stat bonuses
 var characters := {
 	"Sith": { "class": "Soldier", 
-	"bonuses": { "hp_max": 10, "strength": 2 }},
+	"bonuses": { "hp_max": 10, "strength": 2 },
+	"portrait": "res://Assets/Portraits/prt0048.png"},
+	
 	"Clabbe": { "class": "Ranger", 
-	"bonuses": { "speed": 2 }},
+	"bonuses": { "speed": 2 },
+	"portrait": "res://Assets/Portraits/prt0014.png"},
+	
 	"Erik": { "class": "Lancer", 
-	"bonuses": { "ap_max": 15, "strength": 1 }},
+	"bonuses": { "ap_max": 15, "strength": 1 },
+	"portrait": "res://Assets/Portraits/prt0018.png"},
+	
 	"Rage": { "class": "Knight", 
-	"bonuses": { "hp_max": 5, "strength": 2 }},
+	"bonuses": { "hp_max": 5, "strength": 2 },
+	"portrait": "res://Assets/Portraits/prt0016.png"},
+	
 	"Glenn": { "class": "Priest", 
-	"bonuses": { "ap_max": 20, "speed" : 1}},
+	"bonuses": { "ap_max": 20, "speed" : 1},
+	"portrait": "res://Assets/Portraits/prt0005.png"},
+	
 	"Clav": { "class": "Paladin", 
-	"bonuses": { "hp_max": 5, "ap_max": 5, "strength": 1}},
+	"bonuses": { "hp_max": 5, "ap_max": 5, "strength": 1},
+	"portrait": "res://Assets/Portraits/prt0011.png"},
+	
 	"Bili": { "class": "Soldier", 
-	"bonuses": { "ap_max": 5, "strength": 1}},
+	"bonuses": { "ap_max": 5, "strength": 1},
+	"portrait": "res://Assets/Portraits/prt0022.png"},
+	
 	"Fraud": { "class": "Ranger", 
-	"bonuses": { "ap_max": 5, "strength": 1}},
+	"bonuses": { "ap_max": 5, "strength": 1},
+	"portrait": "res://Assets/Portraits/prt0015.png"},
+	
 	"Dan": { "class": "Mage", 
-	"bonuses": { "ap_max": 20, "speed" : 1}},
+	"bonuses": { "ap_max": 20, "speed" : 1},
+	"portrait": "res://Assets/Portraits/prt0012.png"},
+	
 	"Sayree": { "class": "Paladin", 
-	"bonuses": { "ap_max": 20, "speed" : 1}},
+	"bonuses": { "ap_max": 20, "speed" : 1},
+	"portrait": "res://Assets/Portraits/prt0009.png"},
+	
 	"Skoot": { "class": "Archer", 
-	"bonuses": { "ap_max": 20, "speed" : 1}},
+	"bonuses": { "ap_max": 20, "speed" : 1},
+	"portrait": "res://Assets/Portraits/prt0006.png"},
+	
 	"Slam": { "class": "Lancer", 
-	"bonuses": { "ap_max": 20, "speed" : 1}},
+	"bonuses": { "ap_max": 20, "speed" : 1},
+	"portrait": "res://Assets/Portraits/prt0021.png"},
+	
 	"Woofshank": { "class": "Dogue", 
-	"bonuses": { "ap_max": 20, "speed" : 1}},
+	"bonuses": { "ap_max": 20, "speed" : 1},
+	"portrait": "res://Assets/Portraits/prt0104.png"},
 }
 
 # Creates a BattleActor for the given character name, applying class stats and bonuses.

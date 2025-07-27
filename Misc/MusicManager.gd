@@ -4,10 +4,11 @@ extends Node
 @onready var sfx_player : AudioStreamPlayer = $SFX
 
 # Enums
-enum ThemeType { ZONE, INTRO, TOWN, SHOP, BATTLE, BOSS, SPECIAL, VICTORY, GAMEOVER }
+enum ThemeType { START, ZONE, INTRO, TOWN, SHOP, BATTLE, BOSS, SPECIAL, VICTORY, GAMEOVER }
 
 # Variables
-var interact_sfx          :String = "res://Assets/Audio/interact_sfx.wav"
+var interact_sfx          :String = "res://Assets/Audio/UI/interact_sfx.wav"
+var start_theme           :String = "res://Assets/Audio/UI/start_theme.wav"
 var zone_theme            :String = "res://Assets/Audio/zone_theme.wav"
 var intro_theme           :String = "res://Assets/Audio/Battle/intro_theme.wav"
 var town_theme            :String = "res://Assets/Audio/town_theme.wav"
@@ -31,6 +32,7 @@ var previous_theme_type: int = -1
 
 # Volume adjustment (in decibels)
 var theme_volumes := {
+	ThemeType.START: -8,
 	ThemeType.ZONE: -8,
 	ThemeType.INTRO: -7,
 	ThemeType.TOWN: -8,
@@ -47,6 +49,8 @@ func _ready():
 
 func get_type_theme(theme_type: int) -> String:
 	match theme_type:
+		ThemeType.START:
+			return start_theme
 		ThemeType.ZONE:
 			return zone_theme
 		ThemeType.INTRO:

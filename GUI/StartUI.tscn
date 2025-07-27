@@ -1,0 +1,203 @@
+[gd_scene load_steps=6 format=3 uid="uid://cydpksudso0b3"]
+
+[ext_resource type="Script" uid="uid://bapum88ceit1t" path="res://GUI/StartUI.gd" id="1_o1d1v"]
+[ext_resource type="Texture2D" uid="uid://dc3abl7gyrlwq" path="res://Assets/UI/fantasy-ui-borders.svg" id="1_yjgb0"]
+[ext_resource type="PackedScene" uid="uid://bnnptna5yk1l2" path="res://GUI/StartCursor.tscn" id="3_ugd75"]
+[ext_resource type="PackedScene" uid="uid://b6s7p1ad1nyx5" path="res://GUI/CharacterSlot.tscn" id="3_yx8do"]
+[ext_resource type="Script" uid="uid://cftjv2c4j5tgc" path="res://GUI/StartCursor.gd" id="4_yhe21"]
+
+[node name="StartUI" type="CanvasLayer"]
+process_mode = 3
+layer = 11
+script = ExtResource("1_o1d1v")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="StartMenu" type="Control" parent="."]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_right = -19.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="StartMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Left" type="MarginContainer" parent="StartMenu/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_right = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="StartMenu/HBoxContainer/Left"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 3
+
+[node name="Menu" type="NinePatchRect" parent="StartMenu/HBoxContainer/Left/VBoxContainer"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("1_yjgb0")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 13
+patch_margin_top = 11
+patch_margin_right = 13
+patch_margin_bottom = 11
+
+[node name="MarginContainer" type="MarginContainer" parent="StartMenu/HBoxContainer/Left/VBoxContainer/Menu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer"]
+layout_mode = 2
+
+[node name="Item" type="Button" parent="StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Item"
+alignment = 0
+
+[node name="Magic" type="Button" parent="StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Magic"
+alignment = 0
+
+[node name="Equip" type="Button" parent="StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Equip"
+alignment = 0
+
+[node name="Save" type="Button" parent="StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Save"
+alignment = 0
+
+[node name="ColorRect" type="ColorRect" parent="StartMenu/HBoxContainer/Left/VBoxContainer"]
+custom_minimum_size = Vector2(50, 60)
+layout_mode = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Info" type="NinePatchRect" parent="StartMenu/HBoxContainer/Left/VBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 10
+texture = ExtResource("1_yjgb0")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 13
+patch_margin_top = 11
+patch_margin_right = 13
+patch_margin_bottom = 11
+
+[node name="MarginContainer" type="MarginContainer" parent="StartMenu/HBoxContainer/Left/VBoxContainer/Info"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 16.0
+grow_horizontal = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="StartMenu/HBoxContainer/Left/VBoxContainer/Info/MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="StartMenu/HBoxContainer/Left/VBoxContainer/Info/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Resource" type="Label" parent="StartMenu/HBoxContainer/Left/VBoxContainer/Info/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+size_flags_stretch_ratio = 5.0
+horizontal_alignment = 2
+
+[node name="Label" type="Label" parent="StartMenu/HBoxContainer/Left/VBoxContainer/Info/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "G"
+
+[node name="Spacer1" type="HBoxContainer" parent="StartMenu/HBoxContainer/Left/VBoxContainer/Info/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="Resource" type="Label" parent="StartMenu/HBoxContainer/Left/VBoxContainer/Info/MarginContainer/VBoxContainer/Spacer1"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+size_flags_stretch_ratio = 5.0
+horizontal_alignment = 2
+
+[node name="Spacer2" type="HBoxContainer" parent="StartMenu/HBoxContainer/Left/VBoxContainer/Info/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="Timer" type="Label" parent="StartMenu/HBoxContainer/Left/VBoxContainer/Info/MarginContainer/VBoxContainer/Spacer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+size_flags_stretch_ratio = 5.0
+text = "Timer"
+horizontal_alignment = 1
+
+[node name="Played" type="HBoxContainer" parent="StartMenu/HBoxContainer/Left/VBoxContainer/Info/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="TotalTime" type="Label" parent="StartMenu/HBoxContainer/Left/VBoxContainer/Info/MarginContainer/VBoxContainer/Played"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+size_flags_stretch_ratio = 5.0
+text = "00:00:00"
+horizontal_alignment = 2
+
+[node name="Right" type="MarginContainer" parent="StartMenu/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 0
+
+[node name="Characters" type="VBoxContainer" parent="StartMenu/HBoxContainer/Right"]
+layout_mode = 2
+
+[node name="CharacterSlot1" parent="StartMenu/HBoxContainer/Right/Characters" instance=ExtResource("3_yx8do")]
+layout_mode = 2
+
+[node name="CharacterSlot2" parent="StartMenu/HBoxContainer/Right/Characters" instance=ExtResource("3_yx8do")]
+layout_mode = 2
+
+[node name="CharacterSlot3" parent="StartMenu/HBoxContainer/Right/Characters" instance=ExtResource("3_yx8do")]
+layout_mode = 2
+
+[node name="CharacterSlot4" parent="StartMenu/HBoxContainer/Right/Characters" instance=ExtResource("3_yx8do")]
+layout_mode = 2
+
+[node name="StartCursor" parent="StartMenu" instance=ExtResource("3_ugd75")]
+layout_mode = 0
+offset_left = -1.0
+offset_top = 5.0
+offset_right = 31.0
+offset_bottom = 37.0
+script = ExtResource("4_yhe21")

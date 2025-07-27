@@ -1,5 +1,7 @@
 extends Node
 
+signal money_changed
+
 # Stores items by item_id and count
 var items := {} # {item_id: count}
 var money = 2000 # TODO Implement money system
@@ -7,6 +9,10 @@ var money = 2000 # TODO Implement money system
 # Print inventory at startup
 func ready():
 	print_inventory()
+
+func add_money(amount):
+	money += amount
+	emit_signal("money_changed")
 
 # Add item(s) to inventory and print
 func add_item(item_id: String, amount: int = 1):
