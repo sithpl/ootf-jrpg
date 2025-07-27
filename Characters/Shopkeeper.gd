@@ -23,9 +23,9 @@ var shop_database := {
 		"portrait": "res://Assets/Portraits/alice.png",
 		"animation_set": "female_villager_1",
 		"inventory": {
-			"iron_sword": 1,
-			"steel_shield": 2,
-			"helmet": 1
+			"old_sword": 2,
+			"wooden_shield": 1,
+			"leather_helmet": 2
 		}
 	},
 	"items": {
@@ -128,7 +128,7 @@ func show_buy_sell_menu():
 		if item:
 			items_with_stock.append({"item": item, "stock": inventory_dict[item_id]})
 
-	shopui.populate_items(items_with_stock)
+	shopui.populate_buy_items(items_with_stock)
 	if not shopui.visible:
 		shopui.open()
 	else:
@@ -165,8 +165,14 @@ func _on_item_purchased(item: Item, amount: int):
 	PlayerInventory.add_item(item.id, amount)
 	# TODO Adjust player money, play sound, etc.
 
-	# Refresh the shop UI
-	show_buy_sell_menu()
+	# Update the item list in the existing UI, remain in BUY mode
+	var updated_inventory_dict = shop_database[shop_id].get("inventory", {})
+	var updated_items_with_stock := []
+	for updated_item_id in updated_inventory_dict.keys():
+		var updated_item = Item.get_item(updated_item_id)
+		if updated_item:
+			updated_items_with_stock.append({"item": updated_item, "stock": updated_inventory_dict[updated_item_id]})
+	shopui.populate_buy_items(updated_items_with_stock)
 
 # When player selects an item in the shop
 func _on_item_selected(item: Item):

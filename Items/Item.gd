@@ -7,6 +7,8 @@ class_name Item extends Resource
 @export var price: int
 @export var icon: Texture2D
 
+const SELL_PERCENT := 0.5
+
 # Stores all registered items by id
 static var ALL_ITEMS := {}
 
@@ -21,12 +23,12 @@ func update(new_id, n, p, d):
 # Register all items in the static ALL_ITEMS dict
 static func register_items():
 	ALL_ITEMS.clear()
-	ALL_ITEMS["iron_sword"]   = Item.new().update("iron_sword", "Sword", 100, "A sharp blade")
-	ALL_ITEMS["steel_shield"] = Item.new().update("steel_shield", "Shield", 120, "Sturdy shield")
-	ALL_ITEMS["helmet"]       = Item.new().update("helmet", "Helmet", 75, "Protects your head")
-	ALL_ITEMS["potion"]       = Item.new().update("potion", "Potion", 10, "Heals 50 HP")
-	ALL_ITEMS["antidote"]     = Item.new().update("antidote", "Antidote", 25, "Cures poison")
-	ALL_ITEMS["ether"]        = Item.new().update("ether", "Ether", 50, "Restores 20 MP")
+	ALL_ITEMS["old_sword"]      = Item.new().update("old_sword", "Old Sword", 100, "A dull, mostly decorative blade.")
+	ALL_ITEMS["wooden_shield"]  = Item.new().update("wooden_shield", "Wooden Shield", 120, "A large piece of tree bark with a handle.")
+	ALL_ITEMS["leather_helmet"] = Item.new().update("leather_helmet", "Leather Helmet", 75, "Protects your head...kind of.")
+	ALL_ITEMS["potion"]         = Item.new().update("potion", "Potion", 10, "Heals 50 HP")
+	ALL_ITEMS["antidote"]       = Item.new().update("antidote", "Antidote", 25, "Cures poison")
+	ALL_ITEMS["ether"]          = Item.new().update("ether", "Ether", 50, "Restores 20 MP")
 	# Add more items as needed
 
 # Return the item with the given id

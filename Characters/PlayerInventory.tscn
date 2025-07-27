@@ -3,4 +3,5 @@
 [ext_resource type="Script" uid="uid://d4buhy35wip7f" path="res://Characters/PlayerInventory.gd" id="1_f51yk"]
 
 [node name="PlayerInventory" type="Node"]
+process_mode = 3
 script = ExtResource("1_f51yk")

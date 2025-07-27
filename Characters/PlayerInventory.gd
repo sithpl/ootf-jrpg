@@ -2,7 +2,7 @@ extends Node
 
 # Stores items by item_id and count
 var items := {} # {item_id: count}
-var money = 1000 # TODO Implement money system
+var money = 2000 # TODO Implement money system
 
 # Print inventory at startup
 func ready():
@@ -18,6 +18,7 @@ func add_item(item_id: String, amount: int = 1):
 
 # Remove item(s) from inventory and print
 func remove_item(item_id: String, amount: int = 1):
+	print("PlayerInventory.gd/remove_item() called")
 	if items.has(item_id):
 		items[item_id] -= amount
 		if items[item_id] <= 0:

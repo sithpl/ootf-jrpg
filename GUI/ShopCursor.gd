@@ -42,7 +42,7 @@ func _on_viewport_gui_focus_changed(node: Control):
 		if target and target.tree_exiting.is_connected(_on_target_tree_exiting):
 			target.tree_exiting.disconnect(_on_target_tree_exiting)
 		target = node
-		target.tree_exiting.connect(_on_target_tree_exiting.bind(target))
+		target.tree_exiting.connect(_on_target_tree_exiting)
 		show()
 		set_process(true)
 	else:
@@ -52,10 +52,9 @@ func _on_viewport_gui_focus_changed(node: Control):
 		set_process(false)
 
 # Stop tracking if target is removed
-func _on_target_tree_exiting(node: Control):
-	if node == target:
-		target = null
-		set_process(false)
+func _on_target_tree_exiting():
+	target = null
+	set_process(false)
 
 # Play confirmation sound
 func play_confirm_sound():

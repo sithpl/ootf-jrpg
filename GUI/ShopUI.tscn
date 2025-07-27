@@ -28,6 +28,7 @@ grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
+process_mode = 3
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -41,6 +42,7 @@ theme_override_constants/margin_bottom = 8
 metadata/_edit_use_anchors_ = true
 
 [node name="Window" type="NinePatchRect" parent="MarginContainer"]
+process_mode = 3
 layout_mode = 2
 region_rect = Rect2(550, 164, 48, 48)
 patch_margin_left = 4
@@ -49,6 +51,7 @@ patch_margin_right = 4
 patch_margin_bottom = 4
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Window"]
+process_mode = 3
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -137,17 +140,17 @@ theme_override_constants/margin_right = 20
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Window/VBoxContainer/Top/Select/MarginContainer"]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="MarginContainer/Window/VBoxContainer/Top/Select/MarginContainer/HBoxContainer"]
+[node name="Buy" type="Button" parent="MarginContainer/Window/VBoxContainer/Top/Select/MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Buy"
 
-[node name="Button2" type="Button" parent="MarginContainer/Window/VBoxContainer/Top/Select/MarginContainer/HBoxContainer"]
+[node name="Sell" type="Button" parent="MarginContainer/Window/VBoxContainer/Top/Select/MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Sell"
 
-[node name="Button3" type="Button" parent="MarginContainer/Window/VBoxContainer/Top/Select/MarginContainer/HBoxContainer"]
+[node name="Exit" type="Button" parent="MarginContainer/Window/VBoxContainer/Top/Select/MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Exit"
@@ -185,6 +188,7 @@ layout_mode = 2
 text = "G"
 
 [node name="Middle" type="NinePatchRect" parent="MarginContainer/Window/VBoxContainer"]
+process_mode = 3
 custom_minimum_size = Vector2(0, 85)
 layout_mode = 2
 size_flags_vertical = 4
@@ -196,6 +200,7 @@ patch_margin_right = 4
 patch_margin_bottom = 4
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Window/VBoxContainer/Middle"]
+process_mode = 3
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -209,34 +214,81 @@ theme_override_constants/margin_bottom = 4
 metadata/_edit_use_anchors_ = true
 
 [node name="ItemList" type="VBoxContainer" parent="MarginContainer/Window/VBoxContainer/Middle/MarginContainer"]
+process_mode = 3
 layout_mode = 2
 
 [node name="HeaderRow" type="HBoxContainer" parent="MarginContainer/Window/VBoxContainer/Middle/MarginContainer/ItemList"]
+process_mode = 3
 layout_mode = 2
 
 [node name="Item" type="Label" parent="MarginContainer/Window/VBoxContainer/Middle/MarginContainer/ItemList/HeaderRow"]
+custom_minimum_size = Vector2(98, 0)
 layout_mode = 2
-size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
 text = "Item"
 
-[node name="Cost" type="Label" parent="MarginContainer/Window/VBoxContainer/Middle/MarginContainer/ItemList/HeaderRow"]
+[node name="Qty" type="Label" parent="MarginContainer/Window/VBoxContainer/Middle/MarginContainer/ItemList/HeaderRow"]
+custom_minimum_size = Vector2(37, 0)
 layout_mode = 2
-size_flags_horizontal = 3
-text = "Cost"
-
-[node name="Detail" type="Label" parent="MarginContainer/Window/VBoxContainer/Middle/MarginContainer/ItemList/HeaderRow"]
-layout_mode = 2
-size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.0
-text = "Detail"
+text = "Qty"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Window/VBoxContainer"]
+[node name="Price" type="Label" parent="MarginContainer/Window/VBoxContainer/Middle/MarginContainer/ItemList/HeaderRow"]
+custom_minimum_size = Vector2(35, 0)
+layout_mode = 2
+size_flags_stretch_ratio = 2.0
+text = "Price"
+
+[node name="Equipped" type="Label" parent="MarginContainer/Window/VBoxContainer/Middle/MarginContainer/ItemList/HeaderRow"]
+visible = false
+custom_minimum_size = Vector2(35, 0)
+layout_mode = 2
+size_flags_stretch_ratio = 2.0
+text = "Eqpd"
+
+[node name="SellList" type="VBoxContainer" parent="MarginContainer/Window/VBoxContainer/Middle/MarginContainer"]
+process_mode = 3
+layout_mode = 2
+
+[node name="HeaderRow" type="HBoxContainer" parent="MarginContainer/Window/VBoxContainer/Middle/MarginContainer/SellList"]
+process_mode = 3
+layout_mode = 2
+
+[node name="Item" type="Label" parent="MarginContainer/Window/VBoxContainer/Middle/MarginContainer/SellList/HeaderRow"]
+process_mode = 3
+custom_minimum_size = Vector2(98, 0)
+layout_mode = 2
+size_flags_stretch_ratio = 2.0
+text = "Item"
+
+[node name="Qty" type="Label" parent="MarginContainer/Window/VBoxContainer/Middle/MarginContainer/SellList/HeaderRow"]
+process_mode = 3
+custom_minimum_size = Vector2(37, 0)
+layout_mode = 2
+size_flags_stretch_ratio = 3.0
+text = "Qty"
+
+[node name="Price" type="Label" parent="MarginContainer/Window/VBoxContainer/Middle/MarginContainer/SellList/HeaderRow"]
+process_mode = 3
+custom_minimum_size = Vector2(35, 0)
+layout_mode = 2
+size_flags_stretch_ratio = 2.0
+text = "Value"
+
+[node name="Equipped" type="Label" parent="MarginContainer/Window/VBoxContainer/Middle/MarginContainer/SellList/HeaderRow"]
+process_mode = 3
+visible = false
+custom_minimum_size = Vector2(35, 0)
+layout_mode = 2
+size_flags_stretch_ratio = 2.0
+text = "Eqpd"
+
+[node name="Bottom" type="VBoxContainer" parent="MarginContainer/Window/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 3
 
-[node name="Bottom" type="NinePatchRect" parent="MarginContainer/Window/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(0, 40)
+[node name="TBD" type="NinePatchRect" parent="MarginContainer/Window/VBoxContainer/Bottom"]
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
@@ -248,7 +300,35 @@ patch_margin_top = 4
 patch_margin_right = 4
 patch_margin_bottom = 4
 
+[node name="ItemDetail" type="NinePatchRect" parent="MarginContainer/Window/VBoxContainer/Bottom"]
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+size_flags_stretch_ratio = 5.0
+texture = ExtResource("2_c2t1s")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Window/VBoxContainer/Bottom/ItemDetail"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Detail" type="Label" parent="MarginContainer/Window/VBoxContainer/Bottom/ItemDetail/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "Detail"
+vertical_alignment = 1
+
 [node name="ShopCursor" parent="." instance=ExtResource("3_c2t1s")]
+process_mode = 3
 layout_mode = 0
 offset_left = 16.0
 offset_top = 29.0
