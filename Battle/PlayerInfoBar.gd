@@ -11,8 +11,8 @@ class_name PlayerInfoBar extends HBoxContainer
 func _ready():
 	_anim.play("RESET")                 # Reset UI animations
 	_name.text = data.name              # Set name label
-	_health.text = str(data.hp)         # Set health label
-	_action.text = str(data.ap)         # Set AP label
+	_health.text = str(data.base_hp)         # Set health label
+	_action.text = str(data.base_ap)         # Set AP label
 	
 	data.hp_changed.connect(_on_data_hp_changed)  # Connect to BattleActor's hp_changed signal
 
