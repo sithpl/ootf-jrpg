@@ -3,8 +3,8 @@ class_name Game extends Node2D
 @onready var _battle_trigger_sfx : AudioStreamPlayer = $BattleTriggerSFX
 @onready var _canvas_layer0 : CanvasLayer = $CanvasLayer0
 
-const BATTLE : PackedScene = preload("res://Scenes/Battle.tscn")
-const OVERWORLD : PackedScene = preload("res://Scenes/Overworld.tscn")
+const BATTLE : PackedScene = preload("res://Battle/Battle.tscn")
+const OVERWORLD : PackedScene = preload("res://World/Overworld.tscn")
 
 var _world_map : Node2D
 
@@ -99,9 +99,9 @@ func _on_overworld_tile_transition_entered(destination: String) -> void:
 	if destination == _world_map.name:
 		transition_scene(_world_map)
 	else:
-		var scene : Node = load("res://Scenes/" + destination + ".tscn").instantiate()
+		var scene : Node = load("res://World/" + destination + ".tscn").instantiate()
 		if scene.has_signal("tile_transition_entered"):
-			print("Connected tile_transition_entered for", scene)
+			#DEBUG print("Connected tile_transition_entered for", scene)
 			scene.connect("tile_transition_entered", Callable(self, "_on_overworld_tile_transition_entered"))
 		#DEBUG print(scene)
 		transition_scene(scene, destination)
@@ -115,29 +115,29 @@ func play_overworld_animation(anim_name: String):
 
 func show_dialogue(npc: NPC):
 	#DEBUG print("Game.gd/show_dialogue() called")
-	print("Game.show_dialogue called for: ", npc.npc_id)
+	#DEBUG print("Game.show_dialogue called for: ", npc.npc_id)
 	MusicManager.interact()
 	Globals.player.movement_locked = true
-	print("movement_locked = ", Globals.player.movement_locked)
+	#DEBUG print("movement_locked = ", Globals.player.movement_locked)
 
 	var perks = Globals.player_perks if Globals.player_perks != null else []
 	var party_members = Globals.party_members if Globals.party_members != null else []
 	var dialogue = npc.get_formatted_dialogue(perks, party_members)
 
-	print("Input.is_action_pressed(ui_accept): ", Input.is_action_pressed("ui_accept"))
+	#DEBUG print("Input.is_action_pressed(ui_accept): ", Input.is_action_pressed("ui_accept"))
 	TextUi.show_dialogue_box(dialogue)
 	#DEBUG print("Game.gd/show_dialogue() -> TextUI.gd/show_dialogue_box() called")
 	#DEBUG print(dialogue)
 	
-	print("Waiting for confirmation...")
+	#DEBUG print("Waiting for confirmation...")
 	await TextUi.confirmed
-	print("Confirmed signal received!")
+	#DEBUG print("Confirmed signal received!")
 	
 	TextUi.hide_dialogue_box()
 	
 	#DEBUG print("Game.gd/show_dialogue() -> TextUI.gd/hide_dialogue_box() called")
 	Globals.player.movement_locked = false
-	print("movement_locked = ", Globals.player.movement_locked)
+	#DEBUG print("movement_locked = ", Globals.player.movement_locked)
 
 # Waits for a fresh press, not just the key being down
 func _wait_for_confirm():

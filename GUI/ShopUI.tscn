@@ -1,0 +1,336 @@
+[gd_scene load_steps=4 format=3 uid="uid://bksmmlncedmkm"]
+
+[ext_resource type="Script" uid="uid://hhh7nc71q7fy" path="res://GUI/ShopUI.gd" id="1_qk54v"]
+[ext_resource type="Texture2D" uid="uid://dc3abl7gyrlwq" path="res://Assets/UI/fantasy-ui-borders.svg" id="2_c2t1s"]
+[ext_resource type="PackedScene" uid="uid://od888d4uyfe5" path="res://GUI/ShopCursor.tscn" id="3_c2t1s"]
+
+[node name="ShopUI" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchor_right = 0.775
+anchor_bottom = 1.0
+offset_left = 36.0
+offset_right = 38.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+script = ExtResource("1_qk54v")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -36.0
+offset_right = 34.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+metadata/_edit_use_anchors_ = true
+
+[node name="Window" type="NinePatchRect" parent="MarginContainer"]
+process_mode = 3
+layout_mode = 2
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Window"]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="NPC" type="HBoxContainer" parent="MarginContainer/Window/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="ShopGreeting" type="NinePatchRect" parent="MarginContainer/Window/VBoxContainer/NPC"]
+custom_minimum_size = Vector2(150, 20)
+layout_mode = 2
+texture = ExtResource("2_c2t1s")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Window/VBoxContainer/NPC/ShopGreeting"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+
+[node name="Label" type="Label" parent="MarginContainer/Window/VBoxContainer/NPC/ShopGreeting/MarginContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 7
+text = "\"Buy somethin' or get lost, kid\""
+vertical_alignment = 1
+
+[node name="ShopType" type="NinePatchRect" parent="MarginContainer/Window/VBoxContainer/NPC"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("2_c2t1s")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="Label" type="Label" parent="MarginContainer/Window/VBoxContainer/NPC/ShopType"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Shopkeeper"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Top" type="HBoxContainer" parent="MarginContainer/Window/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Select" type="NinePatchRect" parent="MarginContainer/Window/VBoxContainer/Top"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.5
+texture = ExtResource("2_c2t1s")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Window/VBoxContainer/Top/Select"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Window/VBoxContainer/Top/Select/MarginContainer"]
+layout_mode = 2
+
+[node name="Buy" type="Button" parent="MarginContainer/Window/VBoxContainer/Top/Select/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Buy"
+
+[node name="Sell" type="Button" parent="MarginContainer/Window/VBoxContainer/Top/Select/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Sell"
+
+[node name="Exit" type="Button" parent="MarginContainer/Window/VBoxContainer/Top/Select/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Exit"
+
+[node name="Resource" type="NinePatchRect" parent="MarginContainer/Window/VBoxContainer/Top"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("2_c2t1s")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Window/VBoxContainer/Top/Resource"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Window/VBoxContainer/Top/Resource/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Amount" type="Label" parent="MarginContainer/Window/VBoxContainer/Top/Resource/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "9999"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/Window/VBoxContainer/Top/Resource/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "G"
+
+[node name="Middle" type="NinePatchRect" parent="MarginContainer/Window/VBoxContainer"]
+process_mode = 3
+custom_minimum_size = Vector2(0, 85)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("2_c2t1s")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Window/VBoxContainer/Middle"]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+metadata/_edit_use_anchors_ = true
+
+[node name="ItemList" type="VBoxContainer" parent="MarginContainer/Window/VBoxContainer/Middle/MarginContainer"]
+process_mode = 3
+layout_mode = 2
+
+[node name="HeaderRow" type="HBoxContainer" parent="MarginContainer/Window/VBoxContainer/Middle/MarginContainer/ItemList"]
+process_mode = 3
+layout_mode = 2
+
+[node name="Item" type="Label" parent="MarginContainer/Window/VBoxContainer/Middle/MarginContainer/ItemList/HeaderRow"]
+custom_minimum_size = Vector2(98, 0)
+layout_mode = 2
+size_flags_stretch_ratio = 2.0
+text = "Item"
+
+[node name="Qty" type="Label" parent="MarginContainer/Window/VBoxContainer/Middle/MarginContainer/ItemList/HeaderRow"]
+custom_minimum_size = Vector2(37, 0)
+layout_mode = 2
+size_flags_stretch_ratio = 3.0
+text = "Qty"
+
+[node name="Price" type="Label" parent="MarginContainer/Window/VBoxContainer/Middle/MarginContainer/ItemList/HeaderRow"]
+custom_minimum_size = Vector2(35, 0)
+layout_mode = 2
+size_flags_stretch_ratio = 2.0
+text = "Price"
+
+[node name="Equipped" type="Label" parent="MarginContainer/Window/VBoxContainer/Middle/MarginContainer/ItemList/HeaderRow"]
+visible = false
+custom_minimum_size = Vector2(35, 0)
+layout_mode = 2
+size_flags_stretch_ratio = 2.0
+text = "Eqpd"
+
+[node name="SellList" type="VBoxContainer" parent="MarginContainer/Window/VBoxContainer/Middle/MarginContainer"]
+process_mode = 3
+layout_mode = 2
+
+[node name="HeaderRow" type="HBoxContainer" parent="MarginContainer/Window/VBoxContainer/Middle/MarginContainer/SellList"]
+process_mode = 3
+layout_mode = 2
+
+[node name="Item" type="Label" parent="MarginContainer/Window/VBoxContainer/Middle/MarginContainer/SellList/HeaderRow"]
+process_mode = 3
+custom_minimum_size = Vector2(98, 0)
+layout_mode = 2
+size_flags_stretch_ratio = 2.0
+text = "Item"
+
+[node name="Qty" type="Label" parent="MarginContainer/Window/VBoxContainer/Middle/MarginContainer/SellList/HeaderRow"]
+process_mode = 3
+custom_minimum_size = Vector2(37, 0)
+layout_mode = 2
+size_flags_stretch_ratio = 3.0
+text = "Qty"
+
+[node name="Price" type="Label" parent="MarginContainer/Window/VBoxContainer/Middle/MarginContainer/SellList/HeaderRow"]
+process_mode = 3
+custom_minimum_size = Vector2(35, 0)
+layout_mode = 2
+size_flags_stretch_ratio = 2.0
+text = "Value"
+
+[node name="Equipped" type="Label" parent="MarginContainer/Window/VBoxContainer/Middle/MarginContainer/SellList/HeaderRow"]
+process_mode = 3
+visible = false
+custom_minimum_size = Vector2(35, 0)
+layout_mode = 2
+size_flags_stretch_ratio = 2.0
+text = "Eqpd"
+
+[node name="Bottom" type="VBoxContainer" parent="MarginContainer/Window/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="TBD" type="NinePatchRect" parent="MarginContainer/Window/VBoxContainer/Bottom"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+size_flags_stretch_ratio = 5.0
+texture = ExtResource("2_c2t1s")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="ItemDetail" type="NinePatchRect" parent="MarginContainer/Window/VBoxContainer/Bottom"]
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+size_flags_stretch_ratio = 5.0
+texture = ExtResource("2_c2t1s")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Window/VBoxContainer/Bottom/ItemDetail"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Detail" type="Label" parent="MarginContainer/Window/VBoxContainer/Bottom/ItemDetail/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "Detail"
+vertical_alignment = 1
+
+[node name="ShopCursor" parent="." instance=ExtResource("3_c2t1s")]
+process_mode = 3
+layout_mode = 0
+offset_left = 16.0
+offset_top = 29.0
+offset_right = 48.0
+offset_bottom = 61.0

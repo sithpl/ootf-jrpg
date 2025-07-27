@@ -1,0 +1,39 @@
+[gd_scene load_steps=6 format=3 uid="uid://mjbptph0adiw"]
+
+[ext_resource type="Script" uid="uid://dg0c1ckk8pfa6" path="res://Characters/Shopkeeper.gd" id="1_m3i8o"]
+[ext_resource type="SpriteFrames" uid="uid://7731t15gmiyc" path="res://Assets/Animations/NPC.tres" id="2_r13ry"]
+[ext_resource type="PackedScene" uid="uid://bksmmlncedmkm" path="res://GUI/ShopUI.tscn" id="3_r13ry"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fo5tq"]
+size = Vector2(22, 30)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xs5w8"]
+size = Vector2(116, 105)
+
+[node name="Shopkeeper" type="CharacterBody2D"]
+script = ExtResource("1_m3i8o")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.8, 0.8)
+sprite_frames = ExtResource("2_r13ry")
+animation = &"RESET"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(2.38419e-07, 3)
+shape = SubResource("RectangleShape2D_fo5tq")
+
+[node name="InteractionRange" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionRange"]
+shape = SubResource("RectangleShape2D_xs5w8")
+debug_color = Color(3.60981e-06, 0.636973, 0.398091, 0.42)
+
+[node name="Effects" type="AudioStreamPlayer" parent="."]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ShopUI" parent="CanvasLayer" instance=ExtResource("3_r13ry")]
+
+[connection signal="body_entered" from="InteractionRange" to="." method="_on_interaction_range_body_entered"]
+[connection signal="body_exited" from="InteractionRange" to="." method="_on_interaction_range_body_exited"]

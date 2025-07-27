@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://od888d4uyfe5"]
+
+[ext_resource type="Texture2D" uid="uid://cmsa7ipbpl7gj" path="res://Assets/UI/hand_point_e.png" id="1_f5jn3"]
+[ext_resource type="Script" uid="uid://bniyb5wbsform" path="res://GUI/ShopCursor.gd" id="2_w86uv"]
+[ext_resource type="AudioStream" uid="uid://dl8srn1rn86jj" path="res://Assets/Audio/UI/confirmation-ding (lower).wav" id="3_2wy7i"]
+[ext_resource type="AudioStream" uid="uid://x1tyjn66ac5w" path="res://Assets/Audio/UI/confirmation-ding (higher.wav" id="4_5o2a5"]
+
+[node name="ShopCursor" type="TextureRect"]
+offset_right = 32.0
+offset_bottom = 32.0
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_f5jn3")
+stretch_mode = 2
+script = ExtResource("2_w86uv")
+
+[node name="MoveSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_2wy7i")
+volume_db = -15.0
+
+[node name="ConfirmSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_5o2a5")
+volume_db = -10.0
