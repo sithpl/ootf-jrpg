@@ -23,6 +23,7 @@ Globals="*res://Misc/Globals.gd"
 TextUi="*res://GUI/TextUI.tscn"
 MusicManager="*res://Misc/MusicManager.tscn"
 PlayerInventory="*res://Characters/PlayerInventory.gd"
+GameTimer="*res://Misc/GameTimer.gd"
 
 [display]
 

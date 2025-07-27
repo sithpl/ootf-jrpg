@@ -5,6 +5,7 @@ signal item_purchased(item: Item, amount: int) # Emitted when an item is bought
 signal item_selected(item: Item) # Emitted when an item is elected
 
 # UI references
+@onready var startui : StartUI = $StartUI
 @onready var shopui: ShopUI = $"."
 @onready var shop_cursor: ShopCursor = $ShopCursor
 @onready var item_list: VBoxContainer = $MarginContainer/Window/VBoxContainer/Middle/MarginContainer/ItemList
@@ -85,12 +86,13 @@ func close():
 func _unhandled_input(event):
 	#print("_unhandled_input called. event: ", event, " shop_mode: ", shop_mode, " focus owner: ", get_viewport().gui_get_focus_owner())
 	if shopui.visible:
-		if shop_mode == "buy" and event.is_action_pressed("ui_cancel"):
-			_show_menu()
-		if shop_mode == "sell" and event.is_action_pressed("ui_cancel"):
-			_show_menu()
-		elif shop_mode == "menu" and event.is_action_pressed("ui_cancel"):
-			close()
+		if event.is_action_pressed("ui_cancel"):
+			if shop_mode == "buy":
+				_show_menu()
+			elif shop_mode == "sell":
+				_show_menu()
+			elif shop_mode == "menu":
+				close()
 
 func _show_menu():
 	shop_mode = "menu"

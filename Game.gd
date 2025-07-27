@@ -2,18 +2,33 @@ class_name Game extends Node2D
 
 @onready var _battle_trigger_sfx : AudioStreamPlayer = $BattleTriggerSFX
 @onready var _canvas_layer0 : CanvasLayer = $CanvasLayer0
+@onready var startui = $StartUI
 
 const BATTLE : PackedScene = preload("res://Battle/Battle.tscn")
 const OVERWORLD : PackedScene = preload("res://World/Overworld.tscn")
 
 var _world_map : Node2D
+var zone_theme = "ZONE"
 
 func _ready():
+	startui.hide()
 	_world_map = $Overworld
 	if not _world_map.is_connected("enemy_encountered", Callable(self, "_on_overworld_enemy_encountered")):
 		_world_map.connect("enemy_encountered", Callable(self, "_on_overworld_enemy_encountered"))
 	if not _world_map.is_connected("tile_transition_entered", Callable(self, "_on_overworld_tile_transition_entered")):
 		_world_map.connect("tile_transition_entered", Callable(self, "_on_overworld_tile_transition_entered"))
+
+func _unhandled_input(event):
+	if event.is_action_pressed("ui_select"):
+		if startui.visible:
+			startui.close_menu()
+			TextUi.visible = true
+			Globals.player.movement_locked = false
+		else:
+			startui.open_menu()
+			TextUi.visible = false
+			#startui.grab_focus()
+			Globals.player.movement_locked = true
 
 func transition_scene(scene: Node, destination: String = ""):
 	#DEBUG print("Game.gd/transition_scene() called")
