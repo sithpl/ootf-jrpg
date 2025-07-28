@@ -9,7 +9,7 @@ signal tile_transition_entered(destination)
 @onready var _danger              :Danger            = $Danger
 @onready var _main_map            :MainMap           = $MainMap
 @onready var _enemy_spawn_areas   :EnemySpawnAreas   = $EnemySpawnAreas
-@onready var area_name : String = "World Map"
+@onready var area_name            :String            = "World Map"
 
 var area_theme = MusicManager.ThemeType.ZONE
 var _danger_paused: bool = false

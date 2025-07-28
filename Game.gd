@@ -19,15 +19,28 @@ func _ready():
 		_world_map.connect("tile_transition_entered", Callable(self, "_on_overworld_tile_transition_entered"))
 
 func _unhandled_input(event):
+	if event.is_action_pressed("ui_cancel"):
+		if startui.inventory_menu.visible:
+			startui.inventory_menu.hide()
+			startui.open_menu()
+			startui.item_button.grab_focus()
+			return
+		elif startui.visible:
+			startui.close_menu()
+			TextUi.visible = true
+			Globals.player.movement_locked = false
+			return
+
 	if event.is_action_pressed("ui_select"):
-		if startui.visible:
+		if startui.inventory_menu.visible:
+			return  # Do nothing if inventory is open
+		elif startui.visible:
 			startui.close_menu()
 			TextUi.visible = true
 			Globals.player.movement_locked = false
 		else:
 			startui.open_menu()
 			TextUi.visible = false
-			#startui.grab_focus()
 			Globals.player.movement_locked = true
 
 func transition_scene(scene: Node, destination: String = ""):

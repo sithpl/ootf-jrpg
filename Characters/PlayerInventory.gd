@@ -3,7 +3,7 @@ extends Node
 signal money_changed
 
 # Stores items by item_id and count
-var items := {} # {item_id: count}
+var items := {"potion": 5, "ether": 3, "antidote": 2, "old_sword": 1, "wooden_shield": 1,"leather_helmet": 1, "worn_chainmail": 1} # {item_id: count}
 var money = 2000 # TODO Implement money system
 
 # Print inventory at startup
