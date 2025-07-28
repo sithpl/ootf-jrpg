@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://bvm376786fbe4"]
+[gd_scene load_steps=5 format=3 uid="uid://bvm376786fbe4"]
 
 [ext_resource type="Script" uid="uid://cftufuyic7bs4" path="res://GUI/InventoryMenu.gd" id="1_byye0"]
 [ext_resource type="Texture2D" uid="uid://dc3abl7gyrlwq" path="res://Assets/UI/fantasy-ui-borders.svg" id="1_ke5wp"]
 [ext_resource type="PackedScene" uid="uid://bnnptna5yk1l2" path="res://GUI/StartCursor.tscn" id="2_57by7"]
+[ext_resource type="PackedScene" uid="uid://dhg3uq88qs711" path="res://GUI/UseMenu.tscn" id="3_4m65y"]
 
 [node name="InventoryMenu" type="Control"]
 process_mode = 3
@@ -191,105 +192,11 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Type"
 
-[node name="UseMenu" type="Control" parent="."]
+[node name="UseMenu" parent="." instance=ExtResource("3_4m65y")]
 visible = false
-anchors_preset = 0
-offset_left = 203.5
-offset_top = 71.0
-offset_right = 269.5
-offset_bottom = 168.0
-
-[node name="ColorRect" type="ColorRect" parent="UseMenu"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 1)
-
-[node name="NinePatchRect" type="NinePatchRect" parent="UseMenu"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = -0.0151515
-anchor_right = 1.01515
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("1_ke5wp")
-region_rect = Rect2(550, 164, 48, 48)
-patch_margin_left = 13
-patch_margin_top = 11
-patch_margin_right = 13
-patch_margin_bottom = 11
-metadata/_edit_use_anchors_ = true
-
-[node name="MarginContainer" type="MarginContainer" parent="UseMenu/NinePatchRect"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 10
-metadata/_edit_use_anchors_ = true
-
-[node name="VBoxContainer" type="VBoxContainer" parent="UseMenu/NinePatchRect/MarginContainer"]
-layout_mode = 2
-
-[node name="CharacterSlot1" type="VBoxContainer" parent="UseMenu/NinePatchRect/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="CharacterName" type="Button" parent="UseMenu/NinePatchRect/MarginContainer/VBoxContainer/CharacterSlot1"]
-layout_mode = 2
-text = "Clav"
-alignment = 0
-
-[node name="HP" type="Label" parent="UseMenu/NinePatchRect/MarginContainer/VBoxContainer/CharacterSlot1"]
-layout_mode = 2
-text = "9999/9999"
-horizontal_alignment = 2
-
-[node name="CharacterSlot2" type="VBoxContainer" parent="UseMenu/NinePatchRect/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="CharacterName" type="Button" parent="UseMenu/NinePatchRect/MarginContainer/VBoxContainer/CharacterSlot2"]
-layout_mode = 2
-text = "Bili"
-alignment = 0
-
-[node name="HP" type="Label" parent="UseMenu/NinePatchRect/MarginContainer/VBoxContainer/CharacterSlot2"]
-layout_mode = 2
-text = "9999/9999"
-horizontal_alignment = 2
-
-[node name="CharacterSlot3" type="VBoxContainer" parent="UseMenu/NinePatchRect/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="CharacterName" type="Button" parent="UseMenu/NinePatchRect/MarginContainer/VBoxContainer/CharacterSlot3"]
-layout_mode = 2
-text = "Glenn"
-alignment = 0
-
-[node name="HP" type="Label" parent="UseMenu/NinePatchRect/MarginContainer/VBoxContainer/CharacterSlot3"]
-layout_mode = 2
-text = "9999/9999"
-horizontal_alignment = 2
-
-[node name="CharacterSlot4" type="VBoxContainer" parent="UseMenu/NinePatchRect/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="CharacterName" type="Button" parent="UseMenu/NinePatchRect/MarginContainer/VBoxContainer/CharacterSlot4"]
-layout_mode = 2
-text = "Fraud"
-alignment = 0
-
-[node name="HP" type="Label" parent="UseMenu/NinePatchRect/MarginContainer/VBoxContainer/CharacterSlot4"]
-layout_mode = 2
-text = "9999/9999"
-horizontal_alignment = 2
 
 [node name="StartCursor" parent="." instance=ExtResource("2_57by7")]
+z_index = 5
 layout_mode = 0
 offset_left = 86.5
 offset_top = 8.0

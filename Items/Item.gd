@@ -5,8 +5,11 @@ class_name Item extends Resource
 @export var name: String
 @export var description: String
 @export var price: int
-@export var type: String # For use later
+@export var type: String
 @export var icon: Texture2D
+
+@export var use_effect: String = ""
+@export var use_amount: int = 0   
 
 const SELL_PERCENT := 0.5
 
@@ -29,11 +32,23 @@ static func register_items():
 	ALL_ITEMS["wooden_shield"]  = Item.new().update("wooden_shield", "Wooden Shield", 120, "A large piece of bark with a handle.", "O.Hand")
 	ALL_ITEMS["leather_helmet"] = Item.new().update("leather_helmet", "Leather Helmet", 75, "Protects your head...kind of.", "Head")
 	ALL_ITEMS["worn_chainmail"] = Item.new().update("worn_chainmail", "Worn Chainmail", 75, "Bigger holes than normal.", "Chest")
-	ALL_ITEMS["potion"]         = Item.new().update("potion", "Potion", 10, "Heals 50 HP", "Consume")
-	ALL_ITEMS["antidote"]       = Item.new().update("antidote", "Antidote", 25, "Cures poison", "Consume")
-	ALL_ITEMS["ether"]          = Item.new().update("ether", "Ether", 50, "Restores 20 MP", "Consume")
+	
+	ALL_ITEMS["potion"]               = Item.new().update("potion", "Potion", 10, "Heals 50 HP", "Consume")
+	ALL_ITEMS["potion"].use_effect    = "heal"
+	ALL_ITEMS["potion"].use_amount    = 50
+	
+	ALL_ITEMS["antidote"] = Item.new().update("antidote", "Antidote", 25, "Cures poison", "Consume")
+	ALL_ITEMS["antidote"].use_effect = "cure_poison"
+
+	ALL_ITEMS["ether"] = Item.new().update("ether", "Ether", 50, "Restores 20 AP", "Consume")
+	ALL_ITEMS["ether"].use_effect = "restore_ap"
+	ALL_ITEMS["ether"].use_amount = 20
 	# Add more items as needed
 
 # Return the item with the given id
 static func get_item(id: String) -> Item:
 	return ALL_ITEMS.get(id)
+
+func use(target):
+	if use_effect != "":
+		Effects.apply_effect(use_effect, target, [use_amount] if use_amount != 0 else [])

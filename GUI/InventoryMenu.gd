@@ -14,10 +14,17 @@ class_name InventoryMenu extends Control
 @onready var quantity_label : Label = $MarginContainer/VBoxContainer/HBoxContainer3/NinePatchRect/MarginContainer/ItemList/ItemHeaderRow/Qty
 @onready var type_label : Label = $MarginContainer/VBoxContainer/HBoxContainer3/NinePatchRect/MarginContainer/ItemList/ItemHeaderRow/Type
 
+@onready var use_menu : Control = $UseMenu
+
 var player_inventory: Node = null
+var selected_item_id = null
+var use_menu_active = false
+var last_focused_item_index: int = 1 
+var should_restore_focus := false
 
 func _ready():
 	Item.register_items()
+	set_process(true)
 	set_process_unhandled_input(true)
 	for child in item_header_row.get_children():
 		if child is Control:
@@ -27,7 +34,21 @@ func _ready():
 	arrange_button.connect("pressed", Callable(self, "_on_arrange_pressed"))
 	quest_button.connect("pressed", Callable(self, "_on_quest_pressed"))
 
+func _process(delta):
+	if should_restore_focus:
+		# Check if UseMenu is REALLY gone
+		var found_menu = false
+		for child in get_children():
+			if child is UseMenu:
+				found_menu = true
+				break
+		if not found_menu:
+			should_restore_focus = false
+			restore_last_focused_item()
+
 func _unhandled_input(event):
+	if use_menu_active:
+		return 
 	if event.is_action_pressed("ui_cancel"):
 		# Check if an item button is focused
 		var focus_owner = get_viewport().gui_get_focus_owner()
@@ -137,6 +158,14 @@ func populate_inventory_items(inventory_dict: Dictionary) -> void:
 	print("InventoryMenu: item_list children count: ", item_list.get_child_count())
 
 func _on_inventory_item_focus_entered(item_id):
+	# Find which row this item is in, and store the index
+	for i in range(1, item_list.get_child_count()):
+		var row = item_list.get_child(i)
+		if row.get_child_count() > 0:
+			var btn = row.get_child(0)
+			if btn is Button and btn.get_meta("item_id") == item_id:
+				last_focused_item_index = i
+				break
 	show_item_description(item_id)
 
 func show_item_description(item_id):
@@ -153,8 +182,73 @@ func _on_item_selected(index):
 		show_item_description(item_id)
 		quantity_label.text = str(items[index].count)
 
+func _on_inventory_item_pressed(item_id):
+	var item = Item.get_item(item_id)
+	if item == null:
+		return
+	if item.type == "Consume":
+		var use_menu_scene = preload("res://GUI/UseMenu.tscn")
+		var use_menu = use_menu_scene.instantiate()
+		use_menu.set_item(item)
+		use_menu.connect("item_used", Callable(self, "_on_use_menu_item_used"))
+		use_menu.connect("cancelled", Callable(self, "_on_use_menu_cancelled"), CONNECT_ONE_SHOT)
+		add_child(use_menu)
+		use_menu.grab_focus()
+		use_menu_active = true
+
+func _on_use_menu_item_used():
+	populate_inventory_items(PlayerInventory.items)
+	update_total_items()
+
+func _on_use_menu_closed():
+	use_menu_active = false
+	focus_item_menu()
+	item_button.grab_focus()
+
 func update_total_items():
 	var total = 0
 	for count in PlayerInventory.items.values():
 		total += int(count)
 	total_items.text = str(total)
+
+func _on_use_menu_cancelled():
+	print("_on_use_menu_cancelled called!")
+	for child in get_children():
+		if child is UseMenu:
+			child.queue_free()
+	use_menu_active = false
+	item_list.show()
+	should_restore_focus = true
+
+func restore_last_focused_item():
+	var row_count = item_list.get_child_count()
+	var target_btn : Button = null
+	# Clamp index to valid range
+	var idx = clamp(last_focused_item_index, 1, row_count-1)
+	for i in range(idx, row_count):
+		var row = item_list.get_child(i)
+		if row.get_child_count() > 0:
+			var btn = row.get_child(0)
+			if btn is Button and not btn.disabled:
+				target_btn = btn
+				break
+	# If nothing found, search from the top
+	if target_btn == null:
+		for i in range(1, row_count):
+			var row = item_list.get_child(i)
+			if row.get_child_count() > 0:
+				var btn = row.get_child(0)
+				if btn is Button and not btn.disabled:
+					target_btn = btn
+					break
+	if target_btn:
+		target_btn.grab_focus()
+		print("Restored focus to:", target_btn)
+		# Update last_focused_item_index to the new location
+		for i in range(1, row_count):
+			var row = item_list.get_child(i)
+			if row.get_child_count() > 0 and row.get_child(0) == target_btn:
+				last_focused_item_index = i
+				break
+	else:
+		print("No valid button to focus!")

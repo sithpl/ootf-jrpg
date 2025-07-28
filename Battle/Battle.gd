@@ -48,6 +48,9 @@ func _ready():
 
 # Handles global input events (like canceling target selection)
 func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_select"):
+		get_viewport().set_input_as_handled()
+		return
 	if input_locked:
 		get_viewport().gui_disable_input = true
 		return

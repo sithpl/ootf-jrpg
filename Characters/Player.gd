@@ -6,6 +6,7 @@ signal moved(pos, run_factor)
 # Onreadys
 @onready var _anim_sprite : AnimatedSprite2D = $AnimatedSprite2D
 var movement_locked: bool = false
+var battle_actor: BattleActor = null
 
 # Constants
 const SPEED : int = 110
