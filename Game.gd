@@ -43,6 +43,13 @@ func _unhandled_input(event):
 			TextUi.visible = false
 			Globals.player.movement_locked = true
 
+func play_overworld_animation(anim_name: String):
+	var overworld = get_node_or_null("Overworld")
+	if overworld:
+		var anim_player = overworld.get_node("AnimationPlayer")
+		if anim_player:
+			anim_player.play(anim_name)
+
 func transition_scene(scene: Node, destination: String = ""):
 	#DEBUG print("Game.gd/transition_scene() called")
 	Globals.player.enable(false)
@@ -134,12 +141,7 @@ func _on_overworld_tile_transition_entered(destination: String) -> void:
 		#DEBUG print(scene)
 		transition_scene(scene, destination)
 
-func play_overworld_animation(anim_name: String):
-	var overworld = get_node_or_null("Overworld")
-	if overworld:
-		var anim_player = overworld.get_node("AnimationPlayer")
-		if anim_player:
-			anim_player.play(anim_name)
+# ---------- TEXTUI ----------
 
 func show_dialogue(npc: NPC):
 	#DEBUG print("Game.gd/show_dialogue() called")
@@ -167,12 +169,12 @@ func show_dialogue(npc: NPC):
 	Globals.player.movement_locked = false
 	#DEBUG print("movement_locked = ", Globals.player.movement_locked)
 
-# Waits for a fresh press, not just the key being down
-func _wait_for_confirm():
-	while Input.is_action_pressed(&"ui_accept"):
-		await get_tree().process_frame
-	while true:
-		await get_tree().process_frame
-		if Input.is_action_just_pressed(&"ui_accept"):
-			emit_signal("confirmed")
-			break
+## Waits for a fresh press, not just the key being down
+#func _wait_for_confirm():
+	#while Input.is_action_pressed(&"ui_accept"):
+		#await get_tree().process_frame
+	#while true:
+		#await get_tree().process_frame
+		#if Input.is_action_just_pressed(&"ui_accept"):
+			#emit_signal("confirmed")
+			#break

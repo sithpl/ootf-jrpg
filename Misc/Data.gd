@@ -43,8 +43,8 @@ var mobs                  :Array                = enemies.values()
 static var enemies: Dictionary = {
 	"Skeleton"          :BattleActor.new( 2, 2, 5, 10, 1, 1, 2, 2 ),
 	"Slime Green"       :BattleActor.new( 1, 1, 1, 5, 1, 1, 1, 1 ),
-	"Orc Rider"         :BattleActor.new( 1, 1, 1, 5, 1, 1, 1, 1 ),
-	"Orc Elite"         :BattleActor.new( 1, 1, 1, 5, 1, 1, 1, 1 ),
+	"Orc Rider"         :BattleActor.new( 1, 1, 20, 5, 10, 1, 1, 1 ),
+	"Orc Elite"         :BattleActor.new( 1, 1, 25, 5, 15, 1, 1, 1 ),
 	"Skeleton GS"       :BattleActor.new( 1, 1, 1, 5, 1, 1, 1, 1 ),
 	"Clown"             :BattleActor.new( 1, 1, 1, 5, 1, 1, 1, 1 ),
 }
@@ -72,7 +72,7 @@ static func get_random_enemies_from_weighted(count: int, weighted_list: Array) -
 # ---------- CLASSES ----------
 
 # Enums
-enum ActorClass { SOLDIER, RANGER, KNIGHT, PALADIN, MAGE, PRIEST, ARCHER, LANCER }
+enum ActorClass { SOLDIER, RANGER, KNIGHT, PALADIN, MAGE, PRIEST, ARCHER, LANCER, DOGUE }
 
 # class_configs: Stats and asset paths for each class.
 # Format: class_name: { "base_hp", "base_ap", "attack", "defense", "magic", "speed", "texture_path", animations... }
@@ -208,7 +208,7 @@ var class_configs := {
 # ---------- CHARACTERS & PARTY ----------
 
 # party_keys: Names of characters currently in the party
-var party_keys            :Array[String]        = ["Clav", "Bili", "Glenn", "Fraud"]
+var party_keys            :Array[String]        = ["Cracker", "Kanili", "Dan", "Woofshank"]
 
 # party: List of BattleActor instances for the current party
 var party                 :Array[BattleActor]   = []
@@ -247,9 +247,13 @@ var personalities := {
 
 # characters: Data for each available character including class and stat bonuses
 var characters := {
-	"Sith": { "class": "Soldier", 
-	"personality": "Kind",
-	"portrait": "res://Assets/Portraits/prt0048.png"},
+	"Cracker": { "class": "Soldier", 
+	"personality": "Steadfast",
+	"portrait": "res://Assets/Portraits/prt0004.png"},
+	
+	"Kanili": { "class": "Ranger", 
+	"personality": "Compassionate",
+	"portrait": "res://Assets/Portraits/prt0019.png"},
 	
 	"Clabbe": { "class": "Ranger", 
 	"personality": "Brave",
@@ -347,6 +351,9 @@ func rebuild_party() -> void:
 	party.clear()
 	for name in party_keys:
 		party.append(create_character(name))
+	# After building, set the global player_actor reference
+	if party.size() > 0:
+		Globals.player_actor = party[0]
 
 # Replaces the party with a new set of names and rebuilds the party array
 func set_party(new_keys:Array[String]) -> void:

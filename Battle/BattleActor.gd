@@ -116,6 +116,25 @@ func act():
 	#DEBUG print("BattleActor.gd/act() called")
 	acting.emit()
 
-#func set_attack_anim(val:String):
-	#attack_anim = val
-	#print("BattleActor attack_anim set to:", attack_anim)
+# Heal HP
+func heal(amount: int):
+	healhurt(amount)
+	print("%s healed by %d, now at %d/%d HP" % [name, amount, base_hp, hp_max])
+
+# Restore AP 
+func restore_ap(amount: int):
+	base_ap += amount
+	base_ap = clamp(base_ap, 0, ap_max)
+	print("%s restored %d AP, now at %d/%d AP" % [name, amount, base_ap, ap_max])
+
+# Cure poison
+func cure_poison():
+	# If you track status effects, clear poison here
+	print("%s is cured of poison!" % name)
+
+# Revive with 50%
+func revive(percent: float = 0.5):
+	if base_hp <= 0:
+		base_hp = int(hp_max * percent)
+		emit_signal("hp_changed", base_hp, base_hp)
+		print("%s revived to %d/%d HP!" % [name, base_hp, hp_max])
