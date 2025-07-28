@@ -3,7 +3,7 @@ class_name ShopCursor extends TextureRect
 @export var shop_path :NodePath   # Path to ShopUI node
 
 # Node and sound references
-@onready var shop :ShopUI = $".."
+@onready var shop : ShopUI = $".."
 @onready var move_sound :AudioStreamPlayer = $MoveSound
 @onready var confirm_sound :AudioStreamPlayer = $ConfirmSound
 

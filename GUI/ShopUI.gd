@@ -220,7 +220,7 @@ func _on_button_pressed(idx: int):
 		emit_signal("item_purchased", item, 1)
 		# After the purchase, update the UI (e.g., repopulate_items)
 		populate_buy_items(last_items_with_stock)
-		print("get_tree().paused: ", get_tree().paused)
+		#DEBUG print("get_tree().paused: ", get_tree().paused)
 
 # Handle item focus change
 func _on_button_focus_entered(idx: int):
@@ -340,7 +340,7 @@ func _on_sell_pressed():
 	print("ShopUI.gd/_on_sell_pressed() -> shop_cursor.visible = true")
 
 func _on_sell_button_pressed(item_id):
-	print("ShopUI.gd/_on_sell_button_pressed called for ", item_id)
+	#DEBUG print("ShopUI.gd/_on_sell_button_pressed called for ", item_id)
 	var quantity = PlayerInventory.items.get(item_id, 0)
 	print("Quantity before selling: ", quantity)
 	if quantity > 0:
@@ -357,31 +357,31 @@ func _on_sell_button_pressed(item_id):
 		print("get_tree().paused: ", get_tree().paused)
 
 func _on_sell_button_focus_entered(item_id):
-	print("ShopUI.gd/_on_sell_button_focus_entered() called")
+	#DEBUG print("ShopUI.gd/_on_sell_button_focus_entered() called")
 	last_focused_sell_item_id = item_id
 	var item = Item.get_item(item_id)
 	emit_signal("item_selected", item)
-	detail_label.text = item.description
+	detail_label.text = item.description + " : " + item.type
 	
 func _on_exit_pressed():
 	close()
 
 func restore_list_focus(list: VBoxContainer, last_focused_item_id: String, skip_header := true):
-	print("ShopUI.gd/restore_list_focus() called")
+	#DEBUG print("ShopUI.gd/restore_list_focus() called")
 	var start_idx = 1 if skip_header else 0
 	var button_to_focus: Button = null
 
-	print("restore_list_focus called on ", list.name, " with last_focused_item_id: ", last_focused_item_id)
+	#DEBUG print("restore_list_focus called on ", list.name, " with last_focused_item_id: ", last_focused_item_id)
 
 	for idx in range(start_idx, list.get_child_count()):
 		var row = list.get_child(idx)
 		if row.get_child_count() == 0:
 			continue
 		var btn = row.get_child(0)
-		print("Checking button in row ", idx, ": ", btn.text, " id=", btn.get_meta("item_id"), " disabled=", btn.disabled)
+		#DEBUG print("Checking button in row ", idx, ": ", btn.text, " id=", btn.get_meta("item_id"), " disabled=", btn.disabled)
 		if btn.has_meta("item_id") and btn.get_meta("item_id") == last_focused_item_id and not btn.disabled:
 			button_to_focus = btn
-			print("Found matching button to focus: ", btn.text)
+			#DEBUG print("Found matching button to focus: ", btn.text)
 			break
 
 	if button_to_focus == null:
@@ -392,17 +392,17 @@ func restore_list_focus(list: VBoxContainer, last_focused_item_id: String, skip_
 			var btn = row.get_child(0)
 			if not btn.disabled:
 				button_to_focus = btn
-				print("Focusing first enabled button: ", btn.text)
+				#DEBUG print("Focusing first enabled button: ", btn.text)
 				break
 
 	if button_to_focus:
-		print("Grabbing focus for: ", button_to_focus.text)
+		#DEBUG print("Grabbing focus for: ", button_to_focus.text)
 		if button_to_focus.focus_mode == Control.FOCUS_NONE:
-			print("Button had FOCUS_NONE, switching to FOCUS_ALL")
+			#DEBUG print("Button had FOCUS_NONE, switching to FOCUS_ALL")
 			button_to_focus.focus_mode = Control.FOCUS_ALL
 		button_to_focus.grab_focus()
 	else:
-		print("No button to focus, focusing exit_button")
+		#DEBUG print("No button to focus, focusing exit_button")
 		exit_button.grab_focus()
 
-	print("After restore_list_focus: Focus owner is ", get_viewport().gui_get_focus_owner())
+	#DEBUG print("After restore_list_focus: Focus owner is ", get_viewport().gui_get_focus_owner())

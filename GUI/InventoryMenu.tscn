@@ -1,0 +1,297 @@
+[gd_scene load_steps=4 format=3 uid="uid://bvm376786fbe4"]
+
+[ext_resource type="Script" uid="uid://cftufuyic7bs4" path="res://GUI/InventoryMenu.gd" id="1_byye0"]
+[ext_resource type="Texture2D" uid="uid://dc3abl7gyrlwq" path="res://Assets/UI/fantasy-ui-borders.svg" id="1_ke5wp"]
+[ext_resource type="PackedScene" uid="uid://bnnptna5yk1l2" path="res://GUI/StartCursor.tscn" id="2_57by7"]
+
+[node name="InventoryMenu" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -140.5
+offset_top = -90.0
+offset_right = 140.5
+offset_bottom = 90.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_byye0")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -140.5
+offset_top = -90.0
+offset_right = 140.5
+offset_bottom = 90.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="MarginContainer"]
+layout_mode = 2
+color = Color(0, 0, 0, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ItemTitle" type="NinePatchRect" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_ke5wp")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 13
+patch_margin_top = 11
+patch_margin_right = 13
+patch_margin_bottom = 11
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/ItemTitle"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/ItemTitle/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "Item"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ItemMenu" type="NinePatchRect" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(218, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+texture = ExtResource("1_ke5wp")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 13
+patch_margin_top = 11
+patch_margin_right = 13
+patch_margin_bottom = 11
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/ItemMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/ItemMenu/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 25
+
+[node name="Use" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/ItemMenu/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Use"
+
+[node name="Arrange" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/ItemMenu/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Arrange"
+
+[node name="Quest" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/ItemMenu/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Quest"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 1.5
+
+[node name="NinePatchRect" type="NinePatchRect" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_ke5wp")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 13
+patch_margin_top = 11
+patch_margin_right = 13
+patch_margin_bottom = 11
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/NinePatchRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Detail" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/NinePatchRect/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+
+[node name="TotalItems" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/NinePatchRect/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "9"
+horizontal_alignment = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 5.0
+
+[node name="NinePatchRect" type="NinePatchRect" parent="MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_ke5wp")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 13
+patch_margin_top = 11
+patch_margin_right = 13
+patch_margin_bottom = 11
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/NinePatchRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 25
+
+[node name="ItemList" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/NinePatchRect/MarginContainer"]
+layout_mode = 2
+
+[node name="ItemHeaderRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/NinePatchRect/MarginContainer/ItemList"]
+layout_mode = 2
+
+[node name="Item" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer3/NinePatchRect/MarginContainer/ItemList/ItemHeaderRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Item"
+alignment = 0
+
+[node name="Qty" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3/NinePatchRect/MarginContainer/ItemList/ItemHeaderRow"]
+custom_minimum_size = Vector2(23, 0)
+layout_mode = 2
+text = "Qty"
+horizontal_alignment = 1
+
+[node name="Type" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3/NinePatchRect/MarginContainer/ItemList/ItemHeaderRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Type"
+
+[node name="UseMenu" type="Control" parent="."]
+visible = false
+anchors_preset = 0
+offset_left = 203.5
+offset_top = 71.0
+offset_right = 269.5
+offset_bottom = 168.0
+
+[node name="ColorRect" type="ColorRect" parent="UseMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="NinePatchRect" type="NinePatchRect" parent="UseMenu"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.0151515
+anchor_right = 1.01515
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_ke5wp")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 13
+patch_margin_top = 11
+patch_margin_right = 13
+patch_margin_bottom = 11
+metadata/_edit_use_anchors_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="UseMenu/NinePatchRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+metadata/_edit_use_anchors_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UseMenu/NinePatchRect/MarginContainer"]
+layout_mode = 2
+
+[node name="CharacterSlot1" type="VBoxContainer" parent="UseMenu/NinePatchRect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CharacterName" type="Button" parent="UseMenu/NinePatchRect/MarginContainer/VBoxContainer/CharacterSlot1"]
+layout_mode = 2
+text = "Clav"
+alignment = 0
+
+[node name="HP" type="Label" parent="UseMenu/NinePatchRect/MarginContainer/VBoxContainer/CharacterSlot1"]
+layout_mode = 2
+text = "9999/9999"
+horizontal_alignment = 2
+
+[node name="CharacterSlot2" type="VBoxContainer" parent="UseMenu/NinePatchRect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CharacterName" type="Button" parent="UseMenu/NinePatchRect/MarginContainer/VBoxContainer/CharacterSlot2"]
+layout_mode = 2
+text = "Bili"
+alignment = 0
+
+[node name="HP" type="Label" parent="UseMenu/NinePatchRect/MarginContainer/VBoxContainer/CharacterSlot2"]
+layout_mode = 2
+text = "9999/9999"
+horizontal_alignment = 2
+
+[node name="CharacterSlot3" type="VBoxContainer" parent="UseMenu/NinePatchRect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CharacterName" type="Button" parent="UseMenu/NinePatchRect/MarginContainer/VBoxContainer/CharacterSlot3"]
+layout_mode = 2
+text = "Glenn"
+alignment = 0
+
+[node name="HP" type="Label" parent="UseMenu/NinePatchRect/MarginContainer/VBoxContainer/CharacterSlot3"]
+layout_mode = 2
+text = "9999/9999"
+horizontal_alignment = 2
+
+[node name="CharacterSlot4" type="VBoxContainer" parent="UseMenu/NinePatchRect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CharacterName" type="Button" parent="UseMenu/NinePatchRect/MarginContainer/VBoxContainer/CharacterSlot4"]
+layout_mode = 2
+text = "Fraud"
+alignment = 0
+
+[node name="HP" type="Label" parent="UseMenu/NinePatchRect/MarginContainer/VBoxContainer/CharacterSlot4"]
+layout_mode = 2
+text = "9999/9999"
+horizontal_alignment = 2
+
+[node name="StartCursor" parent="." instance=ExtResource("2_57by7")]
+layout_mode = 0
+offset_left = 86.5
+offset_top = 8.0
+offset_right = 118.5
+offset_bottom = 40.0

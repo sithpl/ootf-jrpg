@@ -1,9 +1,9 @@
 class_name StartCursor extends TextureRect
 
-@export var shop_path :NodePath   # Path to ShopUI node
+@export var menu_root_path : NodePath
 
 # Node and sound references
-@onready var start : StartUI = $"../.."
+@onready var menu_root = get_node(menu_root_path) if menu_root_path else null
 @onready var move_sound :AudioStreamPlayer = $MoveSound
 @onready var confirm_sound :AudioStreamPlayer = $ConfirmSound
 
@@ -46,7 +46,7 @@ func _on_viewport_gui_focus_changed(node: Control):
 		show()
 		set_process(true)
 	else:
-		if start and start.is_repopulating:
+		if menu_root and menu_root.has_method("is_repopulating") and menu_root.is_repopulating:
 			return # Ignore hiding during shop repopulation
 		hide_timer.start()
 		set_process(false)
