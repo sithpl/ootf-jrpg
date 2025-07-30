@@ -1,0 +1,68 @@
+[gd_scene load_steps=3 format=3 uid="uid://c4c8fue8uht7l"]
+
+[ext_resource type="Texture2D" uid="uid://dc3abl7gyrlwq" path="res://Assets/UI/fantasy-ui-borders.svg" id="1_8g4ic"]
+[ext_resource type="Script" uid="uid://dqmcl2fua1t1r" path="res://GUI/CheckMenu.gd" id="1_i166a"]
+
+[node name="CheckMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -140.5
+offset_top = -90.0
+offset_right = 140.5
+offset_bottom = 90.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_i166a")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="MarginContainer"]
+layout_mode = 2
+color = Color(0, 0, 0, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Top" type="NinePatchRect" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(47, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+texture = ExtResource("1_8g4ic")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 13
+patch_margin_top = 11
+patch_margin_right = 13
+patch_margin_bottom = 11
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/Top"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Check" type="Label" parent="MarginContainer/VBoxContainer/Top/MarginContainer"]
+layout_mode = 2
+text = "Check"
+horizontal_alignment = 1
+
+[node name="Bottom" type="NinePatchRect" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("1_8g4ic")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 13
+patch_margin_top = 11
+patch_margin_right = 13
+patch_margin_bottom = 11

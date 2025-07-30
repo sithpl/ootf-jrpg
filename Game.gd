@@ -20,8 +20,8 @@ func _ready():
 
 func _unhandled_input(event):
 	if event.is_action_pressed("ui_cancel"):
-		if startui.inventory_menu.visible:
-			startui.inventory_menu.hide()
+		if startui.item_menu.visible:
+			startui.item_menu.hide()
 			startui.open_menu()
 			startui.item_button.grab_focus()
 			return
@@ -32,7 +32,7 @@ func _unhandled_input(event):
 			return
 
 	if event.is_action_pressed("ui_select"):
-		if startui.inventory_menu.visible:
+		if startui.item_menu.visible:
 			return  # Do nothing if inventory is open
 		elif startui.visible:
 			startui.close_menu()

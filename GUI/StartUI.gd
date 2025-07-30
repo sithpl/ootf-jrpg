@@ -3,7 +3,7 @@ class_name StartUI extends CanvasLayer
 @onready var start_cursor : StartCursor = $StartMenu/StartCursor
 @onready var startui : StartUI = $"."
 @onready var start_menu : Control = $StartMenu
-@onready var inventory_menu : Control = $InventoryMenu
+@onready var item_menu : Control = $ItemMenu
 @onready var item_button : Button = $StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer/Item
 @onready var magic_button : Button = $StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer/Magic
 @onready var equip_button : Button = $StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer/Equip
@@ -12,7 +12,7 @@ class_name StartUI extends CanvasLayer
 @onready var current_money_text : Label = $StartMenu/HBoxContainer/Left/VBoxContainer/Info/MarginContainer/VBoxContainer/HBoxContainer/Resource
 @onready var total_time_label : Label = $StartMenu/HBoxContainer/Left/VBoxContainer/Info/MarginContainer/VBoxContainer/Played/TotalTime
 
-const InventoryMenu = preload("res://GUI/InventoryMenu.tscn")
+const ItemMenu = preload("res://GUI/ItemMenu.tscn")
 
 var party_keys = Data.party_keys  # ["Bili", "Glenn", "Fraud", "Rage"]
 
@@ -26,8 +26,8 @@ var party_keys = Data.party_keys  # ["Bili", "Glenn", "Fraud", "Rage"]
 func _ready():
 	#DEBUG print("StartUI.gd/_ready() called")
 	set_process_unhandled_input(true)
-	if inventory_menu:
-		inventory_menu.hide()
+	if item_menu:
+		item_menu.hide()
 	PlayerInventory.connect("money_changed", Callable(self, "get_current_money"))
 	item_button.connect("pressed", Callable(self, "_on_item_pressed"))
 	magic_button.connect("pressed", Callable(self, "_on_magic_pressed"))
@@ -83,11 +83,11 @@ func update_character_slots():
 
 func _on_item_pressed():
 	print("StartUI.gd/_on_item_pressed() called")
-	if inventory_menu:
+	if item_menu:
 		$StartMenu/AnimationPlayer.play("fade_out")
 		await $StartMenu/AnimationPlayer.animation_finished
-		inventory_menu.visible = true
-		inventory_menu.focus_item_menu()
+		item_menu.visible = true
+		item_menu.focus_item_menu()
 	else:
 		pass
 

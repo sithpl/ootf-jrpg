@@ -1,0 +1,329 @@
+[gd_scene load_steps=4 format=3 uid="uid://bqeoj8ogaprno"]
+
+[ext_resource type="Texture2D" uid="uid://dc3abl7gyrlwq" path="res://Assets/UI/fantasy-ui-borders.svg" id="1_60joy"]
+[ext_resource type="Script" uid="uid://nbymmkl3s30c" path="res://GUI/EquipMenu.gd" id="1_jrtxd"]
+[ext_resource type="Texture2D" uid="uid://d0ltvewy1m2xb" path="res://Assets/Portraits/prt0104.png" id="2_jrtxd"]
+
+[node name="EquipMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -140.5
+offset_top = -90.0
+offset_right = 140.5
+offset_bottom = 90.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+script = ExtResource("1_jrtxd")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="MarginContainer"]
+layout_mode = 2
+color = Color(0, 0, 0, 1)
+
+[node name="HBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Top" type="NinePatchRect" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(47, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+texture = ExtResource("1_60joy")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 13
+patch_margin_top = 11
+patch_margin_right = 13
+patch_margin_bottom = 11
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/Top"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/Top/MarginContainer"]
+layout_mode = 2
+text = "Equip"
+horizontal_alignment = 1
+
+[node name="Middle" type="NinePatchRect" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("1_60joy")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 13
+patch_margin_top = 11
+patch_margin_right = 13
+patch_margin_bottom = 11
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/Middle"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -2.0
+offset_bottom = 3.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 6
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/Middle/MarginContainer"]
+layout_mode = 2
+
+[node name="EquipSlots" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Middle/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="MHand" type="Label" parent="MarginContainer/HBoxContainer/Middle/MarginContainer/HBoxContainer/EquipSlots"]
+layout_mode = 2
+text = "M.Hand:"
+
+[node name="OHand" type="Label" parent="MarginContainer/HBoxContainer/Middle/MarginContainer/HBoxContainer/EquipSlots"]
+layout_mode = 2
+text = "O.Hand:"
+
+[node name="Head" type="Label" parent="MarginContainer/HBoxContainer/Middle/MarginContainer/HBoxContainer/EquipSlots"]
+layout_mode = 2
+text = "Head:"
+
+[node name="Chest" type="Label" parent="MarginContainer/HBoxContainer/Middle/MarginContainer/HBoxContainer/EquipSlots"]
+layout_mode = 2
+text = "Chest:"
+
+[node name="Equipped" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Middle/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="MHand" type="Button" parent="MarginContainer/HBoxContainer/Middle/MarginContainer/HBoxContainer/Equipped"]
+layout_mode = 2
+text = "Old Sword"
+alignment = 0
+
+[node name="OHand" type="Button" parent="MarginContainer/HBoxContainer/Middle/MarginContainer/HBoxContainer/Equipped"]
+layout_mode = 2
+text = "Wooden Shield"
+alignment = 0
+
+[node name="Head" type="Button" parent="MarginContainer/HBoxContainer/Middle/MarginContainer/HBoxContainer/Equipped"]
+layout_mode = 2
+text = "Leather Helmet"
+alignment = 0
+
+[node name="Chest" type="Button" parent="MarginContainer/HBoxContainer/Middle/MarginContainer/HBoxContainer/Equipped"]
+layout_mode = 2
+text = "Worn Chainmail"
+alignment = 0
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/Middle/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 8
+size_flags_stretch_ratio = 3.0
+text = "Woofshank"
+horizontal_alignment = 2
+
+[node name="CharacterPortrait" type="TextureRect" parent="MarginContainer/HBoxContainer/Middle/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+texture = ExtResource("2_jrtxd")
+expand_mode = 2
+
+[node name="Bottom" type="NinePatchRect" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 1.9
+texture = ExtResource("1_60joy")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 13
+patch_margin_top = 11
+patch_margin_right = 13
+patch_margin_bottom = 11
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/Bottom"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer"]
+layout_mode = 2
+
+[node name="EquipItems" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.5
+
+[node name="Item" type="Button" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipItems"]
+layout_mode = 2
+text = "Item"
+alignment = 0
+
+[node name="EquipStats" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats"]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer"]
+layout_mode = 2
+
+[node name="CurrentStats" type="Label" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Current"
+horizontal_alignment = 1
+
+[node name="PostStats2" type="Label" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.2
+text = "After"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="CurrentStats" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HP" type="Label" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/CurrentStats"]
+layout_mode = 2
+text = "HP"
+horizontal_alignment = 2
+
+[node name="AP" type="Label" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/CurrentStats"]
+layout_mode = 2
+text = "AP"
+horizontal_alignment = 2
+
+[node name="ATK" type="Label" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/CurrentStats"]
+layout_mode = 2
+text = "ATK"
+horizontal_alignment = 2
+
+[node name="DEF" type="Label" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/CurrentStats"]
+layout_mode = 2
+text = "DEF"
+horizontal_alignment = 2
+
+[node name="MAG" type="Label" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/CurrentStats"]
+layout_mode = 2
+text = "MAG"
+horizontal_alignment = 2
+
+[node name="SPD" type="Label" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/CurrentStats"]
+layout_mode = 2
+text = "SPD"
+horizontal_alignment = 2
+
+[node name="CurrentStats#" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HP#" type="Label" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/CurrentStats#"]
+layout_mode = 2
+text = "99"
+
+[node name="AP#" type="Label" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/CurrentStats#"]
+layout_mode = 2
+text = "99"
+
+[node name="ATK#" type="Label" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/CurrentStats#"]
+layout_mode = 2
+text = "99"
+
+[node name="DEF#" type="Label" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/CurrentStats#"]
+layout_mode = 2
+text = "99"
+
+[node name="MAG#" type="Label" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/CurrentStats#"]
+layout_mode = 2
+text = "99"
+
+[node name="SPD#" type="Label" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/CurrentStats#"]
+layout_mode = 2
+text = "99"
+
+[node name="PostStats" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HP" type="Label" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/PostStats"]
+layout_mode = 2
+text = "HP"
+horizontal_alignment = 2
+
+[node name="AP" type="Label" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/PostStats"]
+layout_mode = 2
+text = "AP"
+horizontal_alignment = 2
+
+[node name="ATK" type="Label" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/PostStats"]
+layout_mode = 2
+text = "ATK"
+horizontal_alignment = 2
+
+[node name="DEF" type="Label" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/PostStats"]
+layout_mode = 2
+text = "DEF"
+horizontal_alignment = 2
+
+[node name="MAG" type="Label" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/PostStats"]
+layout_mode = 2
+text = "MAG"
+horizontal_alignment = 2
+
+[node name="SPD" type="Label" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/PostStats"]
+layout_mode = 2
+text = "SPD"
+horizontal_alignment = 2
+
+[node name="PostStats#" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HP#" type="Label" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/PostStats#"]
+layout_mode = 2
+text = "99"
+
+[node name="AP#" type="Label" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/PostStats#"]
+layout_mode = 2
+text = "99"
+
+[node name="ATK#" type="Label" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/PostStats#"]
+layout_mode = 2
+text = "99"
+
+[node name="DEF#" type="Label" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/PostStats#"]
+layout_mode = 2
+text = "99"
+
+[node name="MAG#" type="Label" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/PostStats#"]
+layout_mode = 2
+text = "99"
+
+[node name="SPD#" type="Label" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/PostStats#"]
+layout_mode = 2
+text = "99"
