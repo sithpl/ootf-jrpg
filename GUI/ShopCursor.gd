@@ -11,6 +11,7 @@ const OFFSET :Vector2 = Vector2(-18, -2) # Cursor offset from target
 
 var hide_timer : Timer = null
 var target :Node = null
+var suppress_next_move_sound: bool = false
 
 # Setup signals, timer, and hide on start
 func _ready():
@@ -37,8 +38,10 @@ func _on_viewport_gui_focus_changed(node: Control):
 	if node is BaseButton:
 		if hide_timer.is_stopped() == false:
 			hide_timer.stop()
-		if target != node and move_sound.stream:
-			move_sound.play()
+		if target != node:
+			if not suppress_next_move_sound and move_sound.stream:
+				move_sound.play()
+			suppress_next_move_sound = false # Reset after use
 		if target and target.tree_exiting.is_connected(_on_target_tree_exiting):
 			target.tree_exiting.disconnect(_on_target_tree_exiting)
 		target = node
@@ -46,8 +49,6 @@ func _on_viewport_gui_focus_changed(node: Control):
 		show()
 		set_process(true)
 	else:
-		if shop and shop.is_repopulating:
-			return # Ignore hiding during shop repopulation
 		hide_timer.start()
 		set_process(false)
 
@@ -78,8 +79,9 @@ func _set_target(node: Control) -> void:
 	global_position = target.global_position + OFFSET
 	show()
 	set_process(true)
-	if move_sound.stream:
+	if not suppress_next_move_sound and move_sound.stream:
 		move_sound.play()
+	suppress_next_move_sound = false
 
 # Hide cursor when timer runs out
 func _on_hide_timer_timeout():

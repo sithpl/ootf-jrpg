@@ -18,6 +18,11 @@ func _ready():
 	if not _world_map.is_connected("tile_transition_entered", Callable(self, "_on_overworld_tile_transition_entered")):
 		_world_map.connect("tile_transition_entered", Callable(self, "_on_overworld_tile_transition_entered"))
 
+func _input(event):
+	if event.is_action_pressed("ui_test_remove"): # bind this in Input Map to some key, e.g. "T"
+		PlayerInventory.remove_item("potion", 1)
+		PlayerInventory.print_inventory()
+
 func _unhandled_input(event):
 	if event.is_action_pressed("ui_cancel"):
 		if startui.item_menu.visible:
@@ -31,7 +36,7 @@ func _unhandled_input(event):
 			Globals.player.movement_locked = false
 			return
 
-	if event.is_action_pressed("ui_select"):
+	if event.is_action_pressed("ui_menu"):
 		if startui.item_menu.visible:
 			return  # Do nothing if inventory is open
 		elif startui.visible:

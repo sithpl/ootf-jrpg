@@ -1,20 +1,22 @@
-class_name InventoryMenu extends Control
+class_name ItemMenu extends Control
 
-@onready var item_menu : HBoxContainer = $MarginContainer/VBoxContainer/HBoxContainer/ItemMenu/MarginContainer/HBoxContainer
-@onready var use_button : Button = $MarginContainer/VBoxContainer/HBoxContainer/ItemMenu/MarginContainer/HBoxContainer/Use
-@onready var arrange_button: Button  = $MarginContainer/VBoxContainer/HBoxContainer/ItemMenu/MarginContainer/HBoxContainer/Arrange
-@onready var quest_button: Button  = $MarginContainer/VBoxContainer/HBoxContainer/ItemMenu/MarginContainer/HBoxContainer/Quest
+# ---------- TOP ----------
+@onready var item_menu        :HBoxContainer  = $MarginContainer/VBoxContainer/Top/ItemMenu/MarginContainer/HBoxContainer
+@onready var use_button       :Button         = $MarginContainer/VBoxContainer/Top/ItemMenu/MarginContainer/HBoxContainer/Use
+@onready var arrange_button   :Button         = $MarginContainer/VBoxContainer/Top/ItemMenu/MarginContainer/HBoxContainer/Arrange
+@onready var quest_button     :Button         = $MarginContainer/VBoxContainer/Top/ItemMenu/MarginContainer/HBoxContainer/Quest
 
-@onready var detail_label : Label = $MarginContainer/VBoxContainer/HBoxContainer2/NinePatchRect/MarginContainer/Detail
-@onready var total_items : Label = $MarginContainer/VBoxContainer/HBoxContainer2/NinePatchRect/MarginContainer/TotalItems
+# ---------- MIDDLE ----------
+@onready var detail_label     :Label          = $MarginContainer/VBoxContainer/Middle/ItemDetail/MarginContainer/Detail
+@onready var total_items      :Label          = $MarginContainer/VBoxContainer/Middle/ItemDetail/MarginContainer/TotalItems
 
-@onready var item_list : VBoxContainer = $MarginContainer/VBoxContainer/HBoxContainer3/NinePatchRect/MarginContainer/ItemList
-@onready var item_header_row : HBoxContainer = $MarginContainer/VBoxContainer/HBoxContainer3/NinePatchRect/MarginContainer/ItemList/ItemHeaderRow
-@onready var item_button : Button = $MarginContainer/VBoxContainer/HBoxContainer3/NinePatchRect/MarginContainer/ItemList/ItemHeaderRow/Item
-@onready var quantity_label : Label = $MarginContainer/VBoxContainer/HBoxContainer3/NinePatchRect/MarginContainer/ItemList/ItemHeaderRow/Qty
-@onready var type_label : Label = $MarginContainer/VBoxContainer/HBoxContainer3/NinePatchRect/MarginContainer/ItemList/ItemHeaderRow/Type
-
-@onready var use_menu : Control = $UseMenu
+# ---------- BOTTOM ----------
+@onready var item_list        :VBoxContainer  = $MarginContainer/VBoxContainer/Bottom/ItemList/MarginContainer/ItemList
+@onready var item_header_row  :HBoxContainer  = $MarginContainer/VBoxContainer/Bottom/ItemList/MarginContainer/ItemList/ItemHeaderRow
+@onready var item_button      :Button         = $MarginContainer/VBoxContainer/Bottom/ItemList/MarginContainer/ItemList/ItemHeaderRow/Item
+@onready var quantity_label   :Label          = $MarginContainer/VBoxContainer/Bottom/ItemList/MarginContainer/ItemList/ItemHeaderRow/Qty
+@onready var type_label       :Label          = $MarginContainer/VBoxContainer/Bottom/ItemList/MarginContainer/ItemList/ItemHeaderRow/Type
+@onready var use_menu         :Control        = $UseMenu
 
 var player_inventory: Node = null
 var selected_item_id = null
@@ -26,6 +28,7 @@ func _ready():
 	Item.register_items()
 	set_process(true)
 	set_process_unhandled_input(true)
+	use_menu.visible = false
 	for child in item_header_row.get_children():
 		if child is Control:
 			child.focus_mode = Control.FOCUS_NONE
@@ -82,7 +85,7 @@ func focus_item_menu():
 	populate_inventory_items(PlayerInventory.items)
 
 func _on_use_pressed():
-	print("InventoryMenu.gd/_on_use_pressed() called")
+	print("ItemMenu.gd/_on_use_pressed() called")
 	set_item_menu_focus_enabled(false)
 	set_item_buttons_focus_enabled(true)
 	if item_list.get_child_count() > 1:
@@ -112,7 +115,7 @@ func set_item_buttons_focus_enabled(enable: bool):
 				btn.focus_mode = Control.FOCUS_ALL if enable else Control.FOCUS_NONE
 
 func populate_inventory_items(inventory_dict: Dictionary) -> void:
-	print("InventoryMenu.gd/populate_inventory_items() called")
+	print("ItemMenu.gd/populate_inventory_items() called")
 	# Clear previous entries (leave header if present at 0)
 	for i in range(1, item_list.get_child_count()):
 		item_list.get_child(i).queue_free()
@@ -155,7 +158,7 @@ func populate_inventory_items(inventory_dict: Dictionary) -> void:
 		item_list.add_child(row)
 	
 	update_total_items()
-	print("InventoryMenu: item_list children count: ", item_list.get_child_count())
+	print("ItemMenu: item_list children count: ", item_list.get_child_count())
 
 func _on_inventory_item_focus_entered(item_id):
 	# Find which row this item is in, and store the index
