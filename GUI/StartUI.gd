@@ -1,16 +1,21 @@
 class_name StartUI extends CanvasLayer
 
-@onready var start_cursor : StartCursor = $StartMenu/StartCursor
-@onready var startui : StartUI = $"."
-@onready var start_menu : Control = $StartMenu
-@onready var item_menu : Control = $ItemMenu
-@onready var item_button : Button = $StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer/Item
-@onready var magic_button : Button = $StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer/Magic
-@onready var equip_button : Button = $StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer/Equip
-@onready var check_button : Button = $StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer/Check
-@onready var save_button : Button = $StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer/Save
-@onready var current_money_text : Label = $StartMenu/HBoxContainer/Left/VBoxContainer/Info/MarginContainer/VBoxContainer/HBoxContainer/Resource
-@onready var total_time_label : Label = $StartMenu/HBoxContainer/Left/VBoxContainer/Info/MarginContainer/VBoxContainer/Played/TotalTime
+@onready var start_cursor  :StartCursor = $StartMenu/StartCursor
+@onready var startui       :StartUI     = $"."
+@onready var start_menu    :Control     = $StartMenu
+
+@onready var item_button   :Button      = $StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer/Item
+@onready var item_menu     :Control     = $ItemMenu
+@onready var magic_button  :Button      = $StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer/Magic
+@onready var magic_menu    :Control     = $MagicMenu
+@onready var equip_button  :Button      = $StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer/Equip
+@onready var equip_menu    :Control     = $EquipMenu
+@onready var check_button  :Button      = $StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer/Check
+@onready var check_menu    :Control     = $CheckMenu
+@onready var save_button   :Button      = $StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer/Save
+
+@onready var current_money_text :Label = $StartMenu/HBoxContainer/Left/VBoxContainer/Info/MarginContainer/VBoxContainer/HBoxContainer/Resource
+@onready var total_time_label   :Label = $StartMenu/HBoxContainer/Left/VBoxContainer/Info/MarginContainer/VBoxContainer/Played/TotalTime
 
 const ItemMenu = preload("res://GUI/ItemMenu.tscn")
 

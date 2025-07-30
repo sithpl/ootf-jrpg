@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://bvm376786fbe4"]
 
-[ext_resource type="Script" uid="uid://cftufuyic7bs4" path="res://GUI/InventoryMenu.gd" id="1_byye0"]
+[ext_resource type="Script" uid="uid://cftufuyic7bs4" path="res://GUI/ItemMenu.gd" id="1_byye0"]
 [ext_resource type="Texture2D" uid="uid://dc3abl7gyrlwq" path="res://Assets/UI/fantasy-ui-borders.svg" id="1_ke5wp"]
 [ext_resource type="PackedScene" uid="uid://bnnptna5yk1l2" path="res://GUI/StartCursor.tscn" id="2_57by7"]
 [ext_resource type="PackedScene" uid="uid://dhg3uq88qs711" path="res://GUI/UseMenu.tscn" id="3_4m65y"]
@@ -42,11 +42,11 @@ color = Color(0, 0, 0, 1)
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="Top" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ItemTitle" type="NinePatchRect" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="ItemTitle" type="NinePatchRect" parent="MarginContainer/VBoxContainer/Top"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("1_ke5wp")
@@ -56,7 +56,7 @@ patch_margin_top = 11
 patch_margin_right = 13
 patch_margin_bottom = 11
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/ItemTitle"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/Top/ItemTitle"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -64,14 +64,14 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/ItemTitle/MarginContainer"]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Top/ItemTitle/MarginContainer"]
 layout_mode = 2
 size_flags_vertical = 1
 text = "Item"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ItemMenu" type="NinePatchRect" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="ItemMenu" type="NinePatchRect" parent="MarginContainer/VBoxContainer/Top"]
 custom_minimum_size = Vector2(218, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -83,7 +83,7 @@ patch_margin_top = 11
 patch_margin_right = 13
 patch_margin_bottom = 11
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/ItemMenu"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/Top/ItemMenu"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -91,30 +91,30 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/ItemMenu/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Top/ItemMenu/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/separation = 25
 
-[node name="Use" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/ItemMenu/MarginContainer/HBoxContainer"]
+[node name="Use" type="Button" parent="MarginContainer/VBoxContainer/Top/ItemMenu/MarginContainer/HBoxContainer"]
 layout_mode = 2
 text = "Use"
 
-[node name="Arrange" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/ItemMenu/MarginContainer/HBoxContainer"]
+[node name="Arrange" type="Button" parent="MarginContainer/VBoxContainer/Top/ItemMenu/MarginContainer/HBoxContainer"]
 layout_mode = 2
 text = "Arrange"
 
-[node name="Quest" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/ItemMenu/MarginContainer/HBoxContainer"]
+[node name="Quest" type="Button" parent="MarginContainer/VBoxContainer/Top/ItemMenu/MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Quest"
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="Middle" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 1.5
 
-[node name="NinePatchRect" type="NinePatchRect" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="ItemDetail" type="NinePatchRect" parent="MarginContainer/VBoxContainer/Middle"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("1_ke5wp")
@@ -124,7 +124,7 @@ patch_margin_top = 11
 patch_margin_right = 13
 patch_margin_bottom = 11
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/NinePatchRect"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/Middle/ItemDetail"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -132,23 +132,23 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Detail" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/NinePatchRect/MarginContainer"]
+[node name="Detail" type="Label" parent="MarginContainer/VBoxContainer/Middle/ItemDetail/MarginContainer"]
 layout_mode = 2
 size_flags_vertical = 1
 
-[node name="TotalItems" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/NinePatchRect/MarginContainer"]
+[node name="TotalItems" type="Label" parent="MarginContainer/VBoxContainer/Middle/ItemDetail/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 text = "9"
 horizontal_alignment = 2
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="Bottom" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 5.0
 
-[node name="NinePatchRect" type="NinePatchRect" parent="MarginContainer/VBoxContainer/HBoxContainer3"]
+[node name="ItemList" type="NinePatchRect" parent="MarginContainer/VBoxContainer/Bottom"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("1_ke5wp")
@@ -158,7 +158,7 @@ patch_margin_top = 11
 patch_margin_right = 13
 patch_margin_bottom = 11
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/NinePatchRect"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/Bottom/ItemList"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -169,25 +169,25 @@ theme_override_constants/margin_left = 25
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 25
 
-[node name="ItemList" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/NinePatchRect/MarginContainer"]
+[node name="ItemList" type="VBoxContainer" parent="MarginContainer/VBoxContainer/Bottom/ItemList/MarginContainer"]
 layout_mode = 2
 
-[node name="ItemHeaderRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/NinePatchRect/MarginContainer/ItemList"]
+[node name="ItemHeaderRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Bottom/ItemList/MarginContainer/ItemList"]
 layout_mode = 2
 
-[node name="Item" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer3/NinePatchRect/MarginContainer/ItemList/ItemHeaderRow"]
+[node name="Item" type="Button" parent="MarginContainer/VBoxContainer/Bottom/ItemList/MarginContainer/ItemList/ItemHeaderRow"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Item"
 alignment = 0
 
-[node name="Qty" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3/NinePatchRect/MarginContainer/ItemList/ItemHeaderRow"]
+[node name="Qty" type="Label" parent="MarginContainer/VBoxContainer/Bottom/ItemList/MarginContainer/ItemList/ItemHeaderRow"]
 custom_minimum_size = Vector2(23, 0)
 layout_mode = 2
 text = "Qty"
 horizontal_alignment = 1
 
-[node name="Type" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3/NinePatchRect/MarginContainer/ItemList/ItemHeaderRow"]
+[node name="Type" type="Label" parent="MarginContainer/VBoxContainer/Bottom/ItemList/MarginContainer/ItemList/ItemHeaderRow"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Type"

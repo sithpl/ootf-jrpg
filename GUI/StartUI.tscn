@@ -1,10 +1,13 @@
-[gd_scene load_steps=10 format=3 uid="uid://cydpksudso0b3"]
+[gd_scene load_steps=13 format=3 uid="uid://cydpksudso0b3"]
 
 [ext_resource type="Script" uid="uid://bapum88ceit1t" path="res://GUI/StartUI.gd" id="1_o1d1v"]
 [ext_resource type="Texture2D" uid="uid://dc3abl7gyrlwq" path="res://Assets/UI/fantasy-ui-borders.svg" id="1_yjgb0"]
 [ext_resource type="PackedScene" uid="uid://bnnptna5yk1l2" path="res://GUI/StartCursor.tscn" id="3_ugd75"]
 [ext_resource type="PackedScene" uid="uid://b6s7p1ad1nyx5" path="res://GUI/CharacterSlot.tscn" id="3_yx8do"]
-[ext_resource type="PackedScene" uid="uid://bvm376786fbe4" path="res://GUI/InventoryMenu.tscn" id="6_ecxfi"]
+[ext_resource type="PackedScene" uid="uid://bqeoj8ogaprno" path="res://GUI/EquipMenu.tscn" id="6_8b2wy"]
+[ext_resource type="PackedScene" uid="uid://h0pobwr6f8xf" path="res://GUI/MagicMenu.tscn" id="6_dfwa1"]
+[ext_resource type="PackedScene" uid="uid://bvm376786fbe4" path="res://GUI/ItemMenu.tscn" id="6_ecxfi"]
+[ext_resource type="PackedScene" uid="uid://c4c8fue8uht7l" path="res://GUI/CheckMenu.tscn" id="7_8b2wy"]
 
 [sub_resource type="Animation" id="Animation_ecxfi"]
 length = 0.001
@@ -270,5 +273,13 @@ libraries = {
 &"": SubResource("AnimationLibrary_dfwa1")
 }
 
-[node name="InventoryMenu" parent="." instance=ExtResource("6_ecxfi")]
+[node name="ItemMenu" parent="." instance=ExtResource("6_ecxfi")]
+visible = false
+
+[node name="MagicMenu" parent="." instance=ExtResource("6_dfwa1")]
+
+[node name="EquipMenu" parent="." instance=ExtResource("6_8b2wy")]
+visible = false
+
+[node name="CheckMenu" parent="." instance=ExtResource("7_8b2wy")]
 visible = false
