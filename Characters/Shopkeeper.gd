@@ -24,8 +24,15 @@ var shop_database := {
 		"animation_set": "female_villager_1",
 		"inventory": {
 			"old_sword": 2,
+			"iron_sword": 1,
+			"shiv": 1,
+			"long_stick": 1,
+			"goodsword": 1,
+			"worn_bow": 1,
 			"wooden_shield": 1,
-			"leather_helmet": 2
+			"leather_helmet": 4,
+			"linen_robes": 1,
+			"worn_chainmail": 3
 		}
 	},
 	"items": {
