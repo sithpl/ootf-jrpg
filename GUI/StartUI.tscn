@@ -136,26 +136,46 @@ layout_mode = 2
 
 [node name="Item" type="Button" parent="StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer"]
 layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath(".")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../Magic")
 text = "Item"
 alignment = 0
 
 [node name="Magic" type="Button" parent="StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer"]
 layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../Item")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../Equip")
 text = "Magic"
 alignment = 0
 
 [node name="Equip" type="Button" parent="StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer"]
 layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../Magic")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../Check")
 text = "Equip"
 alignment = 0
 
 [node name="Check" type="Button" parent="StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer"]
 layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../Equip")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../Save")
 text = "Check"
 alignment = 0
 
 [node name="Save" type="Button" parent="StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer"]
 layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../Check")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath(".")
 text = "Save"
 alignment = 0
 
@@ -250,9 +270,17 @@ layout_mode = 2
 
 [node name="CharacterSlot1" parent="StartMenu/HBoxContainer/Right/Characters" instance=ExtResource("3_yx8do")]
 layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath(".")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../CharacterSlot2")
 
 [node name="CharacterSlot2" parent="StartMenu/HBoxContainer/Right/Characters" instance=ExtResource("3_yx8do")]
 layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../CharacterSlot1")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../CharacterSlot3")
 
 [node name="CharacterSlot3" parent="StartMenu/HBoxContainer/Right/Characters" instance=ExtResource("3_yx8do")]
 layout_mode = 2

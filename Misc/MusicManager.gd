@@ -7,23 +7,23 @@ extends Node
 enum ThemeType { START, ZONE, INTRO, TOWN, SHOP, BATTLE, BOSS, SPECIAL, VICTORY, GAMEOVER }
 
 # Variables
-var interact_sfx          :String = "res://Assets/Audio/UI/interact_sfx.wav"
-var start_theme           :String = "res://Assets/Audio/UI/start_theme.wav"
-var zone_theme            :String = "res://Assets/Audio/zone_theme.wav"
-var intro_theme           :String = "res://Assets/Audio/Battle/intro_theme.wav"
-var town_theme            :String = "res://Assets/Audio/town_theme.wav"
-var shop_theme            :String = "res://Assets/Audio/shop_theme.wav"
-var battle_theme          :String = "res://Assets/Audio/Battle/battle_theme.wav"
-var boss_theme            :String = "res://Assets/Audio/Battle/boss_theme.wav"
-var special_theme         :String = "res://Assets/Audio/Battle/special_theme.wav"
-var victory_theme         :String = "res://Assets/Audio/Battle/victory_theme.wav"
-var gameover_theme        :String = "res://Assets/Audio/Battle/gameover_theme.wav"
+var interact_sfx          :String   = "res://Assets/Audio/UI/interact_sfx.wav"
+var start_theme           :String   = "res://Assets/Audio/UI/start_theme.wav"
+var zone_theme            :String   = "res://Assets/Audio/zone_theme.wav"
+var intro_theme           :String   = "res://Assets/Audio/Battle/intro_theme.wav"
+var town_theme            :String   = "res://Assets/Audio/town_theme.wav"
+var shop_theme            :String   = "res://Assets/Audio/shop_theme.wav"
+var battle_theme          :String   = "res://Assets/Audio/Battle/battle_theme.wav"
+var boss_theme            :String   = "res://Assets/Audio/Battle/boss_theme.wav"
+var special_theme         :String   = "res://Assets/Audio/Battle/special_theme.wav"
+var victory_theme         :String   = "res://Assets/Audio/Battle/victory_theme.wav"
+var gameover_theme        :String   = "res://Assets/Audio/Battle/gameover_theme.wav"
 
-var current_theme_type    :int    = -1
-var current_theme_path    :String = ""
-var current_theme         :String = ""
-var _last_theme_position  :float  = 0.0
-var _is_paused            :bool   = false
+var current_theme_type    :int      = -1
+var current_theme_path    :String   = ""
+var current_theme         :String   = ""
+var _last_theme_position  :float    = 0.0
+var _is_paused            :bool     = false
 
 # For pausing/resuming when entering shop
 var previous_theme_type: int = -1
