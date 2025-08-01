@@ -62,6 +62,7 @@ func _ready():
 		slots[i].slot_index = i  # Assign slot index
 		slots[i].connect("character_selected", Callable(self, "_on_character_slot_selected"))
 	if equip_menu:
+		equip_menu.connect("equipment_changed", Callable(self, "_on_equipment_changed"))
 		equip_menu.connect("cancel_pressed", Callable(self, "_on_equipmenu_cancel"))
 	print("Menu: ", menu_state)
 
@@ -126,7 +127,35 @@ func update_character_slots():
 			var char_data = Data.characters[char_name]
 			var actor = party[i]
 			var portrait_path = char_data.get("portrait", "")
-			slot.set_character(char_name, portrait_path, actor.base_hp, actor.hp_max, actor.base_ap, actor.ap_max, actor.attack, actor.defense, actor.magic, actor.speed)
+
+			# --- NEW CODE: Apply equipment bonuses for menu preview ---
+			var eq = PlayerInventory.get_equipment_for(char_name)
+			var temp_actor = {
+				"base_hp": actor.base_hp,
+				"hp_max": actor.hp_max,
+				"base_ap": actor.base_ap,
+				"ap_max": actor.ap_max,
+				"attack": actor.attack,
+				"defense": actor.defense,
+				"magic": actor.magic,
+				"speed": actor.speed
+			}
+			PlayerInventory.apply_equipment_bonuses(temp_actor, eq)
+			# ---------------------------------------------------------
+
+			# Use the augmented stats for display
+			slot.set_character(
+				char_name,
+				portrait_path,
+				temp_actor.base_hp,
+				temp_actor.hp_max,
+				temp_actor.base_ap,
+				temp_actor.ap_max,
+				temp_actor.attack,
+				temp_actor.defense,
+				temp_actor.magic,
+				temp_actor.speed
+			)
 		else:
 			slot.set_character("", "", 0, 0, 0, 0, 0)
 
@@ -224,3 +253,6 @@ func _on_check_pressed():
 func _on_save_pressed():
 	print("StartUI.gd/_on_save_pressed() called")
 	#menu_state = "save_menu"
+
+func _on_equipment_changed():
+	update_character_slots()

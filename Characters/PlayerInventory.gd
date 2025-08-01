@@ -3,7 +3,7 @@ extends Node
 signal money_changed
 
 # Stores items by item_id and count
-var items := {"potion": 5, "ether": 3, "antidote": 2, "old_sword": 1, "wooden_shield": 1,"leather_helmet": 1, "worn_chainmail": 1} # {item_id: count}
+var items := {"potion": 5, "ether": 3, "antidote": 2} # {item_id: count}
 var money = 2000 # TODO Implement money system
 
 # Example: {"Cracker": {"M.Hand": "old_sword", ...}, ...}
@@ -70,7 +70,38 @@ func get_all_items() -> Array:
 
 func equip_item(name: String, slot: String, item_id: String) -> void:
 	var eq = get_equipment_for(name)
-	eq[slot] = item_id
+	var old_item = eq.get(slot, null)
+	var new_item = Item.get_item(item_id)
+	var is_two_handed = new_item != null and new_item.two_handed
+
+	# --- Handle Two-Handed Logic ---
+	if slot == "M.Hand" and is_two_handed:
+		# If offhand has an item, unequip it and return to inventory
+		var old_offhand = eq.get("O.Hand", null)
+		if old_offhand and old_offhand != "":
+			add_item(old_offhand, 1)
+			eq["O.Hand"] = null
+	elif slot == "O.Hand":
+		var mainhand_item_id = eq.get("M.Hand", null)
+		var mainhand_item = Item.get_item(mainhand_item_id)
+		if mainhand_item and mainhand_item.two_handed:
+			# Can't equip offhand if mainhand is two-handed; option 1: block, option 2: auto-unequip
+			add_item(mainhand_item_id, 1)
+			eq["M.Hand"] = null
+
+	# --- Usual equip/unequip logic ---
+	if old_item == item_id or (old_item == null and (item_id == "" or item_id == null)):
+		set_equipment_for(name, eq)
+		return
+
+	if old_item and old_item != "":
+		add_item(old_item, 1)
+	if item_id and item_id != "":
+		remove_item(item_id, 1)
+		eq[slot] = item_id
+	else:
+		eq[slot] = null
+
 	set_equipment_for(name, eq)
 
 func get_equipment_for(name: String) -> Dictionary:
@@ -79,8 +110,8 @@ func get_equipment_for(name: String) -> Dictionary:
 	# Return empty equipment slots for new characters
 	return {"M.Hand": null, "O.Hand": null, "Head": null, "Chest": null}
 
-func set_equipment_for(name: String, equipment: Dictionary) -> void:
-	equipment[name] = equipment.duplicate()
+func set_equipment_for(name: String, eq: Dictionary) -> void:
+	equipment[name] = eq.duplicate()
 
 func apply_equipment_bonuses(actor, equipment: Dictionary) -> void:
 	if not equipment:

@@ -207,11 +207,10 @@ layout_mode = 2
 [node name="CurrentStats" type="Label" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Stats"
+text = "Current"
 horizontal_alignment = 1
 
 [node name="PostStats2" type="Label" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer2"]
-visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 1.2
@@ -285,7 +284,6 @@ layout_mode = 2
 text = "99"
 
 [node name="PostStats" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer"]
-visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -320,7 +318,6 @@ text = "SPD"
 horizontal_alignment = 2
 
 [node name="PostStats#" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer"]
-visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 
