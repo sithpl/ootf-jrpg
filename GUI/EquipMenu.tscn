@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://bqeoj8ogaprno"]
+[gd_scene load_steps=5 format=3 uid="uid://bqeoj8ogaprno"]
 
 [ext_resource type="Texture2D" uid="uid://dc3abl7gyrlwq" path="res://Assets/UI/fantasy-ui-borders.svg" id="1_60joy"]
 [ext_resource type="Script" uid="uid://nbymmkl3s30c" path="res://GUI/EquipMenu.gd" id="1_jrtxd"]
 [ext_resource type="Texture2D" uid="uid://d0ltvewy1m2xb" path="res://Assets/Portraits/prt0104.png" id="2_jrtxd"]
+[ext_resource type="PackedScene" uid="uid://bnnptna5yk1l2" path="res://GUI/StartCursor.tscn" id="4_eot2w"]
 
 [node name="EquipMenu" type="Control"]
 layout_mode = 3
@@ -112,25 +113,41 @@ theme_override_constants/separation = 2
 
 [node name="MHand" type="Button" parent="MarginContainer/HBoxContainer/Middle/MarginContainer/HBoxContainer/Equipped"]
 layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath(".")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../OHand")
 text = "Old Sword"
 alignment = 0
 
 [node name="OHand" type="Button" parent="MarginContainer/HBoxContainer/Middle/MarginContainer/HBoxContainer/Equipped"]
 layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../MHand")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../Head")
 text = "Wooden Shield"
 alignment = 0
 
 [node name="Head" type="Button" parent="MarginContainer/HBoxContainer/Middle/MarginContainer/HBoxContainer/Equipped"]
 layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../OHand")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../Chest")
 text = "Leather Helmet"
 alignment = 0
 
 [node name="Chest" type="Button" parent="MarginContainer/HBoxContainer/Middle/MarginContainer/HBoxContainer/Equipped"]
 layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../Head")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath(".")
 text = "Worn Chainmail"
 alignment = 0
 
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/Middle/MarginContainer/HBoxContainer"]
+[node name="CharacterName" type="Label" parent="MarginContainer/HBoxContainer/Middle/MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 8
@@ -327,3 +344,10 @@ text = "99"
 [node name="SPD#" type="Label" parent="MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/PostStats#"]
 layout_mode = 2
 text = "99"
+
+[node name="StartCursor" parent="." instance=ExtResource("4_eot2w")]
+layout_mode = 0
+offset_left = 35.5
+offset_top = 30.0
+offset_right = 67.5
+offset_bottom = 62.0

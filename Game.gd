@@ -19,9 +19,34 @@ func _ready():
 		_world_map.connect("tile_transition_entered", Callable(self, "_on_overworld_tile_transition_entered"))
 
 func _input(event):
-	if event.is_action_pressed("ui_test_remove"): # bind this in Input Map to some key, e.g. "T"
-		PlayerInventory.remove_item("potion", 1)
-		PlayerInventory.print_inventory()
+	if event.is_action_pressed("ui_test_add"): # bind this in Input Map to some key, e.g. "T"
+		PlayerInventory.equipment["Cracker"] = {"M.Hand": "old_sword", "O.Hand": "wooden_shield", "Head": "leather_helmet", "Chest": "worn_chainmail"}
+		PlayerInventory.equipment["Kanili"] = {"M.Hand": null, "O.Hand": null, "Head": "leather_helmet", "Chest": "worn_chainmail"}
+		PlayerInventory.equipment["Dan"] = {"M.Hand": "long_stick", "O.Hand": null, "Head": null, "Chest": "linen_robes"}
+		PlayerInventory.equipment["Woofshank"] = {"M.Hand": "old_sword", "O.Hand": null, "Head": "leather_helmet", "Chest": null}
+		Data.rebuild_party()
+		print("Cracker: ", PlayerInventory.get_equipment_for("Cracker"))
+		print("Kanili: ", PlayerInventory.get_equipment_for("Kanili"))
+		print("Dan: ", PlayerInventory.get_equipment_for("Dan"))
+		print("Woofshank: ", PlayerInventory.get_equipment_for("Woofshank"))
+		#print("Cracker's ATK:", Data.party[0].attack)
+		#print("Cracker's DEF:", Data.party[0].defense)
+		#print("Cracker's MAG:", Data.party[0].magic)
+		#print("Cracker's SPD:", Data.party[0].speed)
+	if event.is_action_pressed("ui_test_remove"):
+		PlayerInventory.equipment["Cracker"] = {"M.Hand": null, "O.Hand": null, "Head": null, "Chest": null}
+		PlayerInventory.equipment["Kanili"] = {"M.Hand": null, "O.Hand": null, "Head": null, "Chest": null}
+		PlayerInventory.equipment["Dan"] = {"M.Hand": null, "O.Hand": null, "Head": null, "Chest": null}
+		PlayerInventory.equipment["Woofshank"] = {"M.Hand": null, "O.Hand": null, "Head": null, "Chest": null}
+		Data.rebuild_party()
+		print("Cracker: ", PlayerInventory.get_equipment_for("Cracker"))
+		print("Kanili: ", PlayerInventory.get_equipment_for("Kanili"))
+		print("Dan: ", PlayerInventory.get_equipment_for("Dan"))
+		print("Woofshank: ", PlayerInventory.get_equipment_for("Woofshank"))
+		#print("Cracker's ATK:", Data.party[0].attack)
+		#print("Cracker's DEF:", Data.party[0].defense)
+		#print("Cracker's MAG:", Data.party[0].magic)
+		#print("Cracker's SPD:", Data.party[0].speed)
 
 func _unhandled_input(event):
 	if event.is_action_pressed("ui_cancel"):
@@ -30,12 +55,11 @@ func _unhandled_input(event):
 			startui.open_menu()
 			startui.item_button.grab_focus()
 			return
-		elif startui.visible:
-			startui.close_menu()
-			TextUi.visible = true
-			Globals.player.movement_locked = false
-			return
-
+		#elif startui.visible:
+			#startui.close_menu()
+			#TextUi.visible = true
+			#Globals.player.movement_locked = false
+			#return
 	if event.is_action_pressed("ui_menu"):
 		if startui.item_menu.visible:
 			return  # Do nothing if inventory is open

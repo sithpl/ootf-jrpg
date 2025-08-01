@@ -347,11 +347,14 @@ func create_character(name: String) -> BattleActor:
 
 # Rebuilds the party array from the party_keys list
 func rebuild_party() -> void:
-	#DEBUG print("Data.gd/rebuild_party() called")
 	party.clear()
-	for name in party_keys:
-		party.append(create_character(name))
-	# After building, set the global player_actor reference
+	for i in range(party_keys.size()):
+		var name = party_keys[i]
+		var actor = create_character(name)
+		var equipment = PlayerInventory.get_equipment_for(name)
+		PlayerInventory.apply_equipment_bonuses(actor, equipment)
+		actor.friendly = true   # <--- ADD THIS LINE
+		party.append(actor)
 	if party.size() > 0:
 		Globals.player_actor = party[0]
 
