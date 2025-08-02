@@ -1,22 +1,25 @@
-
 ---------- NEXT STEPS ----------
 
-Basic overworld map -> DONE
-4 way movement (maybe even don't do animations yet) -> DONE
-1 town -> DONE
+Implement Speed (SPD) and Defense (DEF) in Battle
+- SPD = faster turns
+- DEF = damage mitigation (ATK vs DEF)
+
 1 instance
 1 boss
 
-Simple NPCs
-Simple NPC interactions (press button, say thing)
+1 skill
+
+---------- FUTURE STEPS ----------
+
+Implement Magic (MAG) in Battle
+- MAG = Alternate ATK stat for magic users (more damage, more healing, etc.)
 
 ---------- ISSUES ----------
 
-HitText doesn't always display correct damage compared to Catalogable
-- "Sith attacks Skeleton for 6 damage!" -> HitText shows 5
-- Maybe due to bonus calculation?
-
-FIXED -> HitText was showing the amount the enemy was taking up to it's full health, change the method to include potential damage
+- Pressing M while in any sub-menu (Equip, Item, etc.) causes StartUI to blank out entirely
+- Buying out stock on the last listed item in BuyList causes the ShopCursor to get stuck where the old item button was (pressing ui_cancel can help reset the ShopUI)
+- StartCursor gets stuck on UseMenu after using an item in ItemMenu
+- Pressing ui_cancel at StartUI doesn't close menu
 
 ---------- CLASS IDEAS ----------
 

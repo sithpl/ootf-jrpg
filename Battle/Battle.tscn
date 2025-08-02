@@ -141,6 +141,11 @@ script = ExtResource("5_c5ef4")
 
 [node name="PlayerButton" parent="Players" instance=ExtResource("3_1samx")]
 layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
 offset_left = 4.0
 offset_top = 4.0
 offset_right = 24.0
@@ -149,7 +154,6 @@ stretch_mode = 5
 
 [node name="PlayerButton2" parent="Players" instance=ExtResource("3_1samx")]
 layout_mode = 1
-anchors_preset = -1
 anchor_left = 0.134615
 anchor_right = 0.134615
 offset_left = 18.0
@@ -161,6 +165,11 @@ metadata/_edit_use_anchors_ = true
 
 [node name="PlayerButton3" parent="Players" instance=ExtResource("3_1samx")]
 layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
 offset_left = 4.0
 offset_top = 44.0
 offset_right = 24.0
@@ -169,6 +178,11 @@ stretch_mode = 5
 
 [node name="PlayerButton4" parent="Players" instance=ExtResource("3_1samx")]
 layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
 offset_left = 25.0
 offset_top = 64.0
 offset_right = 45.0

@@ -5,8 +5,15 @@
 [ext_resource type="SpriteFrames" uid="uid://dlwgqi40acwwm" path="res://Assets/Animations/Battle_Player.tres" id="3_ko5nr"]
 
 [node name="PlayerButton" type="TextureButton"]
-offset_right = 15.0
-offset_bottom = 18.0
+anchors_preset = -1
+anchor_left = 0.023
+anchor_top = 0.05
+anchor_right = 0.023
+anchor_bottom = 0.05
+offset_left = -7.36
+offset_top = -9.0
+offset_right = 7.64
+offset_bottom = 9.0
 flip_h = true
 script = ExtResource("2_hrsdt")
 
