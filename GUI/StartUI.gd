@@ -7,8 +7,8 @@ class_name StartUI extends CanvasLayer
 
 @onready var item_button   :Button        = $StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer/Item
 @onready var item_menu     :Control       = $ItemMenu
-@onready var magic_button  :Button        = $StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer/Magic
-@onready var magic_menu    :Control       = $MagicMenu
+@onready var skill_button  :Button        = $StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer/Skill
+@onready var skill_menu    :Control       = $SkillMenu
 @onready var equip_button  :Button        = $StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer/Equip
 @onready var char_list     :VBoxContainer = $StartMenu/HBoxContainer/Right/Characters
 @onready var char_slot1     :Button        = $StartMenu/HBoxContainer/Right/Characters/CharacterSlot1/Button
@@ -54,7 +54,7 @@ func _ready():
 		item_menu.hide()
 	PlayerInventory.connect("money_changed", Callable(self, "get_current_money"))
 	item_button.connect("pressed", Callable(self, "_on_item_pressed"))
-	magic_button.connect("pressed", Callable(self, "_on_magic_pressed"))
+	skill_button.connect("pressed", Callable(self, "_on_skill_pressed"))
 	equip_button.connect("pressed", Callable(self, "_on_equip_pressed"))
 	check_button.connect("pressed", Callable(self, "_on_check_pressed"))
 	save_button.connect("pressed", Callable(self, "_on_save_pressed"))
@@ -84,7 +84,7 @@ func open_menu():
 	menu_state = "main"
 	item_menu.visible = false
 	equip_menu.visible = false
-	magic_menu.visible = false
+	skill_menu.visible = false
 	check_menu.visible = false
 	startui.visible = true
 	start_menu.modulate = Color(1,1,1,1)
@@ -171,8 +171,8 @@ func _on_item_pressed():
 		pass
 	print("Menu: ", menu_state)
 
-func _on_magic_pressed():
-	print("StartUI.gd/_on_magic_pressed() called")
+func _on_skill_pressed():
+	print("StartUI.gd/_on_skill_pressed() called")
 	#menu_state = "magic_menu"
 
 func _on_equip_pressed():

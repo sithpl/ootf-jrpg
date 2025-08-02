@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=3 uid="uid://h0pobwr6f8xf"]
 
-[ext_resource type="Script" uid="uid://de8bqtgaetueb" path="res://GUI/MagicMenu.gd" id="1_8v23t"]
+[ext_resource type="Script" uid="uid://de8bqtgaetueb" path="res://GUI/SkillMenu.gd" id="1_hkw7m"]
 
-[node name="MagicMenu" type="Control"]
+[node name="SkillMenu" type="Control"]
 visible = false
 layout_mode = 3
 anchor_left = 0.498
@@ -13,4 +13,4 @@ offset_left = -140.36
 offset_top = -90.0
 offset_right = 140.0
 offset_bottom = 90.0
-script = ExtResource("1_8v23t")
+script = ExtResource("1_hkw7m")

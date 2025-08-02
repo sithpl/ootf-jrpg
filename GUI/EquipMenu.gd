@@ -200,6 +200,7 @@ func _on_equip_item_selected(item_id):
 	original_equipment = PlayerInventory.get_equipment_for(current_character_name).duplicate()
 	set_equipment_buttons(current_character_name)
 	_update_post_stats()
+	Data.rebuild_party()
 	item_list_active = false
 	_hide_equip_items_panel()
 	_grab_slot_btn_focus()

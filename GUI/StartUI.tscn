@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://bnnptna5yk1l2" path="res://GUI/StartCursor.tscn" id="3_ugd75"]
 [ext_resource type="PackedScene" uid="uid://b6s7p1ad1nyx5" path="res://GUI/CharacterSlot.tscn" id="3_yx8do"]
 [ext_resource type="PackedScene" uid="uid://bqeoj8ogaprno" path="res://GUI/EquipMenu.tscn" id="6_8b2wy"]
-[ext_resource type="PackedScene" uid="uid://h0pobwr6f8xf" path="res://GUI/MagicMenu.tscn" id="6_dfwa1"]
+[ext_resource type="PackedScene" uid="uid://h0pobwr6f8xf" path="res://GUI/SkillMenu.tscn" id="6_dfwa1"]
 [ext_resource type="PackedScene" uid="uid://bvm376786fbe4" path="res://GUI/ItemMenu.tscn" id="6_ecxfi"]
 [ext_resource type="PackedScene" uid="uid://c4c8fue8uht7l" path="res://GUI/CheckMenu.tscn" id="7_8b2wy"]
 
@@ -139,23 +139,23 @@ layout_mode = 2
 focus_neighbor_left = NodePath(".")
 focus_neighbor_top = NodePath(".")
 focus_neighbor_right = NodePath(".")
-focus_neighbor_bottom = NodePath("../Magic")
+focus_neighbor_bottom = NodePath("../Skill")
 text = "Item"
 alignment = 0
 
-[node name="Magic" type="Button" parent="StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer"]
+[node name="Skill" type="Button" parent="StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer"]
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
 focus_neighbor_top = NodePath("../Item")
 focus_neighbor_right = NodePath(".")
 focus_neighbor_bottom = NodePath("../Equip")
-text = "Magic"
+text = "Skill"
 alignment = 0
 
 [node name="Equip" type="Button" parent="StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer"]
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
-focus_neighbor_top = NodePath("../Magic")
+focus_neighbor_top = NodePath("../Skill")
 focus_neighbor_right = NodePath(".")
 focus_neighbor_bottom = NodePath("../Check")
 text = "Equip"
@@ -304,7 +304,7 @@ libraries = {
 [node name="ItemMenu" parent="." instance=ExtResource("6_ecxfi")]
 visible = false
 
-[node name="MagicMenu" parent="." instance=ExtResource("6_dfwa1")]
+[node name="SkillMenu" parent="." instance=ExtResource("6_dfwa1")]
 
 [node name="EquipMenu" parent="." instance=ExtResource("6_8b2wy")]
 visible = false

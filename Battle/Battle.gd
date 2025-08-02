@@ -111,7 +111,7 @@ func _start_battle() -> void:
 	
 	 #1) Play battle theme
 	MusicManager.play_type_theme(MusicManager.ThemeType.BATTLE)
-
+	
 	turn_order.clear()
 	# 1) All players are guaranteed valid
 	for p in Data.party:
