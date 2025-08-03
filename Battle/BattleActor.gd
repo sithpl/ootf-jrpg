@@ -64,7 +64,8 @@ func duplicate_custom():
 	dup.copy_from(self)
 	dup.set_name_custom(name) # <- triggers texture loading for enemies
 	dup.resource_name = name
-	print(name, " : ", xp)
+	#DEBUG print("BattleActor.gd/duplicate_custom: ")
+	#DEBUG print("name, " : ", xp")
 	return dup
 
 # Copy all properties from another BattleActor
