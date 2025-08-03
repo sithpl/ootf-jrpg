@@ -22,9 +22,10 @@ func _ready():
 func _unhandled_input(event):
 	#DEBUG print("UseMenu _unhandled_input got event:", event)
 	if event.is_action_pressed("ui_down") or event.is_action_pressed("ui_up"):
-		print("Focus owner is now:", get_viewport().gui_get_focus_owner())
+		#DEBUG print("UseMenu.gd/_unhandled_input -> Focus owner is now: ", get_viewport().gui_get_focus_owner())
+		pass
 	if event.is_action_pressed("ui_cancel") and self.visible:
-		print("ui_cancel pressed in UseMenu!")
+		#DEBUG print("UseMenu.gd/_unhandled_input -> ui_cancel pressed in UseMenu!")
 		emit_signal("cancelled")
 		get_viewport().set_input_as_handled()
 
@@ -93,5 +94,5 @@ func _on_member_selected(member, button):
 		populate_party_members()
 
 func _on_button_focus_entered(button):
-	print("Focus entered:", button.text)
+	#DEBUG print("UseMenu.gd/_on_button_focus_entered -> Focus entered: ", button.text)
 	start_cursor.global_position = button.global_position

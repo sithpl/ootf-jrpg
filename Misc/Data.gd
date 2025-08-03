@@ -43,8 +43,8 @@ var mobs                  :Array                = enemies.values()
 static var enemies: Dictionary = {
 	"Skeleton"          :BattleActor.new( 2, 2, 5, 10, 1, 1, 2, 2 ),
 	"Slime Green"       :BattleActor.new( 1, 1, 1, 5, 1, 1, 1, 1 ),
-	"Orc Rider"         :BattleActor.new( 1, 1, 20, 5, 10, 1, 1, 1 ),
-	"Orc Elite"         :BattleActor.new( 1, 1, 25, 5, 15, 1, 1, 1 ),
+	"Orc Rider"         :BattleActor.new( 1, 1, 20, 5, 8, 1, 1, 5 ),
+	"Orc Elite"         :BattleActor.new( 1, 1, 25, 5, 10, 1, 1, 10 ),
 	"Skeleton GS"       :BattleActor.new( 1, 1, 1, 5, 1, 1, 1, 1 ),
 	"Clown"             :BattleActor.new( 1, 1, 1, 5, 1, 1, 1, 1 ),
 }

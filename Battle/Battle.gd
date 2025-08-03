@@ -37,6 +37,7 @@ var action                        :Actions            = Actions.FIGHT
 var action_log                    :Array[String]      = []
 var EnemyButtonScene              :PackedScene        = preload("res://Battle/EnemyButton.tscn")
 var _enemy_info_nodes             :Array[Label]       = []
+var battle_enemies: Array = []
 
 # Called when the scene is ready
 func _ready():
@@ -105,24 +106,48 @@ func _play_intro() -> void:
 	_gui.show()
 	_start_battle()
 
+# Sort Speed in decending order
+func compare_actor_speed(a: BattleActor, b: BattleActor) -> bool:
+	#DEBUG print("Battle.gd/compare_actor_speed() called")
+	if a.speed != b.speed: 
+		return a.speed > b.speed  # Descending by Speed
+	else:
+		return a.name < b.name    # If Speed is even, sort ascending by Name
+
+# Sorts all living actors by Speed (descending) at the start of each round
+func _calculate_turn_order():
+	#DEBUG print("Battle.gd/_calculate_turn_order() called")
+	# Before calculating
+	print("=== Party Members at start of battle ===")
+	for p in Data.party:
+		print("%s SPD: %d" % [p.name, p.speed])
+	print("=== Enemies at start of battle ===")
+	for e in battle_enemies:
+		print("%s SPD: %d" % [e.name, e.speed])
+
+	var all_actors: Array[BattleActor] = []
+	for p in Data.party:
+		if p.has_hp():
+			all_actors.append(p)
+			#DEBUG print("Party member: %s SPD: %d" % [p.name, p.speed])
+	for enemy in battle_enemies:
+		if enemy.has_hp():
+			all_actors.append(enemy)
+			#DEBUG print("Enemy: %s SPD: %d" % [enemy.name, enemy.speed])
+	all_actors.sort_custom(Callable(self, "compare_actor_speed"))
+	turn_order = all_actors.duplicate()
+	current_turn_idx = 0
+
+	# After calculating
+	print("=== Calculated Turn Order ===")
+	for actor in turn_order:
+		print("%s SPD: %d" % [actor.name, actor.speed])
+
 # Begins the main battle loop, sets turn order, starts first turn
 func _start_battle() -> void:
 	#DEBUG print("Battle.gd/_start_battle() called")
-	
-	 #1) Play battle theme
 	MusicManager.play_type_theme(MusicManager.ThemeType.BATTLE)
-	
-	turn_order.clear()
-	# 1) All players are guaranteed valid
-	for p in Data.party:
-		turn_order.append(p)
-
-	# 2) Only append enemy.data if it's non-null
-	for btn in _enemies_menu.get_buttons():
-		if btn.data != null:
-			turn_order.append(btn.data)
-	current_turn_idx = 0
-
+	_calculate_turn_order()
 	_gui.show()
 	_next_turn()
 
@@ -306,10 +331,12 @@ func _resolve_action(actor: BattleActor, target: BattleActor, act: Actions) -> v
 	
 # Moves to the next actor in the turn order
 func _advance_index() -> void:
-	#DEBUG print("Battle.gd/_advance_index() called")
 	if turn_order.size() == 0:
 		return
-	current_turn_idx = (current_turn_idx + 1) % turn_order.size()
+	current_turn_idx += 1
+	if current_turn_idx >= turn_order.size():
+		# End of round, start new round and re-calculate turn order
+		_calculate_turn_order()
 
 # Checks if the battle should end (victory/defeat), returns true if so
 func _check_end() -> bool:
@@ -451,7 +478,9 @@ func _spawn_random_enemies(requested_count: int) -> void:
 		actors = Data.get_random_enemies_from_weighted(requested_count, enemies_weighted)
 	else:
 		actors = Data.get_random_enemies(requested_count)
-
+	
+	battle_enemies = actors.duplicate()
+	
 	for i in range(_enemy_slots.size()):
 		var slot = _enemy_slots[i]
 		slot.focus_mode = Control.FOCUS_ALL

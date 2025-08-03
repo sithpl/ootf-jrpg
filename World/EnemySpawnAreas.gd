@@ -16,7 +16,7 @@ func _ready():
 	hide()
 
 func get_enemies_weighted_at_cell(pos: Vector2) -> Array:
-	print("EnemySpawnAreas.gd/get_enemies_weighted_at_cell() called")
+	#DEBUG print("EnemySpawnAreas.gd/get_enemies_weighted_at_cell() called")
 	var cell : Vector2 = local_to_map(pos)
 	var autotile_width : int = 4
 	var autotile_coord : Vector2i = get_cell_atlas_coords(Vector2i(int(cell.x), int(cell.y)))

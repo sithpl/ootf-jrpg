@@ -35,14 +35,14 @@ func _on_player_moved(pos: Vector2, run_factor: float) -> void:
 		_danger.countdown(_main_map.get_threat_level(pos) * run_factor)
 
 func _on_danger_limit_reached() -> void:
-	print("Overworld.gd/on_danger_limit_reached() called")
+	#DEBUG print("Overworld.gd/on_danger_limit_reached() called")
 	var enemies_weighted : Array = _enemy_spawn_areas.get_enemies_weighted_at_cell(_player.position)
 	if enemies_weighted == null or enemies_weighted.size() == 0:
 		print("No encounters available on this tile. Pausing danger counter.")
 		_danger_paused = true
 		return
 	emit_signal("enemy_encountered", enemies_weighted)
-	print("signal -> enemy_encountered emitted!")
+	#DEBUG print("Overworld.gd/_on_danger_limit_reached -> Signal: enemy_encountered emitted!")
 	#DEBUG print(enemies_weighted)
 
 func overworld_entrance():

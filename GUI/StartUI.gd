@@ -64,7 +64,7 @@ func _ready():
 	if equip_menu:
 		equip_menu.connect("equipment_changed", Callable(self, "_on_equipment_changed"))
 		equip_menu.connect("cancel_pressed", Callable(self, "_on_equipmenu_cancel"))
-	print("Menu: ", menu_state)
+	#DEBUG print("StartUI.gd/_ready -> Menu: ", menu_state)
 
 func _process(_delta):
 	total_time_label.text = GameTimer.get_time_string()
@@ -77,7 +77,7 @@ func _unhandled_input(event):
 			start_menu.modulate = Color(1,1,1,1)
 			equip_menu.visible = false
 			equip_button.grab_focus()
-			print("Menu: ", menu_state)
+			#DEBUG print("StartUI.gd/_unhandled_input -> Menu: ", menu_state)
 
 func open_menu():
 	#DEBUG print("StartUI.gd/open_menu() called")
@@ -95,7 +95,7 @@ func open_menu():
 	update_character_slots()
 	$StartMenu/AnimationPlayer.play("fade_in")  # Play fade_in animation
 	await $StartMenu/AnimationPlayer.animation_finished
-	print("Menu: ", menu_state)
+	#DEBUG print("StartUI.gd/open_menu -> Menu: ", menu_state)
 
 func close_menu():
 	#DEBUG print("StartUI.gd/close_menu() called")
@@ -105,7 +105,7 @@ func close_menu():
 	start_cursor.visible = false
 	startui.visible = false
 	TextUi.show()
-	print("Menu: ", menu_state)
+	#DEBUG print("StartUI.gd/close_menu -> Menu: ", menu_state)
 
 func get_current_money():
 	#DEBUG print("StartUI.gd/get_current_money() called")
@@ -160,7 +160,7 @@ func update_character_slots():
 			slot.set_character("", "", 0, 0, 0, 0, 0)
 
 func _on_item_pressed():
-	print("StartUI.gd/_on_item_pressed() called")
+	#DEBUG print("StartUI.gd/_on_item_pressed() called")
 	menu_state = "item_menu"
 	if item_menu:
 		$StartMenu/AnimationPlayer.play("fade_out")
@@ -169,14 +169,14 @@ func _on_item_pressed():
 		item_menu.focus_item_menu()
 	else:
 		pass
-	print("Menu: ", menu_state)
+	#DEBUG print("StartUI.gd/_on_item_pressed -> Menu: ", menu_state)
 
 func _on_skill_pressed():
 	print("StartUI.gd/_on_skill_pressed() called")
 	#menu_state = "magic_menu"
 
 func _on_equip_pressed():
-	print("StartUI.gd/_on_equip_pressed() called")
+	#DEBUG print("StartUI.gd/_on_equip_pressed() called")
 	menu_state = "character_select"
 
 	# Set up focus neighbors for buttons in character slot
@@ -197,10 +197,10 @@ func _on_equip_pressed():
 		btn.focus_neighbor_right = btn.get_path()
 
 	char_slot1.grab_focus()  # Focus the first button
-	print("Menu: ", menu_state)
+	#DEBUG print("StartUI.gd/_on_equip_pressed -> Menu: ", menu_state)
 
 func _on_character_slot_selected(index):
-	print("StartUI.gd/_on_character_slot_selected() called")
+	#DEBUG print("StartUI.gd/_on_character_slot_selected() called")
 	menu_state = "equip_menu"
 	anim_player.play("fade_out")
 	await anim_player.animation_finished
@@ -231,10 +231,10 @@ func _on_character_slot_selected(index):
 	# Focus the first button in the EquipMenu
 	equip_menu.set_equipment_buttons(char_name)
 	equip_menu.main_hand_btn.grab_focus()
-	print("Menu: ", menu_state)
+	#DEBUG print("StartUI.gd/_on_character_slot_selected -> Menu: ", menu_state)
 
 func _on_equipmenu_cancel():
-	print("StartUI.gd/_on_equipmenu_cancel() called")
+	#DEBUG print("StartUI.gd/_on_equipmenu_cancel() called")
 	if menu_state == "equip_menu":
 		menu_state = "main"
 		equip_menu.visible = false
@@ -244,7 +244,7 @@ func _on_equipmenu_cancel():
 		anim_player.play("fade_in")
 		await anim_player.animation_finished
 		start_menu.modulate = Color(1,1,1,1)
-	print("Menu: ", menu_state)
+	#DEBUG print("StartUI.gd/_on_equipment_cancel -> Menu: ", menu_state)
 
 func _on_check_pressed():
 	print("StartUI.gd/_on_check_pressed() called")
