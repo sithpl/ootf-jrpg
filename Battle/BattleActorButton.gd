@@ -55,8 +55,15 @@ func _on_pressed() -> void:
 	# 2) Call attack (not used in current battle flow)
 	_attack(target)
 
+# Calculates the percentage of damage mitigated based on Defense.
+# Uses a scaling formula with diminishing returns, capped at max_mitigation (default 80%).
+# Higher Defense provides more mitigation, but never fully negates damage.
+func calculate_mitigation(defense: float, max_mitigation: float = 0.8, k: float = 20.0) -> float:
+	var mitigation = defense / (defense + k)
+	return min(mitigation, max_mitigation)
+
 # Primary attack logic: plays animation, applies damage, emits signal when done
-func _attack(target_btn : BattleActorButton) -> void:
+func _attack(target_btn : BattleActorButton):
 	#DEBUG print("BattleActorButton.gd/_attack() called")
 	# 1) Play attack animation & wait, then switch back to idle animation
 	if attack_anim != "" and anim_sprite:
@@ -64,15 +71,38 @@ func _attack(target_btn : BattleActorButton) -> void:
 		await anim_sprite.animation_finished
 		anim_sprite.play(idle_anim)
 	#else:
-		## Output if attack_anim is null
+		# Output if attack_anim is null
 		#print("Warning: attack animation '%s' not found!")
-	# 2) Apply damage to target BattleActor
-	target_btn.data.healhurt(-data.attack)
+	
+	# 2) Apply damage to target BattleActor with defense mitigation
+	var base_damage = data.attack
+	var defense = target_btn.data.defense
+	var mitigation = calculate_mitigation(defense)
+	var mitigated_damage = int(round(base_damage * (1.0 - mitigation)))
+	if mitigated_damage < 1:
+		mitigated_damage = 1 # Always deal at least 1
+	var mitigated_amount = base_damage - mitigated_damage
+	target_btn.data.healhurt(-mitigated_damage)
+	await get_tree().create_timer(0.5).timeout
+	if idle_anim != "" and anim_sprite:
+		anim_sprite.play(idle_anim)
+	emit_signal("attack_finished", target_btn)
+	# Return damage info for logging
+	return {
+		"attacker": data,
+		"defender": target_btn.data,
+		"damage": mitigated_damage,
+		"mitigated": mitigated_amount,
+		"base": base_damage
+	}
+	
 	# 3) Wait for hit text animation
 	await get_tree().create_timer(0.5).timeout
+	
 	# 4) Return to idle animation
 	if idle_anim != "" and anim_sprite:
 		anim_sprite.play(idle_anim)
+	
 	# 5) Signal that attack is finished
 	emit_signal("attack_finished", target_btn)
 

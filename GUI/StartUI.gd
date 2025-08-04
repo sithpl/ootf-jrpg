@@ -1,27 +1,27 @@
 class_name StartUI extends CanvasLayer
 
-@onready var anim_player   :AnimationPlayer = $StartMenu/AnimationPlayer
-@onready var start_cursor  :StartCursor     = $StartMenu/StartCursor
-@onready var startui       :StartUI         = $"."
-@onready var start_menu    :Control         = $StartMenu
+@onready var anim_player    :AnimationPlayer = $StartMenu/AnimationPlayer
+@onready var start_cursor   :StartCursor     = $StartMenu/StartCursor
+@onready var startui        :StartUI         = $"."
+@onready var start_menu     :Control         = $StartMenu
 
-@onready var item_button   :Button        = $StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer/Item
-@onready var item_menu     :Control       = $ItemMenu
-@onready var skill_button  :Button        = $StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer/Skill
-@onready var skill_menu    :Control       = $SkillMenu
-@onready var equip_button  :Button        = $StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer/Equip
-@onready var char_list     :VBoxContainer = $StartMenu/HBoxContainer/Right/Characters
-@onready var char_slot1     :Button        = $StartMenu/HBoxContainer/Right/Characters/CharacterSlot1/Button
-@onready var char_slot2     :Button        = $StartMenu/HBoxContainer/Right/Characters/CharacterSlot2/Button
-@onready var char_slot3     :Button        = $StartMenu/HBoxContainer/Right/Characters/CharacterSlot3/Button
-@onready var char_slot4     :Button        = $StartMenu/HBoxContainer/Right/Characters/CharacterSlot4/Button
-@onready var equip_menu    :Control       = $EquipMenu
-@onready var check_button  :Button        = $StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer/Check
-@onready var check_menu    :Control       = $CheckMenu
-@onready var save_button   :Button        = $StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer/Save
+@onready var item_button    :Button          = $StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer/Item
+@onready var item_menu      :Control         = $ItemMenu
+@onready var skill_button   :Button          = $StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer/Skill
+@onready var skill_menu     :Control         = $SkillMenu
+@onready var equip_button   :Button          = $StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer/Equip
+@onready var char_list      :VBoxContainer   = $StartMenu/HBoxContainer/Right/Characters
+@onready var char_slot1     :Button          = $StartMenu/HBoxContainer/Right/Characters/CharacterSlot1/Button
+@onready var char_slot2     :Button          = $StartMenu/HBoxContainer/Right/Characters/CharacterSlot2/Button
+@onready var char_slot3     :Button          = $StartMenu/HBoxContainer/Right/Characters/CharacterSlot3/Button
+@onready var char_slot4     :Button          = $StartMenu/HBoxContainer/Right/Characters/CharacterSlot4/Button
+@onready var equip_menu     :Control         = $EquipMenu
+@onready var check_button   :Button          = $StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer/Check
+@onready var check_menu     :Control         = $CheckMenu
+@onready var save_button    :Button          = $StartMenu/HBoxContainer/Left/VBoxContainer/Menu/MarginContainer/VBoxContainer/Save
 
-@onready var current_money_text :Label = $StartMenu/HBoxContainer/Left/VBoxContainer/Info/MarginContainer/VBoxContainer/HBoxContainer/Resource
-@onready var total_time_label   :Label = $StartMenu/HBoxContainer/Left/VBoxContainer/Info/MarginContainer/VBoxContainer/Played/TotalTime
+@onready var current_money_text   :Label   = $StartMenu/HBoxContainer/Left/VBoxContainer/Info/MarginContainer/VBoxContainer/HBoxContainer/Resource
+@onready var total_time_label     :Label   = $StartMenu/HBoxContainer/Left/VBoxContainer/Info/MarginContainer/VBoxContainer/Played/TotalTime
 
 const ItemMenu = preload("res://GUI/ItemMenu.tscn")
 const EquipMenu = preload("res://GUI/EquipMenu.tscn")
@@ -29,8 +29,6 @@ const EquipMenu = preload("res://GUI/EquipMenu.tscn")
 var party_keys = Data.party_keys  # ["Bili", "Glenn", "Fraud", "Rage"]
 
 var menu_state = "main"  # "main", "character_select", "equip_menu", etc.
-
-#var equip_menu_lock : bool = false
 
 @onready var slots = [
 	$StartMenu/HBoxContainer/Right/Characters/CharacterSlot1,
@@ -125,36 +123,25 @@ func update_character_slots():
 		if i < party_keys.size():
 			var char_name = party_keys[i]
 			var char_data = Data.characters[char_name]
-			var actor = party[i]
 			var portrait_path = char_data.get("portrait", "")
 
-			# --- NEW CODE: Apply equipment bonuses for menu preview ---
+			# Use a fresh actor for preview, apply equipment bonuses once
 			var eq = PlayerInventory.get_equipment_for(char_name)
-			var temp_actor = {
-				"base_hp": actor.base_hp,
-				"hp_max": actor.hp_max,
-				"base_ap": actor.base_ap,
-				"ap_max": actor.ap_max,
-				"attack": actor.attack,
-				"defense": actor.defense,
-				"magic": actor.magic,
-				"speed": actor.speed
-			}
-			PlayerInventory.apply_equipment_bonuses(temp_actor, eq)
-			# ---------------------------------------------------------
+			var preview_actor = Data.create_character(char_name)
+			PlayerInventory.apply_equipment_bonuses(preview_actor, eq)
 
-			# Use the augmented stats for display
+			# Use augmented stats for display
 			slot.set_character(
 				char_name,
 				portrait_path,
-				temp_actor.base_hp,
-				temp_actor.hp_max,
-				temp_actor.base_ap,
-				temp_actor.ap_max,
-				temp_actor.attack,
-				temp_actor.defense,
-				temp_actor.magic,
-				temp_actor.speed
+				preview_actor.base_hp,
+				preview_actor.hp_max,
+				preview_actor.base_ap,
+				preview_actor.ap_max,
+				preview_actor.attack,
+				preview_actor.defense,
+				preview_actor.magic,
+				preview_actor.speed
 			)
 		else:
 			slot.set_character("", "", 0, 0, 0, 0, 0)

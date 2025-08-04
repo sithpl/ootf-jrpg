@@ -296,9 +296,14 @@ func _resolve_action(actor: BattleActor, target: BattleActor, act: Actions) -> v
 	match act:
 		Actions.FIGHT:
 			# CALL _attack() and wait for it to finish
-			await actor_btn._attack(target_btn)
-			# Log after the attack sequence completes
-			_log_action("%s attacks %s for %d!" % [actor.name, target.name, actor.attack])
+			var attack_result = await actor_btn._attack(target_btn)
+			# Log: "Slime Green attacks Sith for 5 (10 defended)"
+			var attacker_name = attack_result.attacker.name
+			var defender_name = attack_result.defender.name
+			var dmg = attack_result.damage
+			var mitigated = attack_result.mitigated
+			var msg = "%s attacks %s for %d (%d defended)" % [attacker_name, defender_name, dmg, mitigated]
+			_log_action(msg)
 
 			# If target just died, remove from turn order
 			if not target.has_hp():

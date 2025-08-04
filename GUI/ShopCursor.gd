@@ -38,10 +38,10 @@ func _on_viewport_gui_focus_changed(node: Control):
 	if node is BaseButton:
 		if hide_timer.is_stopped() == false:
 			hide_timer.stop()
-		if target != node:
-			if not suppress_next_move_sound and move_sound.stream:
-				move_sound.play()
-			suppress_next_move_sound = false # Reset after use
+		#if target != node:
+			#if not suppress_next_move_sound and move_sound.stream:
+				#move_sound.play()
+			#suppress_next_move_sound = false # Reset after use
 		if target and target.tree_exiting.is_connected(_on_target_tree_exiting):
 			target.tree_exiting.disconnect(_on_target_tree_exiting)
 		target = node
