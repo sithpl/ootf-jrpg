@@ -1,9 +1,5 @@
 ---------- NEXT STEPS ----------
 
-Implement Speed (SPD) and Defense (DEF) in Battle
-- SPD = faster turns
-- DEF = damage mitigation (ATK vs DEF)
-
 1 instance
 1 boss
 
