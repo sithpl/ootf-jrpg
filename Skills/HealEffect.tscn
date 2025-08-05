@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://cd7l8g34cd1fq"]
+
+[ext_resource type="SpriteFrames" uid="uid://ckp6p7xi2xypx" path="res://Assets/Animations/Battle_Skills.tres" id="1_smbe5"]
+
+[node name="HealEffect" type="Control"]
+z_index = 50
+layout_mode = 3
+anchors_preset = 0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = ExtResource("1_smbe5")
+animation = &"priest_heal_spell"
+frame = 7
+frame_progress = 1.0

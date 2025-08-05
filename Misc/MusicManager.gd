@@ -34,10 +34,10 @@ var previous_theme_type: int = -1
 var theme_volumes := {
 	ThemeType.START: -8,
 	ThemeType.ZONE: -8,
-	ThemeType.INTRO: -7,
+	ThemeType.INTRO: -9,
 	ThemeType.TOWN: -8,
 	ThemeType.SHOP: -10,
-	ThemeType.BATTLE: -12, 
+	ThemeType.BATTLE: -15, 
 	ThemeType.BOSS: 0,
 	ThemeType.SPECIAL: 0,
 	ThemeType.VICTORY: -12,

@@ -2,6 +2,7 @@ class_name BattleActor extends Resource
 
 # Signals
 signal hp_changed(hp, change)              # Notify when HP changes
+signal ap_changed(ap, change)              # Notify when AP changes
 signal defeated()                          # Notify when actor is defeated
 signal acting()                            # Notify when actor is acting
 
@@ -98,19 +99,34 @@ func can_act():
 	return has_hp()
 
 # Heal or damage actor by value; emits hp_changed, defeated if killed
-func healhurt(value: int):
-	#DEBUG print("BattleActor.gd/healhurt() called")
-	last_attempted_damage = value  # Store the attempted value
-	#DEBUG print("Damage: ", value)
+func healhurt(value: int) -> Dictionary:
+	last_attempted_damage = value
 	var hp_start: int = base_hp
-	var change: int = 0
 	base_hp += value
 	base_hp = clamp(base_hp, 0, hp_max)
-	change = base_hp - hp_start
-	emit_signal("hp_changed", base_hp, change)
-	hp_changed.emit(base_hp, change)
+	var actual_heal = base_hp - hp_start
+	var overheal = value - actual_heal if value > 0 else 0
+	emit_signal("hp_changed", base_hp, actual_heal)
+	hp_changed.emit(base_hp, actual_heal)
 	if !has_hp():
 		defeated.emit()
+	return {
+		"actual_heal": actual_heal,
+		"overheal": overheal
+	}
+
+func change_ap(amount: int) -> Dictionary:
+	var ap_start: int = base_ap
+	base_ap += amount
+	base_ap = clamp(base_ap, 0, ap_max)
+	var actual_change = base_ap - ap_start
+	var overrestore = amount - actual_change if amount > 0 else 0
+	print("BattleActor.gd/change_ap() -> ", name, ": base_ap = ", base_ap, " (change: ", actual_change, ")")
+	emit_signal("ap_changed", base_ap, actual_change)
+	return {
+		"actual_change": actual_change,
+		"overrestore": overrestore
+	}
 
 # Emits the acting signal for animation/feedback
 func act():
@@ -119,13 +135,12 @@ func act():
 
 # Heal HP
 func heal(amount: int):
-	healhurt(amount)
+	return healhurt(amount)
 	print("%s healed by %d, now at %d/%d HP" % [name, amount, base_hp, hp_max])
 
 # Restore AP 
 func restore_ap(amount: int):
-	base_ap += amount
-	base_ap = clamp(base_ap, 0, ap_max)
+	return change_ap(amount)
 	print("%s restored %d AP, now at %d/%d AP" % [name, amount, base_ap, ap_max])
 
 # Cure poison

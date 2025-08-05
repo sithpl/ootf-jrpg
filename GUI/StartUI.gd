@@ -122,26 +122,19 @@ func update_character_slots():
 			continue
 		if i < party_keys.size():
 			var char_name = party_keys[i]
-			var char_data = Data.characters[char_name]
-			var portrait_path = char_data.get("portrait", "")
-
-			# Use a fresh actor for preview, apply equipment bonuses once
-			var eq = PlayerInventory.get_equipment_for(char_name)
-			var preview_actor = Data.create_character(char_name)
-			PlayerInventory.apply_equipment_bonuses(preview_actor, eq)
-
-			# Use augmented stats for display
+			var portrait_path = Data.characters[char_name].get("portrait", "")
+			var actor = party[i]  # <-- Always use the live actor!
 			slot.set_character(
 				char_name,
 				portrait_path,
-				preview_actor.base_hp,
-				preview_actor.hp_max,
-				preview_actor.base_ap,
-				preview_actor.ap_max,
-				preview_actor.attack,
-				preview_actor.defense,
-				preview_actor.magic,
-				preview_actor.speed
+				actor.base_hp,
+				actor.hp_max,
+				actor.base_ap,  # <-- Live AP
+				actor.ap_max,   # <-- Live AP max
+				actor.attack,
+				actor.defense,
+				actor.magic,
+				actor.speed
 			)
 		else:
 			slot.set_character("", "", 0, 0, 0, 0, 0)

@@ -23,7 +23,7 @@ var attack_anim                :String       = ""             # Name of attack a
 var idle_anim                  :String       = ""             # Name of idle animation
 var hurt_anim                  :String       = ""             # Name of hurt animation
 var death_anim                 :String       = ""             # Name of death animation
-var skill1_anim                 :String       = ""            # Name of skill1 animation
+var skill1_anim                :String       = ""            # Name of skill1 animation
 
 func _ready() -> void:
 	pass
@@ -34,6 +34,7 @@ func set_data(_data : BattleActor) -> void:
 	# 1) Assign the BattleActor resource
 	data = _data
 	# 2) Connect its signals for health, defeat, and acting
+	data.ap_changed.connect(_on_data_ap_changed)
 	data.hp_changed.connect(_on_data_hp_changed)
 	data.defeated.connect(_on_data_is_defeated)
 	data.acting.connect(_on_data_acting)
@@ -50,10 +51,14 @@ func _set_actor(value:BattleActor) -> void:
 # Called when this button is pressed (if not overridden by child)
 func _on_pressed() -> void:
 	#DEBUG print("BattleActorButton.gd/_on_pressed() called")
+	
 	# 1) Select a target (logic not implemented here)
-	var target : BattleActorButton
+	#var target : BattleActorButton
 	# 2) Call attack (not used in current battle flow)
-	_attack(target)
+	#_attack(target)
+	
+	# Do nothing here; button press logic is handled in Battle.gd
+	pass
 
 # Calculates the percentage of damage mitigated based on Defense.
 # Uses a scaling formula with diminishing returns, capped at max_mitigation (default 80%).
@@ -108,20 +113,37 @@ func _attack(target_btn : BattleActorButton):
 
 # Responds to BattleActor hp_changed signal: plays hurt/recoil, then shows hit text
 func _on_data_hp_changed(_hp : int, change : int) -> void:
-	#DEBUG print("BattleActorButton.gd/_on_data_hp_changed() called")
 	if change < 0:
 		play_hurt_animation()
-		_recoil()  # Ensure recoil finishes before showing hit text
-	
+		_recoil()
 	await get_tree().create_timer(0.5).timeout
 
-	# Show hit text after recoil
 	var hit_text : Label = HIT_TEXT.instantiate()
-	hit_text.z_index  = 100  # Ensure it's above enemy sprites
-	hit_text.text     = str(abs(data.last_attempted_damage))  # Show attempted damage, not HP change
-	# Center the text above the button
+	hit_text.z_index = 100
+	hit_text.text = str(abs(data.last_attempted_damage))
 	hit_text.position = Vector2(self.size.x * 0.5 - hit_text.size.x * 0.5, -hit_text.size.y - 8)
+
+	# Set green for heals, default (white) for damage
+	if data.last_attempted_damage > 0:
+		hit_text.modulate = Color(0, 1, 0)  # Bright green
+
 	add_child(hit_text)
+
+# TODO Gain AP, HitText with blue text
+func _on_data_ap_changed(ap: int, change: int) -> void:
+	#await get_tree().create_timer(0.5).timeout
+#
+	#var hit_text : Label = HIT_TEXT.instantiate()
+	#hit_text.z_index = 100
+	#hit_text.text = str(abs(data.change))
+	#hit_text.position = Vector2(self.size.x * 0.5 - hit_text.size.x * 0.5, -hit_text.size.y - 8)
+#
+	## Set color
+	#if data.change > 0:
+		#hit_text.modulate = Color.BLUE  # Bright blue
+#
+	#add_child(hit_text)
+	pass
 
 # Animates a quick physical recoil when damaged
 func _recoil() -> Tween:
@@ -197,3 +219,12 @@ func _action_slide() -> Tween:
 	tween.tween_property(self, "position:x", start_pos.x + (RECOIL * recoil_direction * -1), 0.5).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_IN)
 	tween.tween_property(self, "position:x", start_pos.x, 0.1).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 	return tween
+
+# Play a skill animation by name and reset to idle when done
+func play_skill_animation(anim_name: String) -> void:
+	if anim_sprite and anim_name != "":
+		anim_sprite.play(anim_name)
+		await anim_sprite.animation_finished
+		# Reset to idle animation if available
+		if idle_anim != "":
+			anim_sprite.play(idle_anim)

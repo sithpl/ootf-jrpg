@@ -19,6 +19,7 @@ enum Actions { FIGHT, SKILLS, ITEM, FLEE }
 @onready var _enemy_info_scroll   :ScrollContainer    = $GUIMargin/Bottom/Enemies/ScrollContainer
 @onready var _enemy_info_vbox     :VBoxContainer      = _enemy_info_scroll.get_node("MarginContainer/VBoxContainer")
 @onready var _players_menu        :Menu               = $Players
+@onready var _skills_menu         :NinePatchRect      = $SkillsMenu
 @onready var _menu_cursor         :MenuCursor         = $MenuCursor
 @onready var _down_cursor         :Sprite2D           = $DownCursor
 
@@ -38,6 +39,9 @@ var action_log                    :Array[String]      = []
 var EnemyButtonScene              :PackedScene        = preload("res://Battle/EnemyButton.tscn")
 var _enemy_info_nodes             :Array[Label]       = []
 var battle_enemies: Array = []
+var selected_skill = null
+var skill_targeting = false
+var all_battle_buttons: Array = []
 
 # Called when the scene is ready
 func _ready():
@@ -57,6 +61,12 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if event.is_action_pressed("ui_cancel") and state == States.PLAYER_TARGET:
 		_cancel_target_selection()
+
+func _update_menu_cursor_to_focused_skill():
+	var focused = get_viewport().gui_get_focus_owner()
+	if focused and focused.is_inside_tree() and focused.get_parent() == _skills_menu.get_node("MarginContainer/ScrollContainer/BoxContainer"):
+		_menu_cursor.global_position = focused.global_position
+		_menu_cursor.show()
 
 # Adds a line to the battle log, maintaining max line count
 func _log_action(text: String) -> void:
@@ -118,12 +128,12 @@ func compare_actor_speed(a: BattleActor, b: BattleActor) -> bool:
 func _calculate_turn_order():
 	#DEBUG print("Battle.gd/_calculate_turn_order() called")
 	# Before calculating
-	print("=== Party Members at start of battle ===")
-	for p in Data.party:
-		print("%s SPD: %d" % [p.name, p.speed])
-	print("=== Enemies at start of battle ===")
-	for e in battle_enemies:
-		print("%s SPD: %d" % [e.name, e.speed])
+	#print("=== Party Members at start of battle ===")
+	#for p in Data.party:
+		#print("%s SPD: %d" % [p.name, p.speed])
+	#print("=== Enemies at start of battle ===")
+	#for e in battle_enemies:
+		#print("%s SPD: %d" % [e.name, e.speed])
 
 	var all_actors: Array[BattleActor] = []
 	for p in Data.party:
@@ -139,9 +149,9 @@ func _calculate_turn_order():
 	current_turn_idx = 0
 
 	# After calculating
-	print("=== Calculated Turn Order ===")
-	for actor in turn_order:
-		print("%s SPD: %d" % [actor.name, actor.speed])
+	#print("=== Calculated Turn Order ===")
+	#for actor in turn_order:
+		#print("%s SPD: %d" % [actor.name, actor.speed])
 
 # Begins the main battle loop, sets turn order, starts first turn
 func _start_battle() -> void:
@@ -205,20 +215,26 @@ func _begin_player_turn() -> void:
 
 # Handles when the player chooses a battle option (Fight/Skills/Item/Defend)
 func _on_options_button_pressed(button: BaseButton) -> void:
-	#DEBUG print("Battle.gd/_on_options_button_pressed() called")
 	$MenuCursor.play_confirm_sound()
 	match button.text:
-		"Fight": action = Actions.FIGHT
-		"Skills": action = Actions.SKILLS
-		"Item":  action = Actions.ITEM
-		"Flee": action = Actions.FLEE
-	
+		"Fight":
+			action = Actions.FIGHT
+		"Skills":
+			action = Actions.SKILLS
+			# Show the Skills menu for the current actor
+			_show_skills_menu(current_actor)
+			return # Don't advance to target selection yet
+		"Item":
+			action = Actions.ITEM
+		"Flee":
+			action = Actions.FLEE
+
 	if action == Actions.FLEE:
 		_options.hide()
 		_log_label.hide()
 		_menu_cursor.hide()
 		_down_cursor.hide()
-		
+
 		_top_menu.show()
 		_top_text_label.text = ("You flee from battle!")
 		for btn in _players_menu.get_buttons():
@@ -590,21 +606,22 @@ func _highlight_and_scroll_info(actor: BattleActor) -> void:
 
 # Enables or disables all player and enemy buttons, also disables process_input
 func _set_buttons_enabled(enabled: bool) -> void:
-	#DEBUG print("Battle.gd/_set_buttons_enabled() called")
 	# Option buttons (BaseButtons inside WindowDefault)
-	for child in $Options.get_children():
+	for child in _options.get_children():
 		if child is BaseButton:
 			child.disabled = not enabled
 		child.set_process_input(enabled)
 
 	# Enemy buttons
 	for btn in _enemies_menu.get_buttons():
-		btn.disabled = not enabled
+		if btn is BaseButton:
+			btn.disabled = not enabled
 		btn.set_process_input(enabled)
 
 	# Player buttons
 	for btn in _players_menu.get_buttons():
-		btn.disabled = not enabled
+		if btn is BaseButton:
+			btn.disabled = not enabled
 		btn.set_process_input(enabled)
 
 # Returns a random alive party member for enemy targeting
@@ -620,3 +637,159 @@ func _wait_for_confirm() -> void:
 		await get_tree().process_frame
 		if Input.is_action_just_pressed("ui_accept"):
 			break
+
+func _show_skills_menu(actor):
+	print("Battle.gd/_show_skills_menu() called")
+	var actor_class = actor.class_key
+	var class_cfg = Data.class_configs[actor_class]
+	var skills = class_cfg.get("skills", [])
+
+	var box = _skills_menu.get_node("MarginContainer/ScrollContainer/BoxContainer")
+
+	# Clear previous buttons
+	for child in box.get_children():
+		child.queue_free()
+
+	var first_btn: Button = null
+
+	# Add a button for each skill
+	for skill_name in skills:
+		var skill_res = Skills.ALL_SKILLS.get(skill_name)
+		if skill_res:
+			var btn = Button.new()
+			btn.text = "%s (%d)" % [skill_res.name, skill_res.cost]
+			btn.name = skill_name
+			btn.connect("pressed", Callable(self, "_on_skill_button_pressed").bind(skill_res))
+
+			# Disable and gray out if not enough AP
+			if actor.base_ap < skill_res.cost:
+				btn.disabled = true
+				btn.self_modulate = Color(0.5, 0.5, 0.5, 1)  # Gray out
+
+			if first_btn == null and not btn.disabled:
+				first_btn = btn
+
+			box.add_child(btn)
+		else:
+			print("Skill resource not found: ", skill_name)
+
+	_skills_menu.show()
+
+	# Focus the first enabled skill button and move the cursor
+	if first_btn:
+		first_btn.grab_focus()
+		await get_tree().process_frame  # Wait a frame for layout
+		_menu_cursor.global_position = first_btn.global_position
+		_menu_cursor.show()
+	else:
+		_menu_cursor.hide()
+
+func _on_skill_button_pressed(skill_resource):
+	print("Battle.gd/on_skill_button_pressed() called")
+	selected_skill = skill_resource
+	skill_targeting = true
+	_skills_menu.hide()
+	# Now enable player selection for the target
+	state = States.PLAYER_TARGET
+	_players_menu.show()
+	_players_menu.button_enable_focus(true)
+	_enemies_menu.button_enable_focus(false)
+	_options_menu.button_enable_focus(false)
+	_players_menu.button_focus(0)
+	_position_cursor_on_player(current_actor)
+
+func _on_players_button_pressed(button: PlayerButton) -> void:
+	print("Battle.gd/_on_players_button_pressed() called")
+	_menu_cursor.play_confirm_sound()
+	_menu_cursor.hide()
+	_down_cursor.hide()
+	var target = button.data
+	if skill_targeting and selected_skill:
+		_resolve_skill(current_actor, target, selected_skill)
+		skill_targeting = false
+		selected_skill = null
+	else:
+		_resolve_action(current_actor, target, action)
+
+func _resolve_skill(actor, target, skill):
+	var actor_button = _get_button_for_actor(actor)
+	var target_button = _get_button_for_actor(target)
+
+	# Get the class config for the actor
+	var class_cfg = Data.class_configs.get(actor.class_key, {})
+	var skill_anim = class_cfg.get("skill_anim", "") # fallback to empty string if not found
+
+	# Play the class-specific skill animation before the effect
+	if actor_button and skill_anim != "":
+		await actor_button.play_skill_animation(skill_anim)
+
+	# Play the skill sfx
+	var stream = load(skill.sfx_path)
+	if stream:
+		var snd = AudioStreamPlayer.new()
+		snd.stream = stream
+		get_tree().current_scene.add_child(snd)
+		snd.play()
+
+	_play_skill_effect(skill, actor_button, target_button)
+	await get_tree().create_timer(1.0).timeout
+
+	if actor.base_ap >= skill.cost:
+		actor.change_ap(-skill.cost)
+	else:
+		# Not enough AP, handle accordingly
+		pass
+
+	var heal_result = null
+	if skill.effect_name == "heal":
+		heal_result = Effects.apply_effect(skill.effect_name, target, skill.effect_params)
+		print("Battle.gd/_resolve_skill -> Heal cast!")
+		if heal_result != null:
+			var healed = heal_result.get("actual_heal", 0)
+			var overheal = heal_result.get("overheal", 0)
+			var msg = "%s heals %s for %d HP" % [actor.name, target.name, healed]
+			if overheal > 0:
+				msg += " (+%d Overheal)" % overheal
+			msg += "."
+			_log_action(msg)
+		else:
+			_log_action("%s uses %s on %s! (No effect)" % [actor.name, skill.name, target.name])
+	else:
+		Effects.apply_effect(skill.effect_name, target, skill.effect_params)
+		_log_action("%s uses %s on %s!" % [actor.name, skill.name, target.name])
+
+	await get_tree().create_timer(2.0).timeout
+	_set_buttons_enabled(true)
+	_advance_index()
+	_next_turn()
+
+func _play_skill_effect(skill, caster_button, target_button):
+	if skill.effect_scene == "":
+		print("No effect_scene specified.")
+		return
+
+	var effect_scene = load(skill.effect_scene)
+	var effect_instance = effect_scene.instantiate()
+	print("Battle.gd/_play_skill_effect -> Effect instance created: ", effect_instance)
+
+	var parent = target_button.get_parent()
+	parent.add_child(effect_instance)
+
+	# Calculate button center in global coordinates
+	var button_rect = target_button.get_global_rect()
+	var button_center = button_rect.position + button_rect.size * 0.3
+
+	var effect_size = effect_instance.size if effect_instance.has_method("get_size") or "size" in effect_instance else Vector2.ZERO
+
+	var vertical_offset = 5  # Move effect X pixels lower
+	effect_instance.global_position = button_center - effect_size * 0.5 + Vector2(0, vertical_offset)
+
+	print("Battle.gd/_play_skill_effect -> Effect instance global_position set to: ", effect_instance.global_position)
+
+	var anim_sprite = effect_instance.get_node_or_null("AnimatedSprite2D")
+	if not anim_sprite:
+		print("No AnimatedSprite2D found in effect_instance!")
+		return
+	anim_sprite.visible = true
+	anim_sprite.play(skill.effect_animation)
+	anim_sprite.connect("animation_finished", effect_instance.queue_free)

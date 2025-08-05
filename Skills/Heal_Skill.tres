@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="Skill" load_steps=2 format=3 uid="uid://qmnywjpavble"]
+
+[ext_resource type="Script" uid="uid://kduoqtm7ucd1" path="res://Skills/Skill.gd" id="1_jfo8w"]
+
+[resource]
+script = ExtResource("1_jfo8w")
+name = "Heal"
+description = "Restores HP to an ally."
+cost = 5
+effect_name = "heal"
+effect_params = [50]
+target_type = "single"
+effect_scene = "res://Skills/HealEffect.tscn"
+effect_animation = "priest_heal_spell"
+effect_position = "target"
+sfx_path = "res://Assets/Audio/Skills/restore_skill.wav"
+metadata/_custom_type_script = "uid://kduoqtm7ucd1"
