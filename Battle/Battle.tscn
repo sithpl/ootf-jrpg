@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://buhojghfeg4r2"]
+[gd_scene load_steps=20 format=3 uid="uid://buhojghfeg4r2"]
 
 [ext_resource type="Script" uid="uid://duujsym6v6wka" path="res://Battle/Battle.gd" id="1_p46lj"]
 [ext_resource type="PackedScene" uid="uid://dggmt4f88v4jj" path="res://GUI/WindowDefault.tscn" id="1_wvl2i"]
@@ -17,6 +17,8 @@
 [sub_resource type="CanvasTexture" id="CanvasTexture_xmk5i"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_p46lj"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_bku68"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_8teo4"]
 
@@ -86,6 +88,11 @@ script = ExtResource("5_c5ef4")
 
 [node name="EnemyButton" parent="Enemies" instance=ExtResource("2_2h7oj")]
 layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
 offset_left = 32.0
 offset_top = 64.0
 offset_right = 58.0
@@ -94,6 +101,11 @@ stretch_mode = 5
 
 [node name="EnemyButton2" parent="Enemies" instance=ExtResource("2_2h7oj")]
 layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
 offset_left = 46.0
 offset_top = 32.0
 offset_right = 72.0
@@ -102,13 +114,24 @@ stretch_mode = 5
 
 [node name="EnemyButton3" parent="Enemies" instance=ExtResource("2_2h7oj")]
 layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
 offset_left = 59.0
 offset_top = 4.0
 offset_right = 85.0
+offset_bottom = 20.0
 stretch_mode = 5
 
 [node name="EnemyButton4" parent="Enemies" instance=ExtResource("2_2h7oj")]
 layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
 offset_left = 6.0
 offset_top = 32.0
 offset_right = 38.0
@@ -117,6 +140,11 @@ stretch_mode = 5
 
 [node name="EnemyButton5" parent="Enemies" instance=ExtResource("2_2h7oj")]
 layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
 offset_left = -4.0
 offset_top = 64.0
 offset_right = 28.0
@@ -125,6 +153,11 @@ stretch_mode = 5
 
 [node name="EnemyButton6" parent="Enemies" instance=ExtResource("2_2h7oj")]
 layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
 offset_left = 20.0
 offset_top = 5.0
 offset_right = 52.0
@@ -407,6 +440,49 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("CanvasTexture_p46lj")
+
+[node name="SkillsMenu" type="NinePatchRect" parent="."]
+visible = false
+layout_mode = 2
+offset_left = 125.0
+offset_top = 124.0
+offset_right = 260.0
+offset_bottom = 176.0
+texture = ExtResource("7_l0uqe")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 13
+patch_margin_top = 11
+patch_margin_right = 13
+patch_margin_bottom = 11
+
+[node name="MarginContainer" type="MarginContainer" parent="SkillsMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="SkillsMenu/MarginContainer"]
+layout_mode = 2
+
+[node name="BoxContainer" type="BoxContainer" parent="SkillsMenu/MarginContainer/ScrollContainer"]
+layout_mode = 2
+
+[node name="Skill+Cost" type="Button" parent="SkillsMenu/MarginContainer/ScrollContainer/BoxContainer"]
+layout_mode = 2
+text = "Skill 8"
+
+[node name="TextureRect" type="TextureRect" parent="SkillsMenu"]
+self_modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("CanvasTexture_bku68")
 
 [node name="Options" parent="." instance=ExtResource("1_wvl2i")]
 custom_minimum_size = Vector2(48, 52)

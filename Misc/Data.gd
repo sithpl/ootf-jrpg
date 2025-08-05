@@ -154,12 +154,14 @@ var class_configs := {
 		"attack": 2, 
 		"defense": 2, 
 		"magic": 6, 
-		"speed": 3,
+		"speed": 20,
 		"texture_path": "res://Assets/Players/Priest.png", 
 		"idle_anim": "priest_idle", 
 		"attack_anim": "priest_melee", 
 		"hurt_anim" : "priest_hurt", 
-		"death_anim" : "priest_death"
+		"death_anim" : "priest_death",
+		"skill_anim" : "priest_skill",
+		"skills": ["Heal"]
 	},
 
 	"Archer": { 
@@ -208,7 +210,7 @@ var class_configs := {
 # ---------- CHARACTERS & PARTY ----------
 
 # party_keys: Names of characters currently in the party
-var party_keys            :Array[String]        = ["Cracker", "Kanili", "Dan", "Woofshank"]
+var party_keys            :Array[String]        = ["Rage", "Fraud", "Glenn", "Dan"]
 
 # party: List of BattleActor instances for the current party
 var party                 :Array[BattleActor]   = []
