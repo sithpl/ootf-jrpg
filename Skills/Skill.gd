@@ -10,6 +10,7 @@ class_name Skill extends Resource
 @export var base_animation       :String     = ""             # Animation played during travel or on cast
 @export var impact_animation     :String     = ""             # Animation played on arrival/impact
 @export var effect_position      :String     = "target"       # "caster", "target", or "screen"
+@export var sfx_cast_delay       :float      = 0.0            # Time sfx with animation frame
 @export var sfx_cast_path        :String     = ""             # Path to cast sound
 @export var sfx_impact_path      :String     = ""             # Path to impact/hit sound
 @export var effect_offset        :Vector2    = Vector2.ZERO   # X/Y offset if needed

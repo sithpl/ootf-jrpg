@@ -9,6 +9,7 @@ func _ready():
 		"restore_ap": Callable(self, "effect_restore_ap"),
 		"cure_poison": Callable(self, "effect_cure_poison"),
 		"revive": Callable(self, "effect_revive"),
+		"multi_attack": Callable(self, "effect_multi_attack"), 
 	}
 
 func apply_effect(effect_name: String, target, params=[]):
@@ -26,7 +27,7 @@ func effect_heal(target, amount):
 
 # effect_damage: Deal damage to target HP
 func effect_damage(target, amount):
-	print("Effects.gd: effect_damage called with target: %s amount: %d" % [target.name, amount])
+	#print("Effects.gd: effect_damage called with target: %s amount: %d" % [target.name, amount])
 	if target and target.has_method("heal"):
 		return target.heal(-abs(amount))
 	return null
@@ -48,3 +49,9 @@ func effect_revive(target, percent=0.5):
 	if target and target.has_method("revive"):
 		return target.revive(percent) 
 	return null
+
+# effect_multi_attack: Deal damage to all targets in array
+func effect_multi_attack(targets: Array, amount):
+	for target in targets:
+		if target and target.has_method("heal"):
+			target.heal(-abs(amount))
