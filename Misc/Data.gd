@@ -145,7 +145,9 @@ var class_configs := {
 		"idle_anim": "mage_idle", 
 		"attack_anim": "mage_melee", 
 		"hurt_anim" : "mage_hurt", 
-		"death_anim" : "mage_death"
+		"death_anim" : "mage_death",
+		"skill_anim" : "mage_skill",
+		"skills": ["Fireblast"]
 	},
 
 	"Priest": { 

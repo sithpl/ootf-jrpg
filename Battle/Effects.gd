@@ -5,6 +5,7 @@ var effects = {}
 func _ready():
 	effects = {
 		"heal": Callable(self, "effect_heal"),
+		"damage": Callable(self, "effect_damage"),
 		"restore_ap": Callable(self, "effect_restore_ap"),
 		"cure_poison": Callable(self, "effect_cure_poison"),
 		"revive": Callable(self, "effect_revive"),
@@ -20,7 +21,14 @@ func apply_effect(effect_name: String, target, params=[]):
 # effect_heal: Heal target HP
 func effect_heal(target, amount):
 	if target and target.has_method("heal"):
-		return target.heal(amount) # <-- return result!
+		return target.heal(amount)
+	return null
+
+# effect_damage: Deal damage to target HP
+func effect_damage(target, amount):
+	print("Effects.gd: effect_damage called with target: %s amount: %d" % [target.name, amount])
+	if target and target.has_method("heal"):
+		return target.heal(-abs(amount))
 	return null
 
 # effect_restore_ap: Restore target AP

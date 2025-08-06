@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://coso52llpor0t"
-path="res://.godot/imported/restore_skill.wav-e72b0059c69970dd47bba1625754a130.sample"
+path="res://.godot/imported/restore_effect_skill.wav-b82fdf5148f1497d734a4bb35e59aee3.sample"
 
 [deps]
 
-source_file="res://Assets/Audio/Skills/restore_skill.wav"
-dest_files=["res://.godot/imported/restore_skill.wav-e72b0059c69970dd47bba1625754a130.sample"]
+source_file="res://Assets/Audio/Skills/restore_effect_skill.wav"
+dest_files=["res://.godot/imported/restore_effect_skill.wav-b82fdf5148f1497d734a4bb35e59aee3.sample"]
 
 [params]
 
