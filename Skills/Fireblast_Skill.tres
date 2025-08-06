@@ -14,6 +14,7 @@ effect_scene = "res://Skills/FireblastEffect.tscn"
 base_animation = "damage_fire_skill_hit"
 impact_animation = ""
 effect_position = "target"
+sfx_cast_delay = 0.0
 sfx_cast_path = "res://Assets/Audio/Skills/sfx_cast_skill.wav"
 sfx_impact_path = "res://Assets/Audio/Skills/damage_fire_skill.wav"
 effect_offset = Vector2(5, -3)

@@ -1,9 +1,14 @@
-[gd_resource type="SpriteFrames" load_steps=31 format=3 uid="uid://ckp6p7xi2xypx"]
+[gd_resource type="SpriteFrames" load_steps=33 format=3 uid="uid://ckp6p7xi2xypx"]
 
+[ext_resource type="Texture2D" uid="uid://b0x0n4a4x3s8n" path="res://Assets/Arrow01(100x100).png" id="1_sww0x"]
 [ext_resource type="Texture2D" uid="uid://dneqjcgko2cjt" path="res://Assets/Animations/Sheets/Spells/mage_attack_spell1.png" id="1_yy15t"]
 [ext_resource type="Texture2D" uid="uid://cmtsfsa125l77" path="res://Assets/Animations/Sheets/Spells/mage_attack_spell2.png" id="2_sww0x"]
 [ext_resource type="Texture2D" uid="uid://bitweeh3tectc" path="res://Assets/Animations/Sheets/Spells/priest_attack_spell.png" id="3_wpojw"]
 [ext_resource type="Texture2D" uid="uid://c3djoev4ebphx" path="res://Assets/Animations/Sheets/Spells/priest_heal_spell.png" id="4_ld1yx"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wpojw"]
+atlas = ExtResource("1_sww0x")
+region = Rect2(0, 0, 100, 100)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pa2bq"]
 atlas = ExtResource("2_sww0x")
@@ -115,6 +120,14 @@ animations = [{
 "loop": false,
 "name": &"RESET",
 "speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wpojw")
+}],
+"loop": false,
+"name": &"damage_arrow_skill",
+"speed": 1.0
 }, {
 "frames": [{
 "duration": 1.0,

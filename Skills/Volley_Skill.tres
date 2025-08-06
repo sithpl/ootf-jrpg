@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Skill" load_steps=2 format=3 uid="uid://d3y8d4idcmpfo"]
+
+[ext_resource type="Script" uid="uid://kduoqtm7ucd1" path="res://Skills/Skill.gd" id="1_a12tb"]
+
+[resource]
+script = ExtResource("1_a12tb")
+name = "Volley"
+description = "Fires a volley of arrows, hitting all enemies for moderate damage."
+cost = 8
+effect_name = "multi_attack"
+effect_params = [8]
+target_type = "all_enemies"
+effect_scene = "res://Skills/VolleyEffect.tscn"
+base_animation = ""
+impact_animation = ""
+effect_position = "target"
+sfx_cast_delay = 0.0
+sfx_cast_path = "res://Assets/Audio/Skills/damage_arrow_skill.wav"
+sfx_impact_path = ""
+effect_offset = Vector2(0, 0)
+metadata/_custom_type_script = "uid://kduoqtm7ucd1"

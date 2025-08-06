@@ -488,12 +488,11 @@ func _cancel_target_selection() -> void:
 
 # Finds the button associated with a given actor (player or enemy)
 func _get_button_for_actor(actor: BattleActor) -> BattleActorButton:
-	#DEBUG print("Battle.gd/_get_button_for_actor() called")
 	for btn in _players_menu.get_buttons():
-		if btn.data == actor:
+		if btn is BattleActorButton and btn.data == actor:
 			return btn
 	for btn in _enemies_menu.get_buttons():
-		if btn.data == actor:
+		if btn is BattleActorButton and btn.data == actor:
 			return btn
 	return null
 
@@ -718,6 +717,13 @@ func _on_skill_button_pressed(skill_resource):
 		_resolve_skill(current_actor, current_actor, skill_resource)
 		skill_targeting = false
 		selected_skill = null
+	elif skill_resource.target_type == "all_enemies":
+		# Instantly resolve skill on self, no menu needed
+		_resolve_skill(current_actor, current_actor, skill_resource)
+		skill_targeting = false
+		selected_skill = null
+		_menu_cursor.hide()
+		_options.hide()
 	else:
 		# Default: treat as ally skill
 		state = States.PLAYER_TARGET
@@ -745,6 +751,7 @@ func _resolve_skill(actor, target, skill):
 	print("Battle.gd/_resolve_skill() called")
 	var actor_button = _get_button_for_actor(actor)
 	var target_button = _get_button_for_actor(target)
+	var targets = []
 
 	# Get the class config for the actor
 	var class_cfg = Data.class_configs.get(actor.class_key, {})
@@ -764,7 +771,7 @@ func _resolve_skill(actor, target, skill):
 	if actor_button and skill_anim != "":
 		await actor_button.play_skill_animation(skill_anim)
 
-	await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(0.5).timeout
 
 	# Play the skill effect, and pass impact sound path if available
 	_play_skill_effect(skill, actor_button, target_button)
@@ -779,6 +786,16 @@ func _resolve_skill(actor, target, skill):
 		# Not enough AP, handle accordingly
 		pass
 
+	# Multi-target skill logic
+	if skill.target_type == "all_enemies":
+		# Gather all valid enemy targets
+		for btn in _enemies_menu.get_buttons():
+			if btn is EnemyButton and btn.data and btn.data.has_hp():
+				targets.append(btn.data)
+		Effects.apply_effect(skill.effect_name, targets, skill.effect_params)
+		_log_action("%s unleashes %s, striking all foes!" % [actor.name, skill.name])
+		
+	# Heal logic
 	var heal_result = null
 	if skill.effect_name == "heal":
 		heal_result = Effects.apply_effect(skill.effect_name, target, skill.effect_params)
@@ -793,11 +810,16 @@ func _resolve_skill(actor, target, skill):
 			_log_action(msg)
 		else:
 			_log_action("%s uses %s on %s! (No effect)" % [actor.name, skill.name, target.name])
+	
+	# Damage logic
 	else:
-		print("Battle.gd/_resolve_skill: Applying effect %s to %s with params %s" % [skill.effect_name, target.name, str(skill.effect_params)])
-		Effects.apply_effect(skill.effect_name, target, skill.effect_params)
-		_log_action("%s hits %s with %s for %s!" % [actor.name, target.name, skill.name, str(skill.effect_params[0])])
-		print("Battle.gd/_resolve_skill: Effect applied")
+		if skill.target_type == "all_enemies":
+			_log_action("%s hits all enemies with %s for %s!" % [actor.name, skill.name, str(skill.effect_params[0])])
+		else:
+			#DEBUG print("Battle.gd/_resolve_skill: Applying effect %s to %s with params %s" % [skill.effect_name, target.name, str(skill.effect_params)])
+			Effects.apply_effect(skill.effect_name, target, skill.effect_params)
+			_log_action("%s hits %s with %s for %s!" % [actor.name, target.name, skill.name, str(skill.effect_params[0])])
+			print("Battle.gd/_resolve_skill: Effect applied")
 
 	await get_tree().create_timer(2.0).timeout
 	print("Battle.gd/_resolve_skill() finished")

@@ -103,7 +103,9 @@ var class_configs := {
 		"idle_anim": "ranger_idle", 
 		"attack_anim": "ranger_ranged", 
 		"hurt_anim" : "ranger_hurt", 
-		"death_anim" : "ranger_death"
+		"death_anim" : "ranger_death",
+		"skill_anim" : "ranger_skill",
+		"skills" : ["Volley"]
 	},
 
 	"Knight": { 
