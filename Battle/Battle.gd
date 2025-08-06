@@ -163,7 +163,7 @@ func _start_battle() -> void:
 
 # Advances to the next turn, handling dead actors and end conditions
 func _next_turn() -> void:
-	#DEBUG print("Battle.gd/_next_turn() called")
+	print("Battle.gd/_next_turn() called")
 	# Reset UI
 	_options.hide()
 	_menu_cursor.hide()
@@ -198,7 +198,7 @@ func _next_turn() -> void:
 
 # Handles player turn setup (enabling UI, setting focus, showing options)
 func _begin_player_turn() -> void:
-	#DEBUG print("Battle.gd/_begin_player_turn() called")
+	print("Battle.gd/_begin_player_turn() called")
 	_set_buttons_enabled(true)
 	set_process_input(true)
 	state = States.PLAYER_SELECT
@@ -215,7 +215,7 @@ func _begin_player_turn() -> void:
 
 # Handles when the player chooses a battle option (Fight/Skills/Item/Defend)
 func _on_options_button_pressed(button: BaseButton) -> void:
-	$MenuCursor.play_confirm_sound()
+	_menu_cursor.play_confirm_sound()
 	match button.text:
 		"Fight":
 			action = Actions.FIGHT
@@ -257,17 +257,23 @@ func _on_options_button_pressed(button: BaseButton) -> void:
 	_position_cursor_on_enemy(_enemies_menu.get_buttons()[0].data)
 
 # Handles when player selects an enemy to target
+
 func _on_enemies_button_pressed(button: EnemyButton) -> void:
 	#DEBUG print("Battle.gd/_on_options_button_pressed() called")
-	$MenuCursor.play_confirm_sound()
+	_menu_cursor.play_confirm_sound()
+	
 	# Immediately hide all target‐selection UI
 	_menu_cursor.hide()
 	_down_cursor.hide()
+	
 	var target = button.data
-
 	await get_tree().create_timer(0.2).timeout
-	_resolve_action(current_actor, target, action)
-	await get_tree().create_timer(0.8).timeout
+	if skill_targeting and selected_skill:
+		_resolve_skill(current_actor, target, selected_skill)
+		skill_targeting = false
+		selected_skill = null
+	else:
+		_resolve_action(current_actor, target, action)
 
 # Handles enemy turn logic (picking a target, resolving action)
 func _begin_enemy_turn() -> void:
@@ -442,7 +448,7 @@ func _end_battle(result_state: States) -> void:
 
 # Moves the cursor to the currently active player button
 func _position_cursor_on_player(actor: BattleActor) -> void:
-	#DEBUG print("Battle.gd/_position_cursor_on_player() called")
+	print("Battle.gd/_position_cursor_on_player() called")
 	var idx = Data.party.find(actor)
 	var btn = _players_menu.get_buttons()[idx]
 	
@@ -685,18 +691,42 @@ func _show_skills_menu(actor):
 		_menu_cursor.hide()
 
 func _on_skill_button_pressed(skill_resource):
-	print("Battle.gd/on_skill_button_pressed() called")
 	selected_skill = skill_resource
 	skill_targeting = true
 	_skills_menu.hide()
-	# Now enable player selection for the target
-	state = States.PLAYER_TARGET
-	_players_menu.show()
-	_players_menu.button_enable_focus(true)
-	_enemies_menu.button_enable_focus(false)
-	_options_menu.button_enable_focus(false)
-	_players_menu.button_focus(0)
-	_position_cursor_on_player(current_actor)
+
+	# Determine target menu based on skill's target_type
+	if skill_resource.target_type == "enemy":
+		state = States.PLAYER_TARGET
+		_enemies_menu.show()
+		_enemies_menu.button_enable_focus(true)
+		_players_menu.button_enable_focus(false)
+		_options_menu.button_enable_focus(false)
+		_enemies_menu.button_focus(0)
+		# Move cursor to first enemy
+		_position_cursor_on_enemy(_enemies_menu.get_buttons()[0].data)
+	elif skill_resource.target_type == "ally":
+		state = States.PLAYER_TARGET
+		_players_menu.show()
+		_players_menu.button_enable_focus(true)
+		_enemies_menu.button_enable_focus(false)
+		_options_menu.button_enable_focus(false)
+		_players_menu.button_focus(0)
+		_position_cursor_on_player(current_actor)
+	elif skill_resource.target_type == "self":
+		# Instantly resolve skill on self, no menu needed
+		_resolve_skill(current_actor, current_actor, skill_resource)
+		skill_targeting = false
+		selected_skill = null
+	else:
+		# Default: treat as ally skill
+		state = States.PLAYER_TARGET
+		_players_menu.show()
+		_players_menu.button_enable_focus(true)
+		_enemies_menu.button_enable_focus(false)
+		_options_menu.button_enable_focus(false)
+		_players_menu.button_focus(0)
+		_position_cursor_on_player(current_actor)
 
 func _on_players_button_pressed(button: PlayerButton) -> void:
 	print("Battle.gd/_on_players_button_pressed() called")
@@ -712,6 +742,7 @@ func _on_players_button_pressed(button: PlayerButton) -> void:
 		_resolve_action(current_actor, target, action)
 
 func _resolve_skill(actor, target, skill):
+	print("Battle.gd/_resolve_skill() called")
 	var actor_button = _get_button_for_actor(actor)
 	var target_button = _get_button_for_actor(target)
 
@@ -719,19 +750,27 @@ func _resolve_skill(actor, target, skill):
 	var class_cfg = Data.class_configs.get(actor.class_key, {})
 	var skill_anim = class_cfg.get("skill_anim", "") # fallback to empty string if not found
 
+	# Play the skill cast sfx (sfx_cast_path)
+	if skill.sfx_cast_path != "":
+		var stream = load(skill.sfx_cast_path)
+		if stream:
+			var snd = AudioStreamPlayer.new()
+			snd.stream = stream
+			snd.pitch_scale = 2.0 # Play at 2x speed (half duration)
+			get_tree().current_scene.add_child(snd)
+			snd.play()
+
 	# Play the class-specific skill animation before the effect
 	if actor_button and skill_anim != "":
 		await actor_button.play_skill_animation(skill_anim)
 
-	# Play the skill sfx
-	var stream = load(skill.sfx_path)
-	if stream:
-		var snd = AudioStreamPlayer.new()
-		snd.stream = stream
-		get_tree().current_scene.add_child(snd)
-		snd.play()
+	await get_tree().create_timer(1.0).timeout
 
+	# Play the skill effect, and pass impact sound path if available
 	_play_skill_effect(skill, actor_button, target_button)
+
+	# If you want to guarantee the impact SFX isn't cut off, you may want to wait for it in _play_skill_effect,
+	# but for now, just keep the old wait
 	await get_tree().create_timer(1.0).timeout
 
 	if actor.base_ap >= skill.cost:
@@ -755,41 +794,62 @@ func _resolve_skill(actor, target, skill):
 		else:
 			_log_action("%s uses %s on %s! (No effect)" % [actor.name, skill.name, target.name])
 	else:
+		print("Battle.gd/_resolve_skill: Applying effect %s to %s with params %s" % [skill.effect_name, target.name, str(skill.effect_params)])
 		Effects.apply_effect(skill.effect_name, target, skill.effect_params)
-		_log_action("%s uses %s on %s!" % [actor.name, skill.name, target.name])
+		_log_action("%s hits %s with %s for %s!" % [actor.name, target.name, skill.name, str(skill.effect_params[0])])
+		print("Battle.gd/_resolve_skill: Effect applied")
 
 	await get_tree().create_timer(2.0).timeout
+	print("Battle.gd/_resolve_skill() finished")
 	_set_buttons_enabled(true)
 	_advance_index()
 	_next_turn()
 
 func _play_skill_effect(skill, caster_button, target_button):
+	print("Battle.gd/_play_skill_effect() called")
 	if skill.effect_scene == "":
 		print("No effect_scene specified.")
 		return
 
 	var effect_scene = load(skill.effect_scene)
 	var effect_instance = effect_scene.instantiate()
-	print("Battle.gd/_play_skill_effect -> Effect instance created: ", effect_instance)
+	target_button.get_parent().add_child(effect_instance)
 
-	var parent = target_button.get_parent()
-	parent.add_child(effect_instance)
-
-	# Calculate button center in global coordinates
 	var button_rect = target_button.get_global_rect()
-	var button_center = button_rect.position + button_rect.size * 0.3
+	var button_center = button_rect.position + button_rect.size * 0.5  # Center
 
-	var effect_size = effect_instance.size if effect_instance.has_method("get_size") or "size" in effect_instance else Vector2.ZERO
+	# Default offsets
+	var vertical_offset = 0
+	var horizontal_offset = 0
 
-	var vertical_offset = 5  # Move effect X pixels lower
-	effect_instance.global_position = button_center - effect_size * 0.5 + Vector2(0, vertical_offset)
+	# Target-type specific tweaks
+	if skill.target_type == "enemy":
+		vertical_offset = 0
+		horizontal_offset = 0  # Adjust as needed for enemies
+	elif skill.target_type == "ally":
+		vertical_offset = 0
+		horizontal_offset = 0  # Adjust as needed for allies
 
-	print("Battle.gd/_play_skill_effect -> Effect instance global_position set to: ", effect_instance.global_position)
+	# If skill has a per-skill offset, add it
+	var effect_offset = Vector2(horizontal_offset, vertical_offset)
+	if "effect_offset" in skill and skill.effect_offset != null:
+		effect_offset += skill.effect_offset
+
+	effect_instance.global_position = button_center + effect_offset
 
 	var anim_sprite = effect_instance.get_node_or_null("AnimatedSprite2D")
-	if not anim_sprite:
-		print("No AnimatedSprite2D found in effect_instance!")
-		return
-	anim_sprite.visible = true
-	anim_sprite.play(skill.effect_animation)
-	anim_sprite.connect("animation_finished", effect_instance.queue_free)
+	if anim_sprite:
+		anim_sprite.visible = true
+		anim_sprite.play(skill.base_animation)
+		anim_sprite.connect("animation_finished", effect_instance.queue_free)
+
+		# Play the impact/hit SFX if present
+		if "sfx_impact_path" in skill and skill.sfx_impact_path != "":
+			var impact_stream = load(skill.sfx_impact_path)
+			if impact_stream:
+				var snd = AudioStreamPlayer.new()
+				snd.stream = impact_stream
+				get_tree().current_scene.add_child(snd)
+				snd.play()
+	
+	print("Battle.gd/_play_skill_effect() finished")

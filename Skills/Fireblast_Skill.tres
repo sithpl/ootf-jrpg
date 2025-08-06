@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="Skill" load_steps=2 format=3 uid="uid://dhc8421nosoir"]
+
+[ext_resource type="Script" uid="uid://kduoqtm7ucd1" path="res://Skills/Skill.gd" id="1_vpxyr"]
+
+[resource]
+script = ExtResource("1_vpxyr")
+name = "Fireblast"
+description = "Deals fire damage to one enemy."
+cost = 5
+effect_name = "damage"
+effect_params = [15]
+target_type = "enemy"
+effect_scene = "res://Skills/FireblastEffect.tscn"
+base_animation = "damage_fire_skill_hit"
+impact_animation = ""
+effect_position = "target"
+sfx_cast_path = "res://Assets/Audio/Skills/sfx_cast_skill.wav"
+sfx_impact_path = "res://Assets/Audio/Skills/damage_fire_skill.wav"
+effect_offset = Vector2(5, -3)
+metadata/_custom_type_script = "uid://kduoqtm7ucd1"

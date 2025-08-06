@@ -9,6 +9,4 @@ anchors_preset = 0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = ExtResource("1_smbe5")
-animation = &"priest_heal_spell"
-frame = 7
-frame_progress = 1.0
+animation = &"damage_fire_skill_hit"

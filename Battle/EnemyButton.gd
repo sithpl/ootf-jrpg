@@ -16,4 +16,5 @@ func _on_data_is_defeated():
 		await anim_player.animation_finished
 	else:
 		print("AnimationPlayer is nil!")  # Wait briefly for animation, etc.
+	await get_tree().create_timer(0.5).timeout
 	queue_free()  # Remove enemy button from scene
