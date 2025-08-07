@@ -69,7 +69,13 @@ func _process(_delta):
 
 func _unhandled_input(event):
 	if event.is_action_pressed("ui_cancel"):
-		if menu_state == "character_select":
+		# NEW
+		if menu_state == "main":
+			# When in the StartMenu, close entire StartUI
+			close_menu()
+		# EXISTING
+		elif menu_state == "character_select":
+			# When selecting a character (from Equip), cancel should return to StartMenu without closing StartUI
 			menu_state = "main"
 			start_menu.visible = true
 			start_menu.modulate = Color(1,1,1,1)
@@ -103,6 +109,7 @@ func close_menu():
 	start_cursor.visible = false
 	startui.visible = false
 	TextUi.show()
+	Globals.player.movement_locked = false # <----- NEW
 	#DEBUG print("StartUI.gd/close_menu -> Menu: ", menu_state)
 
 func get_current_money():
@@ -216,7 +223,6 @@ func _on_character_slot_selected(index):
 func _on_equipmenu_cancel():
 	#DEBUG print("StartUI.gd/_on_equipmenu_cancel() called")
 	if menu_state == "equip_menu":
-		menu_state = "main"
 		equip_menu.visible = false
 		start_menu.visible = true
 		equip_button.grab_focus()
@@ -224,6 +230,7 @@ func _on_equipmenu_cancel():
 		anim_player.play("fade_in")
 		await anim_player.animation_finished
 		start_menu.modulate = Color(1,1,1,1)
+		menu_state = "main" # <----- NEW - Fixes issue with pressing ui_cancel in EquipMenu and backing out of StartUI completely
 	#DEBUG print("StartUI.gd/_on_equipment_cancel -> Menu: ", menu_state)
 
 func _on_check_pressed():

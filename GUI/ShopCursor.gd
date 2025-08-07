@@ -79,7 +79,7 @@ func _set_target(node: Control) -> void:
 	global_position = target.global_position + OFFSET
 	show()
 	set_process(true)
-	if not suppress_next_move_sound and move_sound.stream:
+	if not suppress_next_move_sound and move_sound.stream and move_sound.is_inside_tree():
 		move_sound.play()
 	suppress_next_move_sound = false
 

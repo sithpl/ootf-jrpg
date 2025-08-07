@@ -59,6 +59,27 @@ func _unhandled_input(event: InputEvent) -> void:
 	if input_locked:
 		get_viewport().gui_disable_input = true
 		return
+	# NEW - Skill Menu Cancel Handling
+	if event.is_action_pressed("ui_cancel") and _skills_menu.visible:
+		_skills_menu.hide()
+		_options.show()
+		_options_menu.button_enable_focus(true)
+		_enemies_menu.button_enable_focus(false)
+		_players_menu.button_enable_focus(false)
+		state = States.PLAYER_SELECT
+		skill_targeting = false   # <--- NEW - Fix Skill ability cancel issue where FIGHT would trigger Skill cast
+		selected_skill = null     # <--- NEW - Fix Skill ability cancel issue where FIGHT would trigger Skill cast
+		# Focus the Skills button in the options menu (find by text)
+		var skills_btns = _options_menu.get_children()
+		for btn in skills_btns:
+			if btn is Button and btn.text == "Skills":
+				btn.grab_focus()
+				break
+		_menu_cursor.show()
+		_menu_cursor.global_position = _options_menu.get_buttons()[1].global_position # Assuming Skills is index 1
+		return
+
+	# NEW - Target Selection Cancel Handling
 	if event.is_action_pressed("ui_cancel") and state == States.PLAYER_TARGET:
 		_cancel_target_selection()
 
@@ -474,17 +495,17 @@ func _position_cursor_off() -> void:
 
 # Cancels target selection, returns to options menu
 func _cancel_target_selection() -> void:
-	#DEBUG print("Battle.gd/_cancel_target_selection() called")
 	state = States.PLAYER_SELECT
 	_down_cursor.hide()
 	_options.show()
 	_options_menu.button_enable_focus(true)          # Re-enable options focus
 	_enemies_menu.button_enable_focus(false)
 	_players_menu.button_enable_focus(false)
-
 	_menu_cursor.show()
 	_options_menu.button_focus()
 	_position_cursor_on_player(current_actor)
+	skill_targeting = false   # <--- NEW - Fix Skill ability cancel issue where FIGHT would trigger Skill cast
+	selected_skill = null     # <--- NEW - Fix Skill ability cancel issue where FIGHT would trigger Skill cast
 
 # Finds the button associated with a given actor (player or enemy)
 func _get_button_for_actor(actor: BattleActor) -> BattleActorButton:
@@ -693,6 +714,7 @@ func _on_skill_button_pressed(skill_resource):
 	selected_skill = skill_resource
 	skill_targeting = true
 	_skills_menu.hide()
+	_options.hide()
 
 	# Determine target menu based on skill's target_type
 	if skill_resource.target_type == "enemy":
