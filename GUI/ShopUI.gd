@@ -5,17 +5,17 @@ signal item_purchased(item: Item, amount: int) # Emitted when an item is bought
 signal item_selected(item: Item) # Emitted when an item is selected
 
 # UI references
-@onready var shopui              : ShopUI           = $"."
-@onready var startui             : StartUI          = $StartUI
-@onready var shop_cursor         : ShopCursor       = $ShopCursor
-@onready var buy_button          : Button           = $MarginContainer/Window/VBoxContainer/Top/Select/MarginContainer/HBoxContainer/Buy
-@onready var buy_header_row      : HBoxContainer    = $MarginContainer/Window/VBoxContainer/Middle/MarginContainer/Buy/BuyHeader
-@onready var buy_list            : VBoxContainer    = $MarginContainer/Window/VBoxContainer/Middle/MarginContainer/Buy/BuyScroll/BuyList
-@onready var sell_header_row     : HBoxContainer    = $MarginContainer/Window/VBoxContainer/Middle/MarginContainer/Sell/SellHeader
-@onready var sell_list           : VBoxContainer    = $MarginContainer/Window/VBoxContainer/Middle/MarginContainer/Sell/SellScroll/SellList
-@onready var sell_button         : Button           = $MarginContainer/Window/VBoxContainer/Top/Select/MarginContainer/HBoxContainer/Sell
-@onready var exit_button         : Button           = $MarginContainer/Window/VBoxContainer/Top/Select/MarginContainer/HBoxContainer/Exit
-@onready var detail_label        : Label            = $MarginContainer/Window/VBoxContainer/Bottom/ItemDetail/MarginContainer/Detail
+@onready var shopui              :ShopUI           = $"."
+@onready var startui             :StartUI          = get_node_or_null("StartUI")
+@onready var shop_cursor         :ShopCursor       = $ShopCursor
+@onready var buy_button          :Button           = $MarginContainer/Window/VBoxContainer/Top/Select/MarginContainer/HBoxContainer/Buy
+@onready var buy_header_row      :HBoxContainer    = $MarginContainer/Window/VBoxContainer/Middle/MarginContainer/Buy/BuyHeader
+@onready var buy_list            :VBoxContainer    = $MarginContainer/Window/VBoxContainer/Middle/MarginContainer/Buy/BuyScroll/BuyList
+@onready var sell_header_row     :HBoxContainer    = $MarginContainer/Window/VBoxContainer/Middle/MarginContainer/Sell/SellHeader
+@onready var sell_list           :VBoxContainer    = $MarginContainer/Window/VBoxContainer/Middle/MarginContainer/Sell/SellScroll/SellList
+@onready var sell_button         :Button           = $MarginContainer/Window/VBoxContainer/Top/Select/MarginContainer/HBoxContainer/Sell
+@onready var exit_button         :Button           = $MarginContainer/Window/VBoxContainer/Top/Select/MarginContainer/HBoxContainer/Exit
+@onready var detail_label        :Label            = $MarginContainer/Window/VBoxContainer/Bottom/ItemDetail/MarginContainer/Detail
 
 const Item = preload("res://Items/Item.gd")
 

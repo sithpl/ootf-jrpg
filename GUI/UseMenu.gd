@@ -24,7 +24,7 @@ func _unhandled_input(event):
 	if event.is_action_pressed("ui_down") or event.is_action_pressed("ui_up"):
 		#DEBUG print("UseMenu.gd/_unhandled_input -> Focus owner is now: ", get_viewport().gui_get_focus_owner())
 		pass
-	if event.is_action_pressed("ui_cancel") and self.visible:
+	if event.is_action_pressed("ui_cancel") and visible:
 		#DEBUG print("UseMenu.gd/_unhandled_input -> ui_cancel pressed in UseMenu!")
 		emit_signal("cancelled")
 		get_viewport().set_input_as_handled()
