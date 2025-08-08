@@ -195,26 +195,28 @@ func _on_character_slot_selected(index):
 	# Get character key and data
 	var char_name = party_keys[index]
 	var char_data = Data.characters[char_name]
-	var actor = Data.party[index]
+	var naked_stats = Data.get_naked_stats(char_name) # NEW - Fix for Issue #45
 	var portrait_path = char_data.get("portrait", "")
 
-	# Hide StartMenu, show EquipMenu
-	start_menu.visible = false
+	# Show EquipMenu
+	#start_menu.visible = false # <----- NEW - Fix Issue #35
 	equip_menu.visible = true
 
-	# Set up the EquipMenu with the selected character's data
+	# NEW - Fix for Issue #45
+	# Set up the EquipMenu with the selected character's "naked" data
 	equip_menu.set_character(
 		char_name,
 		portrait_path,
-		actor.base_hp,
-		actor.hp_max,
-		actor.base_ap,
-		actor.ap_max,
-		actor.attack,
-		actor.defense,
-		actor.magic,
-		actor.speed
+		naked_stats["base_hp"],
+		naked_stats["hp_max"],
+		naked_stats["base_ap"],
+		naked_stats["ap_max"],
+		naked_stats["attack"],
+		naked_stats["defense"],
+		naked_stats["magic"],
+		naked_stats["speed"]
 	)
+
 	# Focus the first button in the EquipMenu
 	equip_menu.set_equipment_buttons(char_name)
 	equip_menu.main_hand_btn.grab_focus()

@@ -169,6 +169,24 @@ func populate_buy_items(items_with_stock: Array):
 	var num_existing = buy_list.get_child_count() - 1
 	var num_new = items_with_stock.size()
 
+	# NEW - Fix for Issue #36
+	# Track which item will be focused after removal
+	var next_focus_idx = -1
+
+	# NEW - Fix for Issue #36
+	# Remove excess rows then determine next focus button if needed
+	if num_existing > num_new:
+		# If the last focused item was at the end and now removed, focus previous
+		for idx in range(num_new, num_existing):
+			var row = buy_list.get_child(idx + 1)
+			if row.get_child_count() > 0:
+				var btn = row.get_child(0)
+				if btn.get_meta("item_id") == last_focused_item_id:
+					# Set focus to the previous item if possible
+					next_focus_idx = idx - 1
+			buy_list.get_child(idx + 1).queue_free()
+
+	# Update or add rows as usual
 	for idx in range(max(num_existing, num_new)):
 		if idx < num_new:
 			var entry = items_with_stock[idx]
@@ -177,12 +195,12 @@ func populate_buy_items(items_with_stock: Array):
 			var row: HBoxContainer = null
 
 			if idx < num_existing:
-				pass
 				# Reuse row
 				row = buy_list.get_child(idx + 1)
 				var item_label = row.get_child(0)
 				item_label.text = item.name
 				item_label.set_meta("item_id", item.id)
+				item_label.set_meta("stock", stock)
 				item_label.disabled = stock == 0
 
 				var qty_label = row.get_child(1)
@@ -215,12 +233,16 @@ func populate_buy_items(items_with_stock: Array):
 				price_label.text = str(item.price)
 				row.add_child(price_label)
 
-				# (Add description label if needed elsewhere)
 				item_label.connect("pressed", Callable(self, "_on_button_pressed").bind(idx))
 				item_label.connect("focus_entered", Callable(self, "_on_button_focus_entered").bind(idx))
 				buy_list.add_child(row)
-		elif idx < num_existing:
-			buy_list.get_child(idx + 1).queue_free()
+		#elif idx < num_existing: <----- # NEW - Fix for Issue #36
+			#buy_list.get_child(idx + 1).queue_free() <----- # NEW - Fix for Issue #36
+
+	# NEW - Fix for Issue #36
+	# Update last_focused_item_id if needed
+	if next_focus_idx >= 0 and next_focus_idx < items_with_stock.size():
+		last_focused_item_id = items_with_stock[next_focus_idx]["item"].id
 
 	restore_list_focus(buy_list, last_focused_item_id)
 

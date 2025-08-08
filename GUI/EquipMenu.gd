@@ -1,5 +1,4 @@
-extends Control
-class_name EquipMenu
+class_name EquipMenu extends Control
 
 signal cancel_pressed
 signal equipment_changed
@@ -10,7 +9,7 @@ signal equipment_changed
 @onready var chest_btn      :Button      = $MarginContainer/HBoxContainer/Middle/MarginContainer/HBoxContainer/Equipped/Chest
 
 @onready var equip_items_panel :VBoxContainer = $MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipItems
-@onready var equip_item_button :Button = $MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipItems/Item
+@onready var equip_item_button :Button        = $MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipItems/Item
 
 @onready var char_portrait   :TextureRect = $MarginContainer/HBoxContainer/Middle/MarginContainer/HBoxContainer/CharacterPortrait
 @onready var char_name       :Label       = $MarginContainer/HBoxContainer/Middle/MarginContainer/HBoxContainer/CharacterName
@@ -22,29 +21,22 @@ signal equipment_changed
 @onready var cur_char_mag    :Label = $"MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/CurrentStats#/MAG#"
 @onready var cur_char_spd    :Label = $"MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/CurrentStats#/SPD#"
 
-#@onready var aft_char_hp     :Label = $"MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/PostStats#/HP#"
-#@onready var aft_char_ap     :Label = $"MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/PostStats#/AP#"
-#@onready var aft_char_atk    :Label = $"MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/PostStats#/ATK#"
-#@onready var aft_char_def    :Label = $"MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/PostStats#/DEF#"
-#@onready var aft_char_mag    :Label = $"MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/PostStats#/MAG#"
-#@onready var aft_char_spd    :Label = $"MarginContainer/HBoxContainer/Bottom/MarginContainer/HBoxContainer/EquipStats/VBoxContainer/HBoxContainer/PostStats#/SPD#"
+var current_character_name   :String = ""
+var current_slot_type        :String = ""     # "M.Hand", "O.Hand", "Head", "Chest"
+var slot_button_map          := {}
+var item_list_active         := false          # True if player is choosing from the Item list
 
-var current_character_name : String = ""
-var current_slot_type : String = "" # "M.Hand", "O.Hand", "Head", "Chest"
-var slot_button_map := {}
-var item_list_active := false  # True if player is choosing from the item list
-
-# Store base stats for the current character (for stat preview)
-var base_hp := 0
-var hp_max := 0
-var base_ap := 0
-var ap_max := 0
+# Store base stats for the "current" character (for stat preview)
+var base_hp  := 0
+var hp_max   := 0
+var base_ap  := 0
+var ap_max   := 0
 var base_atk := 0
 var base_def := 0
 var base_mag := 0
 var base_spd := 0
 
-# Store the original equipment at menu open for accurate "Current" preview
+# Store original equipment at EquipMenu open "current" preview
 var original_equipment := {}
 
 func _ready():
@@ -237,10 +229,3 @@ func _update_post_stats(preview_item_id = null):
 	cur_char_def.text = str(current_stats.defense)
 	cur_char_mag.text = str(current_stats.magic)
 	cur_char_spd.text = str(current_stats.speed)
-
-	#aft_char_hp.text  = "%d/%d" % [base_hp, after_stats.hp_max]
-	#aft_char_ap.text  = "%d/%d" % [base_ap, after_stats.ap_max]
-	#aft_char_atk.text = str(after_stats.attack)
-	#aft_char_def.text = str(after_stats.defense)
-	#aft_char_mag.text = str(after_stats.magic)
-	#aft_char_spd.text = str(after_stats.speed)
