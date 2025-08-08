@@ -55,13 +55,8 @@ func _unhandled_input(event):
 			startui.open_menu()
 			startui.item_button.grab_focus()
 			return
-		#elif startui.visible:
-			#startui.close_menu()
-			#TextUi.visible = true
-			#Globals.player.movement_locked = false
-			#return
 	if event.is_action_pressed("ui_menu"):
-		if startui.item_menu.visible:
+		if startui.item_menu.visible or startui.equip_menu.visible: # NEW - Fix for Issue #35
 			return  # Do nothing if inventory is open
 		elif startui.visible:
 			startui.close_menu()

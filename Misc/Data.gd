@@ -383,3 +383,38 @@ func swap_party_member(slot:int, new_name:String) -> void:
 func get_party() -> Array[BattleActor]:
 	#DEBUG print("Data.gd/get_party() called")
 	return party
+
+# NEW - Fix for Issue #45
+# Returns the "naked" stats (class + personality, no equipment) for a character
+func get_naked_stats(name: String) -> Dictionary:
+	var char_cfg = characters[name]
+	var cls_name = char_cfg["class"]
+	var cls_cfg = class_configs[cls_name]
+	var pers_cfg = personalities.get(char_cfg.get("personality", ""), {})
+
+	var bonus_dict = {}
+	if char_cfg.has("bonuses"):
+		bonus_dict = char_cfg.bonuses
+	if char_cfg.has("personality"):
+		var pers = char_cfg.personality
+		if personalities.has(pers):
+			for k in personalities[pers]:
+				bonus_dict[k] = bonus_dict.get(k, 0) + personalities[pers][k]
+
+	var hp_max   = cls_cfg.base_hp   + bonus_dict.get("base_hp", 0)
+	var ap_max   = cls_cfg.base_ap   + bonus_dict.get("base_ap", 0)
+	var attack   = cls_cfg.attack    + bonus_dict.get("attack", 0)
+	var defense  = cls_cfg.defense   + bonus_dict.get("defense", 0)
+	var magic    = cls_cfg.magic     + bonus_dict.get("magic", 0)
+	var speed    = cls_cfg.speed     + bonus_dict.get("speed", 0)
+
+	return {
+		"base_hp": hp_max,
+		"hp_max": hp_max,
+		"base_ap": ap_max,
+		"ap_max": ap_max,
+		"attack": attack,
+		"defense": defense,
+		"magic": magic,
+		"speed": speed
+	}
