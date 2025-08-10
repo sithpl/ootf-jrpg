@@ -20,9 +20,7 @@ script = ExtResource("2_hrsdt")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(-44, -39)
 sprite_frames = ExtResource("3_ko5nr")
-animation = &"ranger_skill"
-frame = 11
-frame_progress = 1.0
+animation = &"lancer_use"
 centered = false
 flip_h = true
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bitweeh3tectc"
-path="res://.godot/imported/priest_attack_spell.png-6114b650885ef14e09f642544bfea746.ctex"
+uid="uid://dneqjcgko2cjt"
+path="res://.godot/imported/damage_ice_skill.png-7fc81853703807c13260ba6d16ea5a31.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Animations/Sheets/Spells/priest_attack_spell.png"
-dest_files=["res://.godot/imported/priest_attack_spell.png-6114b650885ef14e09f642544bfea746.ctex"]
+source_file="res://Assets/Animations/Sheets/Skills/damage_ice_skill.png"
+dest_files=["res://.godot/imported/damage_ice_skill.png-7fc81853703807c13260ba6d16ea5a31.ctex"]
 
 [params]
 

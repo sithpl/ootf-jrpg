@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c3djoev4ebphx"
-path="res://.godot/imported/priest_heal_spell.png-5a3635cff37a691c050c3edd52270752.ctex"
+uid="uid://c253kcxcv24h1"
+path="res://.godot/imported/Lancer-Use.png-bebb20748b54dbb41431f1bd5af9ad2a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Animations/Sheets/Spells/priest_heal_spell.png"
-dest_files=["res://.godot/imported/priest_heal_spell.png-5a3635cff37a691c050c3edd52270752.ctex"]
+source_file="res://Assets/Animations/Sheets/Classes/Lancer-Use.png"
+dest_files=["res://.godot/imported/Lancer-Use.png-bebb20748b54dbb41431f1bd5af9ad2a.ctex"]
 
 [params]
 

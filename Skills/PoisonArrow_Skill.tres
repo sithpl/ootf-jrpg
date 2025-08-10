@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Skill" load_steps=2 format=3 uid="uid://cawfvy0igcf7"]
+
+[ext_resource type="Script" uid="uid://kduoqtm7ucd1" path="res://Skills/Skill.gd" id="1_0yo5h"]
+
+[resource]
+script = ExtResource("1_0yo5h")
+name = "P.Arrow"
+description = "A poisonous arrow that inflicts damage over time."
+cost = 10
+effect_name = "status_poison"
+effect_params = [10, 5, 5]
+target_type = "enemy"
+effect_scene = "res://Skills/PoisonArrowEffect.tscn"
+base_animation = "damage_poison_skill"
+impact_animation = ""
+effect_position = "target"
+sfx_cast_delay = 0.0
+sfx_cast_path = "res://Assets/Audio/Skills/damage_arrow_skill.wav"
+sfx_impact_path = ""
+effect_offset = Vector2(0, 0)
+metadata/_custom_type_script = "uid://kduoqtm7ucd1"

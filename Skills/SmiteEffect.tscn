@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://bdc8rcyh4mu7s"]
+
+[ext_resource type="SpriteFrames" uid="uid://ckp6p7xi2xypx" path="res://Assets/Animations/Battle_Skills.tres" id="1_riqu6"]
+
+[node name="SmiteEffect" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = ExtResource("1_riqu6")
+animation = &"damage_holy_skill_hit"
