@@ -183,6 +183,10 @@ offset_left = 4.0
 offset_top = 4.0
 offset_right = 24.0
 offset_bottom = 24.0
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath(".")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../PlayerButton2")
 stretch_mode = 5
 
 [node name="PlayerButton2" parent="Players" instance=ExtResource("3_1samx")]
@@ -193,6 +197,10 @@ offset_left = 18.0
 offset_top = 24.0
 offset_right = 38.0
 offset_bottom = 44.0
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../PlayerButton")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../PlayerButton3")
 stretch_mode = 5
 metadata/_edit_use_anchors_ = true
 
@@ -207,6 +215,10 @@ offset_left = 4.0
 offset_top = 44.0
 offset_right = 24.0
 offset_bottom = 64.0
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../PlayerButton2")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../PlayerButton4")
 stretch_mode = 5
 
 [node name="PlayerButton4" parent="Players" instance=ExtResource("3_1samx")]
@@ -220,6 +232,10 @@ offset_left = 25.0
 offset_top = 64.0
 offset_right = 45.0
 offset_bottom = 84.0
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../PlayerButton3")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath(".")
 stretch_mode = 5
 
 [node name="GUIMargin" type="MarginContainer" parent="."]
@@ -468,12 +484,59 @@ layout_mode = 2
 
 [node name="BoxContainer" type="BoxContainer" parent="SkillsMenu/MarginContainer/ScrollContainer"]
 layout_mode = 2
+vertical = true
 
 [node name="Skill+Cost" type="Button" parent="SkillsMenu/MarginContainer/ScrollContainer/BoxContainer"]
 layout_mode = 2
-text = "Skill 8"
+text = "Skill (8)"
+alignment = 0
 
 [node name="TextureRect" type="TextureRect" parent="SkillsMenu"]
+self_modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("CanvasTexture_bku68")
+
+[node name="ItemMenu" type="NinePatchRect" parent="."]
+visible = false
+layout_mode = 2
+offset_left = 125.0
+offset_top = 124.0
+offset_right = 260.0
+offset_bottom = 176.0
+texture = ExtResource("7_l0uqe")
+region_rect = Rect2(550, 164, 48, 48)
+patch_margin_left = 13
+patch_margin_top = 11
+patch_margin_right = 13
+patch_margin_bottom = 11
+
+[node name="MarginContainer" type="MarginContainer" parent="ItemMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="ItemMenu/MarginContainer"]
+layout_mode = 2
+
+[node name="BoxContainer" type="BoxContainer" parent="ItemMenu/MarginContainer/ScrollContainer"]
+layout_mode = 2
+vertical = true
+
+[node name="Item+Qty" type="Button" parent="ItemMenu/MarginContainer/ScrollContainer/BoxContainer"]
+layout_mode = 2
+text = "Potion x5"
+alignment = 0
+
+[node name="TextureRect" type="TextureRect" parent="ItemMenu"]
 self_modulate = Color(0, 0, 0, 1)
 show_behind_parent = true
 layout_mode = 1

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cmtsfsa125l77"
-path="res://.godot/imported/mage_attack_spell2.png-29b4e673ccca8660e060145e3a421a98.ctex"
+uid="uid://bitweeh3tectc"
+path="res://.godot/imported/damage_holy_skill.png-84d071d2e6eb6daefa8fc8cd5f246283.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Animations/Sheets/Spells/mage_attack_spell2.png"
-dest_files=["res://.godot/imported/mage_attack_spell2.png-29b4e673ccca8660e060145e3a421a98.ctex"]
+source_file="res://Assets/Animations/Sheets/Skills/damage_holy_skill.png"
+dest_files=["res://.godot/imported/damage_holy_skill.png-84d071d2e6eb6daefa8fc8cd5f246283.ctex"]
 
 [params]
 

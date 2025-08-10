@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Skill" load_steps=2 format=3 uid="uid://smiteuid"]
+
+[ext_resource type="Script" uid="uid://kduoqtm7ucd1" path="res://Skills/Skill.gd" id="1_skill"]
+
+[resource]
+script = ExtResource("1_skill")
+name = "Smite"
+description = "Deals holy damage to one enemy. Extra vs. undead."
+cost = 6
+effect_name = "damage"
+effect_params = [18]
+target_type = "enemy"
+effect_scene = "res://Skills/SmiteEffect.tscn"
+base_animation = "damage_holy_skill_hit"
+impact_animation = ""
+effect_position = "target"
+sfx_cast_delay = 0.0
+sfx_cast_path = "res://Assets/Audio/Skills/sfx_cast_skill.wav"
+sfx_impact_path = "res://Assets/Audio/Skills/damage_holy_skill.wav"
+effect_offset = Vector2(-5, 3)
+metadata/_custom_type_script = "uid://kduoqtm7ucd1"

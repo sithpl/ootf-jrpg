@@ -9,7 +9,8 @@ func _ready():
 		"restore_ap": Callable(self, "effect_restore_ap"),
 		"cure_poison": Callable(self, "effect_cure_poison"),
 		"revive": Callable(self, "effect_revive"),
-		"multi_attack": Callable(self, "effect_multi_attack"), 
+		"multi_attack": Callable(self, "effect_multi_attack"),
+		"status_poison": Callable(self, "effect_status_poison"), 
 	}
 
 func apply_effect(effect_name: String, target, params=[]):
@@ -42,6 +43,12 @@ func effect_restore_ap(target, amount):
 func effect_cure_poison(target):
 	if target and target.has_method("cure_poison"):
 		return target.cure_poison() 
+	return null
+
+# effect_status_poison: Inflicts Poison status
+func effect_status_poison(target):
+	if target and target.has_method("status_poison"):
+		return target.status_poison() 
 	return null
 
 # effect_revive: Revive target with 50% HP

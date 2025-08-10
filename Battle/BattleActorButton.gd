@@ -23,7 +23,10 @@ var attack_anim                :String       = ""             # Name of attack a
 var idle_anim                  :String       = ""             # Name of idle animation
 var hurt_anim                  :String       = ""             # Name of hurt animation
 var death_anim                 :String       = ""             # Name of death animation
-var skill1_anim                :String       = ""            # Name of skill1 animation
+var walk_anim                  :String       = ""             # Name of walk animation
+var use_anim                   :String       = ""             # Name of use animation
+var cast_anim                  :String       = ""             # Name of cast animation
+var skill1_anim                :String       = ""             # Name of skill1 animation
 
 func _ready() -> void:
 	pass
@@ -57,7 +60,7 @@ func _on_pressed() -> void:
 	# 2) Call attack (not used in current battle flow)
 	#_attack(target)
 	
-	# Do nothing here; button press logic is handled in Battle.gd
+	# UPDATED - Do nothing here. Button press logic is handled in Battle.gd
 	pass
 
 # Calculates the percentage of damage mitigated based on Defense.
@@ -111,8 +114,27 @@ func _attack(target_btn : BattleActorButton):
 	# 5) Signal that attack is finished
 	emit_signal("attack_finished", target_btn)
 
+func flash_for_attack(flashes, flash_time) -> void:
+	# Use an over-bright white to simulate a negative/flash
+	var bright_modulate = Color(2, 2, 2, 1)
+
+	for i in range(flashes):
+		if anim_sprite:
+			anim_sprite.modulate = bright_modulate
+		else:
+			self.modulate = bright_modulate
+		await get_tree().create_timer(flash_time).timeout
+
+		if anim_sprite:
+			anim_sprite.modulate = Color(1, 1, 1, 1)
+		else:
+			self.modulate = Color(1, 1, 1, 1)
+		await get_tree().create_timer(flash_time).timeout
+
 # Responds to BattleActor hp_changed signal: plays hurt/recoil, then shows hit text
 func _on_data_hp_changed(_hp : int, change : int) -> void:
+	print("BAB.gd/_on_data_hp_changed() called")
+	print(_hp, " : ", change)
 	if change < 0:
 		play_hurt_animation()
 		_recoil()
@@ -123,27 +145,27 @@ func _on_data_hp_changed(_hp : int, change : int) -> void:
 	hit_text.text = str(abs(data.last_attempted_damage))
 	hit_text.position = Vector2(self.size.x * 0.5 - hit_text.size.x * 0.5, -hit_text.size.y - 8)
 
-	# Set green for heals, default (white) for damage
+	# Default (white) for damage, green for heals, blue for AP gain
 	if data.last_attempted_damage > 0:
 		hit_text.modulate = Color(0, 1, 0)  # Bright green
 
 	add_child(hit_text)
 
-# TODO Gain AP, HitText with blue text
+# Responds to BattleActor ap_changed signal: shows hit text
 func _on_data_ap_changed(ap: int, change: int) -> void:
-	#await get_tree().create_timer(0.5).timeout
-#
-	#var hit_text : Label = HIT_TEXT.instantiate()
-	#hit_text.z_index = 100
-	#hit_text.text = str(abs(data.change))
-	#hit_text.position = Vector2(self.size.x * 0.5 - hit_text.size.x * 0.5, -hit_text.size.y - 8)
-#
-	## Set color
-	#if data.change > 0:
-		#hit_text.modulate = Color.BLUE  # Bright blue
-#
-	#add_child(hit_text)
-	pass
+	if change < 0:
+		return
+	await get_tree().create_timer(0.5).timeout
+
+	var hit_text : Label = HIT_TEXT.instantiate()
+	hit_text.z_index = 100
+	hit_text.text = str(abs(ap))
+	hit_text.position = Vector2(self.size.x * 0.5 - hit_text.size.x * 0.5, -hit_text.size.y - 8)
+
+	# Default (white) for damage, green for heals, blue for AP gain
+	hit_text.modulate = Color(0.3, 0.6, 1.0)  # Bright blue
+
+	add_child(hit_text)
 
 # Animates a quick physical recoil when damaged
 func _recoil() -> Tween:
@@ -208,18 +230,6 @@ func _on_data_acting() -> void:
 	tween.tween_property(self, "position:x",start_pos.x - (RECOIL * recoil_direction), 0.5).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_IN)
 	tween.tween_property(self, "position:x", start_pos.x, 0.1).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 
-# Unused: old animation to slide forward when attacking
-# TODO Maybe remove? Players have animations, enemies need to just flash and attack in place
-func _action_slide() -> Tween: 
-	#DEBUG print("BattleActorButton.gd/_action_slide() called")
-	# 1) If Tween is currently playing, stop it and void any set properties
-	if tween: tween.kill()
-	# 2) Create new Tween for alternate slide
-	tween = create_tween()
-	tween.tween_property(self, "position:x", start_pos.x + (RECOIL * recoil_direction * -1), 0.5).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_IN)
-	tween.tween_property(self, "position:x", start_pos.x, 0.1).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
-	return tween
-
 # Play a skill animation by name and reset to idle when done
 func play_skill_animation(anim_name: String) -> void:
 	if anim_sprite and anim_name != "":
@@ -228,3 +238,55 @@ func play_skill_animation(anim_name: String) -> void:
 		# Reset to idle animation if available
 		if idle_anim != "":
 			anim_sprite.play(idle_anim)
+
+# Animates up to the impact, then yields
+func play_charge_attack_impact(target_button: BattleActorButton, charge_sfx: AudioStreamPlayer = null) -> void:
+	var orig_pos = position
+	var my_parent = get_parent()
+	var target_global_rect = target_button.get_global_rect()
+	var target_center = target_global_rect.position + target_global_rect.size * 0.5
+	var parent_global_rect = my_parent.get_global_rect()
+	var target_local = target_center - parent_global_rect.position - self.size * 0.5 + Vector2(40,0)
+
+	# Walk anim (run up)
+	if walk_anim != "" and anim_sprite:
+		anim_sprite.speed_scale = 3.0
+		anim_sprite.play(walk_anim)
+		await get_tree().create_timer(0.5).timeout
+		anim_sprite.speed_scale = 1.0
+
+	# Move toward target
+	var tween = create_tween()
+	tween.tween_property(self, "position", target_local, 0.2)
+	await tween.finished
+
+	# Stop charge sfx
+	if charge_sfx:
+		charge_sfx.stop()
+
+	# Skill anim
+	if skill1_anim != "" and anim_sprite:
+		anim_sprite.play(skill1_anim)
+		await anim_sprite.animation_finished
+
+# Returns to original position from play_charge_attack_impact
+func tween_return_to_orig() -> void:
+	var back_tween = create_tween()
+	back_tween.tween_property(self, "position", start_pos, 0.3)
+	await back_tween.finished
+	if idle_anim != "" and anim_sprite:
+		anim_sprite.play(idle_anim)
+
+	# At this point, yield back so the main logic can apply damage!
+# TODO Maybe remove _action_slide? Players have animations, enemies need to just flash and attack in place
+
+# Unused: old animation to slide forward when attacking
+#func _action_slide() -> Tween: 
+	##DEBUG print("BattleActorButton.gd/_action_slide() called")
+	## 1) If Tween is currently playing, stop it and void any set properties
+	#if tween: tween.kill()
+	## 2) Create new Tween for alternate slide
+	#tween = create_tween()
+	#tween.tween_property(self, "position:x", start_pos.x + (RECOIL * recoil_direction * -1), 0.5).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_IN)
+	#tween.tween_property(self, "position:x", start_pos.x, 0.1).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+	#return tween

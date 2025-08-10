@@ -30,6 +30,10 @@ var xp            :int         = 0         # EXP
 var texture       :Texture     = null      # Sprite/texture for UI
 var friendly      :bool        = false     # Is this a player character?
 
+var is_poisoned: bool = false
+var poison_damage: int = 0
+var poison_turns: int = 0
+
 # ---------- Actor Initialization ----------
 
 # Sets up actor stats at creation
@@ -143,14 +147,28 @@ func restore_ap(amount: int):
 	return change_ap(amount)
 	print("%s restored %d AP, now at %d/%d AP" % [name, amount, base_ap, ap_max])
 
-# Cure poison
-func cure_poison():
-	# If you track status effects, clear poison here
-	print("%s is cured of poison!" % name)
-
 # Revive with 50%
 func revive(percent: float = 0.5):
 	if base_hp <= 0:
 		base_hp = int(hp_max * percent)
 		emit_signal("hp_changed", base_hp, base_hp)
 		print("%s revived to %d/%d HP!" % [name, base_hp, hp_max])
+
+func apply_poison(damage: int, turns: int = 3):
+	is_poisoned = true
+	poison_damage = damage
+	poison_turns = turns
+
+func process_poison():
+	if is_poisoned:
+		healhurt(-poison_damage)
+		poison_turns -= 1
+		print("%s takes %d poison damage!" % [name, poison_damage])
+		if poison_turns <= 0:
+			cure_poison()
+
+func cure_poison():
+	is_poisoned = false
+	poison_damage = 0
+	poison_turns = 0
+	print("%s is cured of poison!" % name)

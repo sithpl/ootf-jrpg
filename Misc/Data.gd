@@ -89,7 +89,8 @@ var class_configs := {
 		"attack_anim": "soldier_melee", 
 		"hurt_anim" : "soldier_hurt", 
 		"death_anim" : "soldier_death", 
-		"skill1_anim" : "soldier_skill1"
+		"skill1_anim" : "soldier_skill1",
+		"skills" : ["Charge"]
 	},
 
 	"Ranger": { 
@@ -104,27 +105,33 @@ var class_configs := {
 		"attack_anim": "ranger_ranged", 
 		"hurt_anim" : "ranger_hurt", 
 		"death_anim" : "ranger_death",
+		"walk_anim" : "ranger_walk",
+		"use_anim" : "ranger_use",
+		"cast_anim" : "ranger_skill",
 		"skill_anim" : "ranger_skill",
-		"skills" : ["Volley"]
+		"skills" : ["P.Arrow","Volley"]
 	},
 
 	"Knight": { 
 		"base_hp": 70, 
-		"base_ap": 5, 
+		"base_ap": 10, 
 		"attack": 6, 
 		"defense": 5, 
 		"magic": 1, 
-		"speed": 1,
+		"speed": 20,
 		"texture_path": "res://Assets/Players/Knight.png", 
 		"idle_anim": "knight_idle", 
 		"attack_anim": "knight_melee", 
 		"hurt_anim" : "knight_hurt", 
-		"death_anim" : "knight_death"
+		"death_anim" : "knight_death",
+		"walk_anim" : "knight_walk",
+		"skill1_anim" : "knight_skill1",
+		"skills" : ["Charge"]
 	},
 
 	"Paladin": { 
 		"base_hp": 50, 
-		"base_ap": 10, 
+		"base_ap": 15, 
 		"attack": 5, 
 		"defense": 4, 
 		"magic": 3, 
@@ -133,7 +140,9 @@ var class_configs := {
 		"idle_anim": "paladin_idle", 
 		"attack_anim": "paladin_melee", 
 		"hurt_anim" : "paladin_hurt", 
-		"death_anim" : "paladin_death"
+		"death_anim" : "paladin_death",
+		"skill_anim" : "paladin_skill1",
+		"skills": ["Smite", "Heal"]
 	},
 
 	"Mage": { 
@@ -148,6 +157,9 @@ var class_configs := {
 		"attack_anim": "mage_melee", 
 		"hurt_anim" : "mage_hurt", 
 		"death_anim" : "mage_death",
+		"walk_anim" : "mage_walk",
+		"use_anim" : "mage_use",
+		"cast_anim" : "mage_skill",
 		"skill_anim" : "mage_skill",
 		"skills": ["Fireblast"]
 	},
@@ -158,14 +170,17 @@ var class_configs := {
 		"attack": 2, 
 		"defense": 2, 
 		"magic": 6, 
-		"speed": 20,
+		"speed": 3,
 		"texture_path": "res://Assets/Players/Priest.png", 
 		"idle_anim": "priest_idle", 
 		"attack_anim": "priest_melee", 
 		"hurt_anim" : "priest_hurt", 
 		"death_anim" : "priest_death",
+		"walk_anim" : "priest_walk",
+		"use_anim" : "priest_use",
+		"cast_anim" : "priest_skill",
 		"skill_anim" : "priest_skill",
-		"skills": ["Heal"]
+		"skills": ["Heal", "Smite"]
 	},
 
 	"Archer": { 
@@ -179,7 +194,9 @@ var class_configs := {
 		"idle_anim": "archer_idle", 
 		"attack_anim": "archer_ranged", 
 		"hurt_anim" : "archer_hurt", 
-		"death_anim" : "archer_death"
+		"death_anim" : "archer_death",
+		"skill_anim" : "archer_skill",
+		"skills" : ["Volley"]
 	},
 
 	"Lancer": { 
@@ -193,7 +210,12 @@ var class_configs := {
 		"idle_anim": "lancer_idle", 
 		"attack_anim": "lancer_melee", 
 		"hurt_anim" : "lancer_hurt", 
-		"death_anim" : "lancer_death"
+		"death_anim" : "lancer_death",
+		"walk_anim" : "lancer_run", # Actually has a run animation
+		"use_anim" : "lancer_use",
+		"cast_anim" : "lancer_use",
+		"skill1_anim" : "lancer_skill1",
+		"skills" : ["Charge", "Smite"]
 	},
 
 	"Dogue": { 
@@ -214,7 +236,7 @@ var class_configs := {
 # ---------- CHARACTERS & PARTY ----------
 
 # party_keys: Names of characters currently in the party
-var party_keys            :Array[String]        = ["Rage", "Fraud", "Glenn", "Dan"]
+var party_keys            :Array[String]        = ["Erik", "Fraud", "Glenn", "Dan"]
 
 # party: List of BattleActor instances for the current party
 var party                 :Array[BattleActor]   = []

@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://b73x0ny4ns8sy"]
+
+[ext_resource type="SpriteFrames" uid="uid://ckp6p7xi2xypx" path="res://Assets/Animations/Battle_Skills.tres" id="1_u7m5e"]
+
+[node name="PoisonArrowEffect" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = ExtResource("1_u7m5e")
+animation = &"damage_poison_skill"
+frame = 15
+frame_progress = 1.0

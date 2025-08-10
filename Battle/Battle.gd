@@ -20,6 +20,7 @@ enum Actions { FIGHT, SKILLS, ITEM, FLEE }
 @onready var _enemy_info_vbox     :VBoxContainer      = _enemy_info_scroll.get_node("MarginContainer/VBoxContainer")
 @onready var _players_menu        :Menu               = $Players
 @onready var _skills_menu         :NinePatchRect      = $SkillsMenu
+@onready var _item_menu           :NinePatchRect      = $ItemMenu
 @onready var _menu_cursor         :MenuCursor         = $MenuCursor
 @onready var _down_cursor         :Sprite2D           = $DownCursor
 
@@ -27,6 +28,7 @@ enum Actions { FIGHT, SKILLS, ITEM, FLEE }
 const MAX_LOG_LINES               :                   = 3
 
 # Variables to track battle state and flow
+var EnemyButtonScene              :PackedScene        = preload("res://Battle/EnemyButton.tscn")
 var enemies_weighted              :Array              = []
 var input_locked                  :bool               = false
 var state                         :States             = States.IDLE
@@ -36,12 +38,14 @@ var current_turn_idx              :int                = 0
 var current_actor                 :BattleActor        = null
 var action                        :Actions            = Actions.FIGHT
 var action_log                    :Array[String]      = []
-var EnemyButtonScene              :PackedScene        = preload("res://Battle/EnemyButton.tscn")
 var _enemy_info_nodes             :Array[Label]       = []
-var battle_enemies: Array = []
-var selected_skill = null
-var skill_targeting = false
-var all_battle_buttons: Array = []
+var battle_enemies                :Array              = []
+var all_battle_buttons            :Array              = []
+var player_inventory              :PlayerInventory    = PlayerInventory
+var selected_skill     = null
+var skill_targeting    = false
+var selected_item      = null
+var item_targeting     = false
 
 # Called when the scene is ready
 func _ready():
@@ -82,6 +86,26 @@ func _unhandled_input(event: InputEvent) -> void:
 	# NEW - Target Selection Cancel Handling
 	if event.is_action_pressed("ui_cancel") and state == States.PLAYER_TARGET:
 		_cancel_target_selection()
+		
+	# NEW - Item Menu Cancel Handling (matching SkillMenu)
+	if event.is_action_pressed("ui_cancel") and _item_menu.visible:
+		_item_menu.hide()
+		_options.show()
+		_options_menu.button_enable_focus(true)
+		_enemies_menu.button_enable_focus(false)
+		_players_menu.button_enable_focus(false)
+		state = States.PLAYER_SELECT
+		item_targeting = false
+		selected_item = null
+		# Focus Item button (by text)
+		var item_btns = _options_menu.get_children()
+		for btn in item_btns:
+			if btn is Button and btn.text == "Item":
+				btn.grab_focus()
+				break
+		_menu_cursor.show()
+		_menu_cursor.global_position = _options_menu.get_buttons()[2].global_position # Assuming Item is index 2
+		return
 
 func _update_menu_cursor_to_focused_skill():
 	var focused = get_viewport().gui_get_focus_owner()
@@ -220,6 +244,25 @@ func _next_turn() -> void:
 # Handles player turn setup (enabling UI, setting focus, showing options)
 func _begin_player_turn() -> void:
 	print("Battle.gd/_begin_player_turn() called")
+
+	# Poison damage at start of turn
+	if current_actor.is_poisoned:
+		current_actor.process_poison()
+		_log_action("%s takes %d poison damage!" % [current_actor.name, current_actor.poison_damage])
+		await get_tree().create_timer(0.5).timeout
+
+		# If actor died from poison, skip their turn
+		if not current_actor.has_hp():
+			# Remove from turn_order if needed
+			var idx = turn_order.find(current_actor)
+			if idx != -1:
+				if idx < current_turn_idx:
+					current_turn_idx -= 1
+				turn_order.remove_at(idx)
+			_advance_index()
+			_next_turn()
+			return
+
 	_set_buttons_enabled(true)
 	set_process_input(true)
 	state = States.PLAYER_SELECT
@@ -247,6 +290,9 @@ func _on_options_button_pressed(button: BaseButton) -> void:
 			return # Don't advance to target selection yet
 		"Item":
 			action = Actions.ITEM
+			# Show the Item menu for the current actor
+			_show_item_menu()
+			return # Don't advance to target selection yet
 		"Flee":
 			action = Actions.FLEE
 
@@ -278,7 +324,6 @@ func _on_options_button_pressed(button: BaseButton) -> void:
 	_position_cursor_on_enemy(_enemies_menu.get_buttons()[0].data)
 
 # Handles when player selects an enemy to target
-
 func _on_enemies_button_pressed(button: EnemyButton) -> void:
 	#DEBUG print("Battle.gd/_on_options_button_pressed() called")
 	_menu_cursor.play_confirm_sound()
@@ -299,11 +344,38 @@ func _on_enemies_button_pressed(button: EnemyButton) -> void:
 # Handles enemy turn logic (picking a target, resolving action)
 func _begin_enemy_turn() -> void:
 	#DEBUG print("Battle.gd/_begin_enemy_turn() called")
+
+	# Poison damage at start of turn
+	if current_actor.is_poisoned:
+		current_actor.process_poison()
+		_log_action("%s takes %d poison damage!" % [current_actor.name, current_actor.poison_damage])
+		await get_tree().create_timer(1.0).timeout
+
+		# If actor died from poison, skip their turn!
+		if not current_actor.has_hp():
+			# Remove from turn_order if needed
+			var idx = turn_order.find(current_actor)
+			if idx != -1:
+				if idx < current_turn_idx:
+					current_turn_idx -= 1
+				turn_order.remove_at(idx)
+				await get_tree().create_timer(0.5).timeout
+			_advance_index()
+			_next_turn()
+			return
+
 	_set_buttons_enabled(false)
 	set_process_input(false)
 	state = States.ENEMY_TURN
 	_menu_cursor.hide()
 	_down_cursor.hide()
+
+	await get_tree().create_timer(0.5).timeout
+
+	# NEW: Flash the enemy before attacking
+	var enemy_btn = _get_button_for_actor(current_actor)
+	if enemy_btn:
+		await enemy_btn.flash_for_attack(3, 0.10) # flashes, flash time
 
 	var target = _pick_random_alive_party_member()
 	if target == null:
@@ -311,6 +383,7 @@ func _begin_enemy_turn() -> void:
 		_end_battle(States.GAMEOVER)
 		return
 	await _resolve_action(current_actor, target, Actions.FIGHT)
+	await get_tree().create_timer(0.5).timeout
 
 # Resolves the chosen action for current actor (attack, skill, item, defend)
 func _resolve_action(actor: BattleActor, target: BattleActor, act: Actions) -> void:
@@ -608,7 +681,7 @@ func _calculate_battle_rewards() -> Dictionary:
 			total_xp += actor.xp
 			total_gold += actor.gold
 	return {"xp": total_xp, "gold": total_gold}
-	
+
 # Highlights and scrolls to enemy info when their button is focused
 func _on_enemy_button_focused(button: EnemyButton) -> void:
 	var actor = button.data
@@ -664,6 +737,97 @@ func _wait_for_confirm() -> void:
 		if Input.is_action_just_pressed("ui_accept"):
 			break
 
+func _show_item_menu():
+	var box = _item_menu.get_node("MarginContainer/ScrollContainer/BoxContainer")
+
+	# Clear previous buttons
+	for child in box.get_children():
+		child.queue_free()
+
+	var items = player_inventory.get_all_items()
+	var first_btn: Button = null
+
+	for item_dict in items:
+		var item_id = item_dict["item_id"]
+		var count = item_dict["count"]
+		var item = Item.ALL_ITEMS.get(item_id)
+		if item == null:
+			continue  # Skip unregistered items
+
+		var btn = Button.new()
+		btn.focus_mode = Control.FOCUS_ALL
+		btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		btn.text = "%s x%d" % [item.name, count]
+		btn.name = item_id
+		btn.connect("pressed", Callable(self, "_on_item_button_pressed").bind(item))
+
+		if first_btn == null:
+			first_btn = btn
+
+		box.add_child(btn)
+
+	# Show the item menu
+	_item_menu.show()
+	
+	# Lock all other menus' focus
+	_options_menu.button_enable_focus(false)
+	_enemies_menu.button_enable_focus(false)
+	_players_menu.button_enable_focus(false)
+
+	# Focus the first available item
+	if first_btn:
+		first_btn.grab_focus()
+		await get_tree().process_frame
+		_menu_cursor.global_position = first_btn.global_position
+		_menu_cursor.show()
+	else:
+		_menu_cursor.hide()
+
+func _on_item_button_pressed(item: Item):
+	selected_item = item
+	item_targeting = true
+	_item_menu.hide()
+	_options.hide()
+
+	# Determine if item targets enemies, allies, or self, or just acts instantly
+	if item.use_effect == "heal" or item.use_effect == "cure_poison" or item.use_effect == "restore_ap":
+		# Target an ally
+		state = States.PLAYER_TARGET
+		_players_menu.show()
+		_players_menu.button_enable_focus(true)
+		_enemies_menu.button_enable_focus(false)
+		_options_menu.button_enable_focus(false)
+		_players_menu.button_focus(0)
+		_position_cursor_on_player(current_actor)
+	else:
+		# Use on self or instantly
+		_resolve_item_use(current_actor, item)
+		item_targeting = false
+		selected_item = null
+
+func _resolve_item_use(target, item: Item):
+	print("Battle.gd/_resolve_item_use() called")
+	if player_inventory.has_item(item.id, 1):
+		item.use(target)
+
+	# Play the skill cast sfx (sfx_cast_path)
+	var stream = load("res://Assets/Audio/Items/sfx_item_use.wav")
+	if stream:
+		var snd = AudioStreamPlayer.new()
+		snd.stream = stream
+		snd.pitch_scale = 2.0 # Play at 2x speed (half duration)
+		get_tree().current_scene.add_child(snd)
+		snd.play()
+
+		player_inventory.remove_item(item.id, 1)
+		_log_action("%s uses %s on %s!" % [current_actor.name, item.name, target.name])
+	else:
+		_log_action("No %s left!" % item.name)
+	await get_tree().create_timer(1.0).timeout
+	_set_buttons_enabled(true)
+	_advance_index()
+	_next_turn()
+
 func _show_skills_menu(actor):
 	print("Battle.gd/_show_skills_menu() called")
 	var actor_class = actor.class_key
@@ -683,6 +847,7 @@ func _show_skills_menu(actor):
 		var skill_res = Skills.ALL_SKILLS.get(skill_name)
 		if skill_res:
 			var btn = Button.new()
+			btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
 			btn.text = "%s (%d)" % [skill_res.name, skill_res.cost]
 			btn.name = skill_name
 			btn.connect("pressed", Callable(self, "_on_skill_button_pressed").bind(skill_res))
@@ -766,6 +931,10 @@ func _on_players_button_pressed(button: PlayerButton) -> void:
 		_resolve_skill(current_actor, target, selected_skill)
 		skill_targeting = false
 		selected_skill = null
+	elif item_targeting and selected_item:
+		_resolve_item_use(target, selected_item)
+		item_targeting = false
+		selected_item = null
 	else:
 		_resolve_action(current_actor, target, action)
 
@@ -775,12 +944,13 @@ func _resolve_skill(actor, target, skill):
 	var target_button = _get_button_for_actor(target)
 	var targets = []
 
-	# Get the class config for the actor
+	# Get class config for the actor
 	var class_cfg = Data.class_configs.get(actor.class_key, {})
+	var cast_anim = class_cfg.get("cast_anim", "")
 	var skill_anim = class_cfg.get("skill_anim", "") # fallback to empty string if not found
 
-	# Play the skill cast sfx (sfx_cast_path)
-	if skill.sfx_cast_path != "":
+	# Play skill cast sfx (sfx_cast_path)
+	if skill.sfx_cast_path != "" and not skill.name == "Charge":
 		var stream = load(skill.sfx_cast_path)
 		if stream:
 			var snd = AudioStreamPlayer.new()
@@ -789,34 +959,60 @@ func _resolve_skill(actor, target, skill):
 			get_tree().current_scene.add_child(snd)
 			snd.play()
 
-	# Play the class-specific skill animation before the effect
+	# Play class-specific skill animation before the effect
 	if actor_button and skill_anim != "":
 		await actor_button.play_skill_animation(skill_anim)
 
 	await get_tree().create_timer(0.5).timeout
 
-	# Play the skill effect, and pass impact sound path if available
-	_play_skill_effect(skill, actor_button, target_button)
+	# Play the skill effect, and pass impact sound path (if available)
+	if skill.name == "Charge" and actor_button and cast_anim != "":
+		var stream = load("res://Assets/Audio/Skills/sfx_use_skill.wav")
+		var snd = AudioStreamPlayer.new()
+		snd.stream = stream
+		snd.pitch_scale = 0.6 
+		get_tree().current_scene.add_child(snd)
+		snd.play()
+		await actor_button.play_skill_animation(cast_anim)
+	else:
+		_play_skill_effect(skill, actor_button, target_button)
 
-	# If you want to guarantee the impact SFX isn't cut off, you may want to wait for it in _play_skill_effect,
-	# but for now, just keep the old wait
+	# Wait for impact SFX
 	await get_tree().create_timer(1.0).timeout
 
 	if actor.base_ap >= skill.cost:
 		actor.change_ap(-skill.cost)
 	else:
-		# Not enough AP, handle accordingly
+		# Not enough AP
 		pass
 
-	# Multi-target skill logic
-	if skill.target_type == "all_enemies":
-		# Gather all valid enemy targets
-		for btn in _enemies_menu.get_buttons():
-			if btn is EnemyButton and btn.data and btn.data.has_hp():
-				targets.append(btn.data)
-		Effects.apply_effect(skill.effect_name, targets, skill.effect_params)
-		_log_action("%s unleashes %s, striking all foes!" % [actor.name, skill.name])
-		
+	if skill.name == "Charge" and actor_button and target_button:
+		# 0. Start sfx
+		#if skill.sfx_cast_path != "":
+		var stream = load(skill.sfx_cast_path)
+		#if stream:
+		var snd = AudioStreamPlayer.new()
+		snd.stream = stream
+		snd.pitch_scale = 1.5 # Play at 2x speed (half duration)
+		get_tree().current_scene.add_child(snd)
+		snd.play()
+
+		# 1. Animate up to hit
+		await actor_button.play_charge_attack_impact(target_button, snd)
+		print("Charge used! ", actor_button, " -> ", target_button)
+
+		# 2. Apply damage (triggers HitText via signal/handler)
+		var damage = skill.effect_params[0]
+		_play_skill_effect(skill, actor_button, target_button)
+		print("Charge used! ", skill.effect_params, " : sent to BAB.gd/_on_data_hp_changed")
+
+		# 3. Wait for sec
+		await get_tree().create_timer(0.5).timeout
+
+		# 4. Move actor back to original position
+		await actor_button.tween_return_to_orig()
+		print("Charge used! Actor return to original position")
+
 	# Heal logic
 	var heal_result = null
 	if skill.effect_name == "heal":
@@ -834,14 +1030,37 @@ func _resolve_skill(actor, target, skill):
 			_log_action("%s uses %s on %s! (No effect)" % [actor.name, skill.name, target.name])
 	
 	# Damage logic
+	
+	# Multi-target skill logic
+	if skill.target_type == "all_enemies":
+		# Gather all valid enemy targets
+		for btn in _enemies_menu.get_buttons():
+			if btn is EnemyButton and btn.data and btn.data.has_hp():
+				targets.append(btn.data)
+		Effects.apply_effect(skill.effect_name, targets, skill.effect_params)
+		_log_action("%s unleashes %s, striking all foes!" % [actor.name, skill.name])
 	else:
 		if skill.target_type == "all_enemies":
 			_log_action("%s hits all enemies with %s for %s!" % [actor.name, skill.name, str(skill.effect_params[0])])
-		else:
-			#DEBUG print("Battle.gd/_resolve_skill: Applying effect %s to %s with params %s" % [skill.effect_name, target.name, str(skill.effect_params)])
-			Effects.apply_effect(skill.effect_name, target, skill.effect_params)
-			_log_action("%s hits %s with %s for %s!" % [actor.name, target.name, skill.name, str(skill.effect_params[0])])
-			print("Battle.gd/_resolve_skill: Effect applied")
+
+	# Poison logic
+	if skill.effect_name == "status_poison":
+		# effect_params: [initial_damage, poison_damage, poison_turns]
+		var initial_damage = skill.effect_params[0]
+		var poison_damage = skill.effect_params[1]
+		var poison_turns  = skill.effect_params[2] if skill.effect_params.size() > 2 else 3
+		# Apply initial hit
+		target.healhurt(-initial_damage)
+		_log_action("%s hits %s with %s for %d!" % [actor.name, target.name, skill.name, initial_damage])
+		# Apply poison
+		target.apply_poison(poison_damage, poison_turns)
+		_log_action("%s is poisoned!" % target.name)
+	
+	else:
+		# Single-target skill logic
+		_log_action("%s hits %s with %s for %s!" % [actor.name, target.name, skill.name, str(skill.effect_params[0])])
+		Effects.apply_effect(skill.effect_name, target, skill.effect_params)
+		print("Battle.gd/_resolve_skill: ", skill.effect_name, " applied")
 
 	await get_tree().create_timer(2.0).timeout
 	print("Battle.gd/_resolve_skill() finished")

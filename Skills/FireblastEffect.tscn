@@ -8,7 +8,5 @@ anchors_preset = 0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = ExtResource("1_4rh1h")
-animation = &"damage_fire_skill_hit"
-frame = 4
-frame_progress = 1.0
+animation = &"damage_melee_skill_hit"
 flip_h = true

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dneqjcgko2cjt"
-path="res://.godot/imported/mage_attack_spell1.png-1b9857103129de0c0a066889704e4565.ctex"
+uid="uid://cmtsfsa125l77"
+path="res://.godot/imported/damage_fire_skill.png-dd5d943af3ce214b8ca826a7bcdcd60a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Animations/Sheets/Spells/mage_attack_spell1.png"
-dest_files=["res://.godot/imported/mage_attack_spell1.png-1b9857103129de0c0a066889704e4565.ctex"]
+source_file="res://Assets/Animations/Sheets/Skills/damage_fire_skill.png"
+dest_files=["res://.godot/imported/damage_fire_skill.png-dd5d943af3ce214b8ca826a7bcdcd60a.ctex"]
 
 [params]
 

@@ -12,6 +12,9 @@ func _ready():
 		idle_anim     = class_cfg.get("idle_anim", "")     # Set idle animation name
 		hurt_anim     = class_cfg.get("hurt_anim", "")     # Set hurt animation name
 		death_anim    = class_cfg.get("death_anim", "")    # Set death animation name
+		walk_anim     = class_cfg.get("walk_anim", "")     # Set walk animation name
+		use_anim      = class_cfg.get("use_anim", "")      # Set use animation name
+		cast_anim     = class_cfg.get("cast_anim", "")     # Set cast animation name
 		skill1_anim   = class_cfg.get("skill1_anim", "")   # Set skill1 animation name
 		var tex_path  = class_cfg.get("texture_path", "")  # Get the texture path
 		if tex_path != "":
