@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://d2dr515uoi4xt"
-path="res://.godot/imported/sfx_charge_skill_big.wav-7220e891b1fb323545f71225cf39464b.sample"
+path="res://.godot/imported/charge_blank_skill_big.wav-8ea4cb793b83b5b3ca3fc14a59d9df82.sample"
 
 [deps]
 
-source_file="res://Assets/Audio/Skills/sfx_charge_skill_big.wav"
-dest_files=["res://.godot/imported/sfx_charge_skill_big.wav-7220e891b1fb323545f71225cf39464b.sample"]
+source_file="res://Assets/Audio/Skills/charge_blank_skill_big.wav"
+dest_files=["res://.godot/imported/charge_blank_skill_big.wav-8ea4cb793b83b5b3ca3fc14a59d9df82.sample"]
 
 [params]
 

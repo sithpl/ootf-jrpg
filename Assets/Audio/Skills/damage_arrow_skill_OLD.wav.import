@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://crjaiq8gqf0n5"
-path="res://.godot/imported/damage_arrow_skill.wav-82c7712cda69e027452422a6b71d88bc.sample"
+path="res://.godot/imported/damage_arrow_skill_OLD.wav-948cdc18ab1bcab3c3cf4288e942bc9b.sample"
 
 [deps]
 
-source_file="res://Assets/Audio/Skills/damage_arrow_skill.wav"
-dest_files=["res://.godot/imported/damage_arrow_skill.wav-82c7712cda69e027452422a6b71d88bc.sample"]
+source_file="res://Assets/Audio/Skills/damage_arrow_skill_OLD.wav"
+dest_files=["res://.godot/imported/damage_arrow_skill_OLD.wav-948cdc18ab1bcab3c3cf4288e942bc9b.sample"]
 
 [params]
 

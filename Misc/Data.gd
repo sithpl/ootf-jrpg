@@ -18,11 +18,19 @@ func _ready():
 # ---------- SCENE TRANSITIONS ----------
 
 var tile_transitions : Dictionary = {
-	# Discord
+	# Town_Discord_SouthGate
 	Vector2(20,6): "Town_Discord",
 	Vector2(20,5): "Town_Discord",
 	Vector2(21,6): "Town_Discord",
-	Vector2(21,5): "Town_Discord"
+	Vector2(21,5): "Town_Discord",
+	# Town_Discord_NorthForest
+	Vector2(24,2): "Town_Discord",
+	Vector2(25,2): "Town_Discord",
+	Vector2(24,1): "Town_Discord",
+	Vector2(25,1): "Town_Discord",
+	# Dungeon_GoonCave_SouthExit
+	Vector2(24,-2): "Dungeon_GoonCave",
+	Vector2(25,-2): "Dungeon_GoonCave",
 }
 
 # ---------- ITEMS ----------

@@ -64,3 +64,5 @@ offset_bottom = 20.0
 libraries = {
 &"": SubResource("AnimationLibrary_5lyeh")
 }
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]

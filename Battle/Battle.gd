@@ -988,9 +988,7 @@ func _resolve_skill(actor, target, skill):
 
 	if skill.name == "Charge" and actor_button and target_button:
 		# 0. Start sfx
-		#if skill.sfx_cast_path != "":
 		var stream = load(skill.sfx_cast_path)
-		#if stream:
 		var snd = AudioStreamPlayer.new()
 		snd.stream = stream
 		snd.pitch_scale = 1.5 # Play at 2x speed (half duration)
@@ -1037,11 +1035,19 @@ func _resolve_skill(actor, target, skill):
 		for btn in _enemies_menu.get_buttons():
 			if btn is EnemyButton and btn.data and btn.data.has_hp():
 				targets.append(btn.data)
+		# Play skill impact sfx (sfx_impact_path)
+		if skill.sfx_impact_path != "":
+			var stream = load(skill.sfx_impact_path)
+			if stream:
+				var snd = AudioStreamPlayer.new()
+				snd.stream = stream
+				snd.pitch_scale = 2.0 # Play at 2x speed (half duration)
+				get_tree().current_scene.add_child(snd)
+				snd.play()
+				await snd.finished
 		Effects.apply_effect(skill.effect_name, targets, skill.effect_params)
 		_log_action("%s unleashes %s, striking all foes!" % [actor.name, skill.name])
-	else:
-		if skill.target_type == "all_enemies":
-			_log_action("%s hits all enemies with %s for %s!" % [actor.name, skill.name, str(skill.effect_params[0])])
+		_log_action("%s hits all enemies with %s for %s!" % [actor.name, skill.name, str(skill.effect_params[0])])
 
 	# Poison logic
 	if skill.effect_name == "status_poison":
@@ -1057,10 +1063,11 @@ func _resolve_skill(actor, target, skill):
 		_log_action("%s is poisoned!" % target.name)
 	
 	else:
-		# Single-target skill logic
-		_log_action("%s hits %s with %s for %s!" % [actor.name, target.name, skill.name, str(skill.effect_params[0])])
-		Effects.apply_effect(skill.effect_name, target, skill.effect_params)
-		print("Battle.gd/_resolve_skill: ", skill.effect_name, " applied")
+		if skill.target_type != "all_enemies":
+			# Single-target skill logic
+			_log_action("%s hits %s with %s for %s!" % [actor.name, target.name, skill.name, str(skill.effect_params[0])])
+			Effects.apply_effect(skill.effect_name, target, skill.effect_params)
+			print("Battle.gd/_resolve_skill: ", skill.effect_name, " applied")
 
 	await get_tree().create_timer(2.0).timeout
 	print("Battle.gd/_resolve_skill() finished")
