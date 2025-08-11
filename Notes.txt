@@ -1,21 +1,7 @@
----------- NEXT STEPS ----------
-
-1 instance
-1 boss
-
-1 skill
-
 ---------- FUTURE STEPS ----------
 
 Implement Magic (MAG) in Battle
 - MAG = Alternate ATK stat for magic users (more damage, more healing, etc.)
-
----------- ISSUES ----------
-
-- Pressing M while in any sub-menu (Equip, Item, etc.) causes StartUI to blank out entirely
-- Buying out stock on the last listed item in BuyList causes the ShopCursor to get stuck where the old item button was (pressing ui_cancel can help reset the ShopUI)
-- StartCursor gets stuck on UseMenu after using an item in ItemMenu
-- Pressing ui_cancel at StartUI doesn't close menu
 
 ---------- CLASS IDEAS ----------
 

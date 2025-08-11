@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://cf25jnrfi4cpp"
-path="res://.godot/imported/sfx_bow_draw_skill.wav-bb2ae086a2aba0c00ee5b9fb9cf6bab1.sample"
+path="res://.godot/imported/charge_bow_draw_skill.wav-bc916026f317161b2183cce5278a6ae7.sample"
 
 [deps]
 
-source_file="res://Assets/Audio/Skills/sfx_bow_draw_skill.wav"
-dest_files=["res://.godot/imported/sfx_bow_draw_skill.wav-bb2ae086a2aba0c00ee5b9fb9cf6bab1.sample"]
+source_file="res://Assets/Audio/Skills/charge_bow_draw_skill.wav"
+dest_files=["res://.godot/imported/charge_bow_draw_skill.wav-bc916026f317161b2183cce5278a6ae7.sample"]
 
 [params]
 
